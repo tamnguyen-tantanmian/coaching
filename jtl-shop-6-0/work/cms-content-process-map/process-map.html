@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS content process map</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-paper: #f5f5f5; --color-ink: #2d3142; --color-muted: #4f5d75; --color-accent: #bf4520;
+    --font-sans: 'Geist', system-ui, sans-serif; --font-serif: 'Instrument Serif', serif; --font-mono: 'Geist Mono', ui-monospace, monospace;
+  }
+  body { font-family: var(--font-sans); background: var(--color-paper); color: var(--color-ink); padding: 3rem 2rem 4rem; line-height: 1.5; }
+  .frame { max-width: 1120px; margin: 0 auto; }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
+  h1 { font-family: var(--font-serif); font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.75rem; }
+  h2 { font-size: 1.05rem; font-weight: 600; margin: 2.5rem 0 0.5rem; }
+  p { max-width: 72ch; margin-bottom: 0.75rem; }
+  .note { color: var(--color-muted); font-size: 0.875rem; }
+  .diagram-container { width: 100%; overflow-x: auto; margin-top: 1rem; }
+  svg { width: 100%; min-width: 1072px; display: block; }
+  ul.rules { max-width: 72ch; padding-left: 1.1rem; font-size: 0.9rem; }
+  ul.rules li { margin-bottom: 0.35rem; }
+  table { border-collapse: collapse; font-size: 0.875rem; max-width: 72ch; width: 100%; }
+  th, td { text-align: left; padding: 0.45rem 0.75rem 0.45rem 0; border-bottom: 1px solid rgba(45,49,66,0.12); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-muted); }
+  footer { margin-top: 3rem; padding-top: 0.75rem; border-top: 1px solid rgba(45,49,66,0.12); font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-muted); }
+  @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+</style>
+</head>
+<body>
+<div class="frame">
+<p class="eyebrow">Process map · JTL Shop 6.0 · Shop settings › Storefront pages</p>
+<h1>How a storefront page goes from draft to live</h1>
+<p>The to-be lifecycle of a CMS content page in one shop: create it, edit its content, publish it, change it once it is live, and take it offline. Each column is one actor; a line into another column is a handover. Orange marks the key moment: the page goes public.</p>
+<p class="note">Shop owner and Shop staff have the same rights and can both do every step. The map splits them only to show a typical case: staff build a new page, and the owner later changes or takes down a live one.</p>
+
+<div class="diagram-container">
+<svg viewBox="0 0 1072 1096" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cms-title cms-desc">
+<title id="cms-title">Storefront page lifecycle</title>
+<desc id="cms-desc">Swimlane across Shop owner, Shop staff, Admin dashboard and Public storefront, in four bands: create a page as a draft, edit and publish it, change a live page through a new draft version, and unpublish a page so the storefront returns 404.</desc>
+<defs>
+<marker id="cms-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+<marker id="cms-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+<text x="164" y="60" fill="#2d3142" font-size="9" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.18em">SHOP OWNER</text>
+<text x="412" y="60" fill="#2d3142" font-size="9" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.18em">SHOP STAFF</text>
+<text x="660" y="60" fill="#2d3142" font-size="9" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.18em">ADMIN DASHBOARD</text>
+<text x="908" y="60" fill="#2d3142" font-size="9" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.18em">PUBLIC STOREFRONT</text>
+<line x1="40" y1="76" x2="1032" y2="76" stroke="#bfc0c0" stroke-width="1"/>
+<rect x="40" y="92" width="992" height="200" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<rect x="40" y="308" width="992" height="288" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<rect x="40" y="612" width="992" height="288" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<rect x="40" y="916" width="992" height="96" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<line x1="288" y1="76" x2="288" y2="1012" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<line x1="536" y1="76" x2="536" y2="1012" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<line x1="784" y1="76" x2="784" y2="1012" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<rect x="48" y="98" width="100.48" height="16" rx="2" fill="#ececec"/>
+<text x="52" y="110" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">1 · CREATE A PAGE</text>
+<rect x="48" y="314" width="116.8" height="16" rx="2" fill="#ececec"/>
+<text x="52" y="326" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">2 · EDIT AND PUBLISH</text>
+<rect x="48" y="618" width="127.68" height="16" rx="2" fill="#ececec"/>
+<text x="52" y="630" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">3 · CHANGE A LIVE PAGE</text>
+<rect x="48" y="922" width="133.12" height="16" rx="2" fill="#ececec"/>
+<text x="52" y="934" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">4 · TAKE A PAGE OFFLINE</text>
+<path d="M 412,172 L 412,220" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 516,244 L 556,244" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 660,268 L 660,292 Q 660,300 652,300 L 420,300 Q 412,300 412,308 L 412,340" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 412,388 L 412,436" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 412,484 L 412,532" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 308,556 L 272,556 Q 264,556 264,548 L 264,372 Q 264,364 272,364 L 308,364" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#cms-arrow)"/>
+<path d="M 516,556 L 556,556" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 764,556 L 804,556" fill="none" stroke="#bf4520" stroke-width="1.4" marker-end="url(#cms-arrow-accent)"/>
+<path d="M 268,668 L 556,668" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 660,692 L 660,704 Q 660,712 652,712 L 172,712 Q 164,712 164,720 L 164,740" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 268,764 L 556,764" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 164,788 L 164,836" fill="none" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#cms-arrow)"/>
+<path d="M 268,972 L 556,972" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<path d="M 764,972 L 804,972" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<rect x="272.00" y="454" width="18.88" height="12" rx="2" fill="#ececec"/><text x="281.44" y="463" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">NO</text>
+<rect x="523.84" y="538" width="24.32" height="12" rx="2" fill="#ececec"/><text x="536.00" y="547" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">YES</text>
+<rect x="399.84" y="746" width="24.32" height="12" rx="2" fill="#ececec"/><text x="412.00" y="755" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">YES</text>
+<rect x="172.00" y="806" width="18.88" height="12" rx="2" fill="#ececec"/><text x="181.44" y="815" fill="#5a6580" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.06em">NO</text>
+<rect x="308" y="124" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="308" y="124" width="208" height="48" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<text x="412" y="145" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Opens Storefront pages</text>
+<text x="412" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">Shop settings › Storefront pages</text>
+<rect x="308" y="220" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="308" y="220" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="412" y="241" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Creates the page</text>
+<text x="412" y="256" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">title + template → Create page</text>
+<rect x="556" y="220" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="556" y="220" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="660" y="241" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Saves it as a Draft</text>
+<text x="660" y="256" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">slug from title · not public</text>
+<rect x="308" y="340" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="308" y="340" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="412" y="361" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Edits the content</text>
+<text x="412" y="376" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">page content editor · CMS blocks</text>
+<rect x="308" y="436" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="308" y="436" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="412" y="457" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Previews the page</text>
+<text x="412" y="472" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">as shoppers will see it</text>
+<polygon points="324,532 500,532 516,556 500,580 324,580 308,556" fill="#f5f5f5"/>
+<polygon points="324,532 500,532 516,556 500,580 324,580 308,556" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="412" y="560" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Ready to publish?</text>
+<rect x="556" y="532" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="556" y="532" width="208" height="48" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<text x="660" y="553" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Publishes the page</text>
+<text x="660" y="568" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">status: Draft → Published</text>
+<rect x="804" y="532" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="804" y="532" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="908" y="553" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Page is live</text>
+<text x="908" y="568" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">shoppers can open /slug</text>
+<rect x="60" y="644" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="60" y="644" width="208" height="48" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<text x="164" y="665" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Edits the live page</text>
+<text x="164" y="680" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">page content editor</text>
+<rect x="556" y="644" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="556" y="644" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="660" y="665" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Saves a new Draft version</text>
+<text x="660" y="680" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">live version stays online</text>
+<polygon points="76,740 252,740 268,764 252,788 76,788 60,764" fill="#f5f5f5"/>
+<polygon points="76,740 252,740 268,764 252,788 76,788 60,764" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="164" y="768" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Publish the change?</text>
+<rect x="556" y="740" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="556" y="740" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="660" y="761" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Publishes the new version</text>
+<text x="660" y="776" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">replaces the live version</text>
+<rect x="60" y="836" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="60" y="836" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="164" y="857" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Deletes the draft</text>
+<text x="164" y="872" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">only drafts can be deleted</text>
+<rect x="60" y="948" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="60" y="948" width="208" height="48" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<text x="164" y="969" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Unpublishes the page</text>
+<text x="164" y="984" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">from the Storefront pages list</text>
+<rect x="556" y="948" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="556" y="948" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="660" y="969" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Takes the page offline</text>
+<text x="660" y="984" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">keeps the last version</text>
+<rect x="804" y="948" width="208" height="48" rx="6" fill="#f5f5f5"/>
+<rect x="804" y="948" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="908" y="969" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Page returns 404</text>
+<text x="908" y="984" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">until it is published again</text>
+<line x1="40" y1="1036" x2="1032" y2="1036" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+<text x="40" y="1064" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">LEGEND</text>
+<rect x="112" y="1055" width="22" height="12" rx="3" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="142" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Step</text>
+<rect x="184" y="1055" width="22" height="12" rx="3" fill="rgba(79,93,117,0.10)" stroke="#5a6580" stroke-width="1"/>
+<text x="214" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Where a path starts</text>
+<polygon points="324,1055 338,1055 342,1061 338,1067 324,1067 320,1061" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="350" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Decision</text>
+<rect x="412" y="1055" width="22" height="12" rx="3" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+<text x="442" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Key moment: publish</text>
+<line x1="556" y1="1061" x2="580" y2="1061" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#cms-arrow)"/>
+<text x="590" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Flow / handover</text>
+<line x1="684" y1="1061" x2="708" y2="1061" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#cms-arrow)"/>
+<text x="718" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Alternative branch</text>
+<line x1="824" y1="1061" x2="848" y2="1061" stroke="#bf4520" stroke-width="1.4" marker-end="url(#cms-arrow-accent)"/>
+<text x="858" y="1064" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Page goes public</text>
+</svg>
+</div>
+
+<h2>Rules the map assumes</h2>
+<ul class="rules">
+<li>A new page always starts as a <strong>Draft</strong>; it is not on the storefront until someone publishes it.</li>
+<li>Owner and staff can both publish. There is no review or approval step.</li>
+<li>Editing a live page makes a new Draft version. The live version stays on the storefront, unchanged, until the new version is published.</li>
+<li><strong>Delete</strong> works on drafts only. Deleting the draft of a live page throws away the change; the live version stays.</li>
+<li><strong>Unpublish</strong> takes the page off the storefront (404) but keeps its last version, so it can be published again.</li>
+</ul>
+
+<h2>What the prototype has today</h2>
+<table>
+<tr><th>Step on the map</th><th>Shop Setup Platform prototype</th></tr>
+<tr><td>Open Storefront pages, create a page (title + template)</td><td>Yes. Templates: Standard page, Home, Product list, Product detail, Landing page, Blog post</td></tr>
+<tr><td>Save as Draft, slug from title</td><td>Yes</td></tr>
+<tr><td>Edit content in a page content editor</td><td>No. The Edit button has no action</td></tr>
+<tr><td>Preview, Publish, Unpublish, new Draft version of a live page</td><td>No (proposed)</td></tr>
+<tr><td>Delete drafts only</td><td>No. Delete removes any page, published or not, without a confirmation</td></tr>
+</table>
+
+<p class="note" style="margin-top:1.5rem">Scope note: the Pflichtenheft (§9.1) lists “Management of CMS Elements and Templates” outside the MVP. This map is a to-be proposal, not a committed MVP flow.</p>
+
+<footer>Built with diagram-design · source: Shop Setup Platform prototype (Shop settings › Storefront pages) and the owner’s answers, 24 Oct 2026</footer>
+</div>
+</body>
+</html>
