@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="en" data-theme="minimal">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>JTL Shop 6.0 · Case report</title>
+<style>
+:root{--ink:#14121c;--bg:#fff;--surface:#faf9ff;--muted:rgba(20,18,28,.66);--line:rgba(20,18,28,.13);--purple:#6B3FEE;--link:#5530d4;--tint:rgba(107,63,238,.10);--tint2:rgba(107,63,238,.18);--on-purple:#fff;--r:12px;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:0;background:var(--purple);color:var(--on-purple);padding:8px 14px;z-index:30}
+.skip:focus{left:8px;top:8px}
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:1280px;margin:0 auto;padding:10px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;margin-right:auto}
+.brand .logo{height:22px;width:auto;flex:none;color:var(--ink)}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:.74rem;letter-spacing:0}
+.tabs{display:flex;gap:4px;overflow-x:auto}
+.tabs a{padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.92rem;white-space:nowrap}
+.tabs a:hover{background:var(--tint)}
+.tabs a[aria-current=page]{background:var(--purple);color:var(--on-purple)}
+.themepick{font-size:.8rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.themepick select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.view{display:none}
+.view.on{display:block}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 24px 80px}
+h1{font-size:1.8rem;line-height:1.25;margin:0 0 8px;letter-spacing:-.015em}
+h2{font-size:1.1rem;margin:34px 0 12px;letter-spacing:-.005em}
+h3{font-size:1rem;margin:22px 0 6px}
+.lede{color:var(--muted);margin:0 0 22px}
+.banner{background:var(--ink);color:var(--bg);border-radius:var(--r);padding:12px 16px;margin:0 0 22px;font-size:.92rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:8px 0 8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.card .num{font-size:1.9rem;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.card .lbl{color:var(--muted);font-size:.85rem}
+.card.warnc .num::after{content:" ⚠";font-size:1rem}
+.gatecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.gate{border-radius:var(--r);padding:14px 16px;background:var(--ink);color:var(--bg)}
+.gate small{display:block;opacity:.8}
+.gate .st{margin-top:8px;font-weight:700}
+.gate .bar{height:6px;border-radius:99px;background:rgba(255,255,255,.25);margin-top:8px;overflow:hidden}
+.gate .bar i{display:block;height:100%;background:#fff}
+.table-wrap{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+table.bal{table-layout:fixed}
+table.bal th,table.bal td{overflow-wrap:break-word;word-break:normal}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);font-weight:700}
+table.props th{background:none;color:var(--muted);font-weight:600;width:11em}
+.missing{font-weight:700;color:var(--muted);font-style:italic}
+.card .lbl small{display:block;font-size:.74rem;opacity:.85}
+details.help{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 18px;margin:0 0 22px}
+details.help summary{cursor:pointer;font-weight:700}
+details.help ul,details.help dl{margin:10px 0 4px}
+details.help dt{font-weight:700;margin-top:10px}
+details.help dd{margin:2px 0 0;color:var(--muted)}
+.chip,.idc,.idtag{display:inline-block;font-weight:800;font-size:.8rem;line-height:1;padding:4px 8px;border-radius:7px;text-decoration:none;letter-spacing:.03em;vertical-align:middle;border:2px solid transparent;white-space:nowrap}
+.t-O{background:var(--purple);color:var(--on-purple)}
+.t-H{border-color:var(--purple);color:var(--link)}
+.t-D{background:var(--ink);color:var(--bg)}
+.t-E{border-color:var(--ink);color:var(--ink)}
+.t-F{background:var(--tint2);color:var(--ink)}
+.t-M{background:var(--tint2);color:var(--ink)}
+.t-P{border:2px dashed var(--muted);color:var(--ink)}
+a.chip:hover{filter:brightness(1.1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.warnlist{list-style:none;margin:0;padding:0}
+.warnlist li{padding:10px 14px;margin:8px 0;border-radius:var(--r);background:var(--tint);border-left:4px solid var(--purple)}
+.ok{padding:10px 14px;border-radius:var(--r);background:var(--tint)}
+.wgroup{border:1px solid var(--line);border-radius:var(--r);margin:0 0 10px;background:var(--surface)}
+.wgroup>summary{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;list-style:none;font-weight:600}
+.wgroup>summary::-webkit-details-marker{display:none}
+.wgroup>summary::before{content:"▸";color:var(--muted);font-size:.8rem}
+.wgroup[open]>summary::before{content:"▾"}
+.wcount{margin-left:auto;font-size:.8rem;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--tint)}
+.whint{margin:0;padding:0 14px 8px;font-size:.88rem;color:var(--muted)}
+.wgrid{list-style:none;margin:0;padding:0 14px 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 14px}
+.wgrid li{display:flex;align-items:center;gap:8px;min-width:0;font-size:.9rem}
+.wt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.wn{margin-left:auto;font-size:.8rem;color:var(--muted);white-space:nowrap}
+/* journey */
+.jcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.jcard{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;text-decoration:none;color:var(--ink)}
+.jcard:hover{border-color:var(--purple);box-shadow:0 2px 0 var(--purple)}
+.jcard .wk{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--link)}
+.jcard h3{margin:4px 0 6px;font-size:1.05rem}
+.jcard p{margin:0;color:var(--muted);font-size:.9rem}
+.has-doc .jlist{display:none}
+.journey .doc,.reference .doc{display:none}
+.journey .doc.on,.reference .doc.on{display:block}
+.reading{max-width:76ch}
+.pn{display:flex;justify-content:space-between;gap:16px;margin-top:40px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.back{display:inline-block;margin:0 0 16px;font-size:.9rem}
+.subtabs{display:flex;gap:6px;margin:0 0 18px;flex-wrap:wrap}
+.subtabs a{padding:6px 12px;border-radius:999px;border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:.9rem;font-weight:600}
+.subtabs a[aria-current=page]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* trace */
+.trace{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:28px;align-items:start}
+.pane-tree{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:12px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.filters button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 11px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--purple);border-color:var(--purple);color:var(--on-purple)}
+.tsearch{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 12px;font:inherit;font-size:.9rem;margin:0 0 10px}
+.tcount{font-size:.8rem;color:var(--muted);margin:0 0 8px}
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{margin-left:14px;padding-left:10px;border-left:1px solid var(--line)}
+.tree li[hidden]{display:none}
+.tree summary{cursor:pointer;display:flex;align-items:flex-start;gap:6px;padding:3px 0;list-style:none}
+.tree summary::-webkit-details-marker{display:none}
+.tree summary::before{content:"▸";color:var(--muted);width:1em;flex:none;font-size:.8rem;margin-top:5px}
+.tree details[open]>summary::before{content:"▾"}
+.tree li.leaf{padding-left:1.35em}
+.tree a.node{display:flex;gap:8px;align-items:flex-start;text-decoration:none;color:var(--ink);padding:4px 6px;border-radius:8px;flex:1;min-width:0;font-size:.9rem}
+.tree a.node:hover{background:var(--tint)}
+.tree a.node.sel{background:var(--tint2);font-weight:700}
+.tree .idc{font-size:.72rem;padding:3px 6px;flex:none;margin-top:2px}
+.tree .nt{overflow-wrap:anywhere}
+.tree .wb{margin-left:auto;flex:none}
+.tree .cnt{display:block;color:var(--muted);font-size:.75rem;font-weight:500}
+.tree .gh{font-size:.8rem;font-weight:800;color:var(--muted);padding:8px 0 2px}
+.pane-detail .doc{display:none}
+.pane-detail .doc.on{display:block}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);padding:28px;text-align:center}
+.pane-detail .doc.on~.empty{display:none}
+.ihead{display:flex;gap:14px;align-items:flex-start;margin:0 0 14px}
+.ihead .idtag{font-size:1rem;padding:7px 12px;flex:none;margin-top:2px}
+.ihead .kind{margin:0;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ihead h1{margin:2px 0 0;font-size:1.5rem}
+.warnbox{margin:0 0 14px;padding:10px 14px;border-radius:var(--r);background:var(--tint);border-left:4px solid var(--purple);font-size:.92rem}
+.path{font-size:.88rem;color:var(--muted);margin:0 0 14px}
+.path .chain{margin:6px 0 0;align-items:center}
+.path .more{display:block;margin-top:6px}
+.backlinks{margin-top:30px;padding:14px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.backlinks h2{margin:0 0 8px;font-size:.95rem}
+.backlinks .row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:6px 0}
+.backlinks .lbl{font-size:.8rem;color:var(--muted);min-width:7em}
+.dlist{display:flex;flex-direction:column}
+.dlink{display:flex;align-items:center;gap:12px;padding:9px 4px;border-top:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:.92rem}
+.dlink:first-child{border-top:0}
+.dlink:hover{background:var(--tint)}
+.dlink:hover .darr{color:var(--purple);transform:translateX(2px)}
+.dtype{flex:0 0 14em;font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dtitle{flex:1;min-width:0}
+.darr{color:var(--muted);transition:transform .15s}
+@media (max-width:600px){.dtype{flex-basis:6.5em}}
+.back-tree{display:none}
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:6px}
+.acard{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 0 14px;text-decoration:none;color:var(--ink);overflow:hidden}
+.acard[hidden]{display:none}
+.acard:hover{border-color:var(--purple);box-shadow:0 2px 0 var(--purple)}
+.acard .thumb{width:100%;height:150px;object-fit:cover;object-position:top;border-bottom:1px solid var(--line);background:var(--tint)}
+.acard>*:not(.thumb){margin-left:16px;margin-right:16px}
+.acard:not(:has(.thumb))>.atype{margin-top:14px}
+.atype{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--link)}
+.acard h3{margin:0;font-size:1.02rem}
+.acard p{margin:0;color:var(--muted);font-size:.88rem}
+.ameta{font-size:.78rem;color:var(--muted)}
+.st{display:inline-block;padding:1px 8px;border-radius:999px;font-weight:700;font-size:.72rem;background:var(--tint2);color:var(--ink)}
+.st-simulated,.st-planned,.st-draft{background:var(--ink);color:var(--bg)}
+.ahead .sum{font-size:1.05rem;color:var(--muted);margin:6px 0 10px}
+.ahead .kind{margin:0;color:var(--muted);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.supports{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:6px 0 14px}
+.backlinks .row{align-items:baseline}
+.supports .lbl{font-size:.8rem;color:var(--muted)}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin:8px 0}
+.fig{margin:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff}
+.fig img{display:block;width:100%;height:auto}
+.fig figcaption,.mcard .cap{font-size:.8rem;color:var(--muted);padding:6px 12px}
+.mcard{border:1px solid var(--line);border-radius:var(--r);margin:12px 0;overflow:hidden;background:var(--surface)}
+.mhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px}
+.mtag{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.btn{margin-left:auto;padding:5px 12px;border-radius:999px;background:var(--purple);color:var(--on-purple);text-decoration:none;font-size:.82rem;font-weight:700}
+.mcard iframe{display:block;width:100%;height:560px;border:0;border-top:1px solid var(--line);background:#fff}
+.mcard video{display:block;width:100%}
+.achip{display:inline-flex;gap:8px;align-items:baseline;padding:6px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--surface);font-size:.9rem}
+.achip:hover{border-color:var(--purple)}
+.achip .atype{font-size:.66rem}
+.sgroup{margin:10px 0}
+.sgroup h3{margin:0 0 6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.t-A{background:var(--tint2);color:var(--ink);border-color:transparent}
+details.draft{margin:14px 0;border:1px dashed var(--muted);border-radius:var(--r);padding:10px 14px;background:var(--surface)}
+details.draft>summary{cursor:pointer;font-weight:700;color:var(--muted)}
+.srcnote{margin-top:24px;font-size:.82rem;color:var(--muted)}
+.docs .doc{display:none}
+.docs .doc.on{display:block}
+.has-doc .jlist{display:none}
+blockquote{margin:16px 0;padding:10px 16px;background:var(--tint);border-left:4px solid var(--purple);border-radius:0 10px 10px 0}
+blockquote p{margin:6px 0}
+code{font:.88em ui-monospace,Menlo,Consolas,monospace;background:var(--tint);padding:1px 5px;border-radius:5px}
+pre{background:var(--tint);padding:12px 14px;border-radius:10px;overflow-x:auto}
+pre code{background:none;padding:0}
+hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:1.4em}
+li{margin:4px 0}
+.box{font-family:ui-monospace,Menlo,Consolas,monospace}
+.ext{color:var(--muted);border-bottom:1px dotted var(--muted);cursor:help}
+.broken{color:#9b1c1c;text-decoration:underline wavy}
+img{max-width:100%}
+footer.foot{margin-top:56px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:900px){
+  .trace{grid-template-columns:1fr}
+  .pane-tree{position:static;max-height:none}
+  .has-item .pane-tree{display:none}
+  .has-item .back-tree{display:inline-block}
+  .wrap{padding:20px 16px 60px}
+}
+@media print{
+  header.top,.skip,.pane-tree,.back,.pn,.subtabs,.back-tree,.themepick,.filters,.tsearch{display:none!important}
+  .view,.journey .doc,.reference .doc,.docs .doc,.pane-detail .doc{display:block!important}
+  .jlist{display:none}
+  .doc{break-before:page}
+  .wrap{padding:0;max-width:none}
+  .trace{display:block}
+  a{color:inherit;text-decoration:none}
+  table{font-size:.8rem}
+  .banner{border:1px solid #000;background:none;color:#000}
+}
+
+/* sidebar layout (mirrors the website structure: one page per document, nested menu on the left) */
+.shell{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1480px;margin:0 auto;align-items:start}
+.side{position:sticky;top:51px;height:calc(100vh - 51px);overflow:auto;border-right:1px solid var(--line);padding:16px 12px 48px;font-size:.9rem;background:var(--bg)}
+.side nav{display:block}
+.side a{display:block;text-decoration:none;color:var(--ink);padding:5px 10px;border-radius:8px;overflow-wrap:anywhere}
+.side a:hover{background:var(--tint)}
+.side a[aria-current=page]{background:var(--purple);color:var(--on-purple);font-weight:700}
+.side .s-top{font-weight:700}
+.side details{margin:0}
+.side summary{cursor:pointer;list-style:none;font-weight:800;padding:7px 10px;border-radius:8px;display:flex;gap:6px;align-items:baseline}
+.side summary::-webkit-details-marker{display:none}
+.side summary::before{content:"▸";color:var(--muted);font-size:.75rem;width:.9em;flex:none}
+.side details[open]>summary::before{content:"▾"}
+.side summary:hover{background:var(--tint)}
+.side .grp{margin-top:6px}
+.side .grp>.sub{margin-left:12px;border-left:1px solid var(--line);padding-left:6px}
+.side .sub summary{font-weight:700;color:var(--ink);font-size:.88rem}
+.side .sub .cnt{margin-left:auto;font-weight:500;color:var(--muted);font-size:.78rem}
+.side .sub a{font-size:.85rem;color:var(--ink)}
+.side .sub a .idc{font-size:.66rem;padding:2px 5px;margin-right:6px}
+.side .sub a[aria-current=page] .idc{border-color:var(--on-purple);background:transparent;color:var(--on-purple)}
+.side .menu>summary{display:none}
+.shell .wrap{max-width:1000px;padding:28px 40px 80px}
+/* one page at a time: the trace tree is its own page, items are pages of their own */
+.trace{display:block}
+.pane-tree{position:static;max-height:none;overflow:visible;border:0;background:none;padding:0}
+#v-trace.has-item .pane-tree{display:none}
+#v-trace:not(.has-item) .pane-detail{display:none}
+#v-trace .back-tree{display:inline-block}
+#v-reference .wrap>h1,#v-reference .wrap>.lede,#v-reference .subtabs{display:none}
+@media (max-width:900px){
+  .shell{display:block}
+  .side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px 12px;max-height:none}
+  .side .menu>summary{display:block;cursor:pointer;font-weight:800;padding:8px 10px;list-style:none}
+  .side .menu[open]>summary{border-bottom:1px solid var(--line);margin-bottom:6px}
+  .shell .wrap{padding:20px 16px 60px}
+}
+@media print{.side{display:none!important}.shell{display:block}.shell .wrap{max-width:none;padding:0}}
+
+/* minimalist layer: fewer boxes, more air, one accent */
+body{font-size:15.5px;line-height:1.7}
+header.top{border-bottom:1px solid var(--line)}
+.top-in{padding:12px 24px}
+.brand{font-weight:700}
+.brand small{display:none}
+h1{font-size:1.75rem;font-weight:700}
+h2{font-size:.8rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:44px 0 12px}
+.lede{margin:0 0 26px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:18px;margin:14px 0 6px;padding:0}
+.stats span{display:flex;flex-direction:column;gap:2px;padding:2px 18px;border-left:1px solid var(--line);color:var(--muted);font-size:.8rem;text-transform:capitalize}
+.stats span:nth-child(4n+1){border-left:0;padding-left:0}
+.stats span:last-child:nth-child(4n+1){grid-column:span 4}
+.stats .w{text-transform:none}
+.stats b{display:block;margin:0;font-size:1.7rem;line-height:1.15;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.stats .w b{color:#b76e00}
+.stats .w b::after{content:" ⚠";font-size:.9rem}
+.stats .w.bad b{color:#b71d18}
+.stats .w.ok b{color:#118d57}
+.stats .w.ok b::after{content:" ✓"}
+.wtier{margin:18px 0 8px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.wtier-block{color:#b71d18}
+.winfo{margin:18px 0 0}
+.winfo>summary{cursor:pointer;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 0}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stats span:nth-child(4n+1){border-left:1px solid var(--line);padding-left:18px}.stats span:nth-child(2n+1){border-left:0;padding-left:0}.stats span:last-child:nth-child(4n+1){grid-column:auto}}
+.glist{margin:0;border-top:1px solid var(--line)}
+.grow{display:grid;grid-template-columns:minmax(0,1.4fr) 110px minmax(80px,1fr) 70px;gap:16px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.grow .gn small{display:block;color:var(--muted);font-size:.78rem}
+.grow .gn strong{font-weight:600}
+.grow .gs{font-size:.85rem;font-weight:600}
+.grow .gs.ok{color:#1a7f4b}
+.grow .gs.no{color:#a33}
+.grow .gb{height:4px;border-radius:99px;background:var(--line);overflow:hidden}
+.grow .gb i{display:block;height:100%;background:var(--purple)}
+.grow .gc{font-size:.82rem;color:var(--muted);text-align:right}
+.warnlist li{background:none;border-left:0;border-top:1px solid var(--line);border-radius:0;padding:10px 0;margin:0}
+.warnlist li:last-child{border-bottom:1px solid var(--line)}
+.warnlist strong{font-weight:500}
+.ok{background:none;padding:0;color:var(--muted)}
+table{font-size:.9rem}
+th{background:none;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--ink)}
+td{border-bottom:1px solid var(--line)}
+.chip,.idc,.idtag{font-weight:700;font-size:.74rem;padding:3px 7px}
+details.help{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:14px 0;margin:44px 0 0}
+details.help summary{font-weight:600;color:var(--muted)}
+.banner{background:var(--tint);color:var(--ink);font-size:.88rem;border-radius:var(--r);padding:10px 14px}
+.side{font-size:.88rem}
+.jcard,.acard{background:none}
+.reading{max-width:70ch}
+footer.foot{margin-top:48px}
+@media (max-width:640px){.grow{grid-template-columns:1fr 1fr;gap:6px 12px}.grow .gb{grid-column:1/-1}}
+/* sidebar: five sections; each opens a page of cards */
+.side{padding:14px 12px}
+.nav2 a{display:flex;align-items:center;gap:8px;padding:9px 12px;font-weight:600;font-size:.95rem}
+.nav2 a .nm{margin-left:auto;font-weight:500;font-size:.78rem;color:var(--muted)}
+.nav2 a[aria-current=page] .nm{color:var(--on-purple);opacity:.85}
+/* item page */
+.ihead{display:block;margin:0 0 6px}
+.ihead .idtag{display:inline-block;font-size:.78rem;padding:3px 8px;margin:0 0 10px}
+.ihead .kind{display:block;margin:0 0 6px;font-size:.74rem;font-weight:600;letter-spacing:.06em;color:var(--muted)}
+.ihead h1{font-size:1.6rem;margin:0;line-height:1.3}
+.ihead>div{display:block}
+.path{margin:14px 0 18px;font-size:.84rem}
+.path>span:first-child{display:block;margin-bottom:4px}
+.warnbox{background:none;border:0;border-left:2px solid var(--purple);border-radius:0;padding:2px 0 2px 12px;margin:0 0 10px;font-size:.88rem}
+table.props{margin:0 0 8px}
+table.props th{width:11em;padding:7px 12px 7px 0;font-size:.82rem;text-transform:none;letter-spacing:0;font-weight:500;color:var(--muted);border-bottom:1px solid var(--line)}
+table.props td{padding:7px 0}
+.backlinks{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:14px 0 0;margin-top:36px}
+.backlinks h2{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.backlinks .lbl{font-weight:500}
+.reading h2{margin-top:30px}
+/* trace tree */
+.pane-tree{margin-top:0}
+.tsearch{background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:8px 0;font-size:.95rem}
+.filters{margin:2px 0 14px;gap:4px}
+.filters button{border:0;background:none;color:var(--muted);padding:4px 10px;font-weight:600}
+.filters button:hover{background:var(--tint)}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.tree ul{margin-left:11px;padding-left:12px;border-left:1px solid var(--line)}
+.tree a.node{padding:4px 6px;font-size:.92rem}
+.tree a.node:hover{background:var(--tint)}
+.tree a.node.sel{background:var(--tint);font-weight:600}
+.tree .cnt{display:inline;margin-left:8px;font-size:.76rem;color:var(--muted)}
+.tree .idc{font-size:.68rem;padding:2px 5px;border-width:1px}
+.tree summary{padding:2px 0}
+.tree .gh{font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+/* cards: documents, journey pages, insights */
+.acards,.jcards,.icards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:6px;border:0}
+.acard,.jcard,.icard{display:flex;flex-direction:column;gap:4px;padding:16px;border:1px solid var(--line);border-radius:var(--r);background:none;text-decoration:none;color:var(--ink);overflow:hidden;min-height:112px}
+.acard:hover,.jcard:hover,.icard:hover{border-color:var(--ink);box-shadow:none;background:none}
+.acard[hidden],.icard[hidden]{display:none}
+.acard>*:not(.thumb),.icard>*{margin:0}
+.acard:not(:has(.thumb))>.atype{margin:0}
+.acard .thumb{display:block;align-self:stretch;width:auto;max-width:none;margin:-16px -16px 10px;height:110px;object-fit:cover;object-position:top;border-bottom:1px solid var(--line);background:var(--tint)}
+.acard .atype,.jcard .wk,.icard .itype{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.acard h3,.jcard h3,.icard h3{margin:2px 0 0;font-size:1rem;line-height:1.35}
+.acard p,.jcard p,.icard p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.5}
+.acard .ameta{font-size:.76rem;color:var(--muted);margin-top:auto;padding-top:8px}
+.icard .top{display:flex;align-items:center;gap:8px}
+.icard .top .w{margin-left:auto}
+.st{background:none;border:1px solid var(--line);color:var(--muted);font-weight:600;padding:0 7px}
+.st-simulated,.st-planned,.st-draft{background:none;border:1px solid var(--ink);color:var(--ink)}
+.ahead .kind{font-size:.74rem;letter-spacing:.09em}
+.ahead h1{margin:4px 0 6px}
+.ahead .sum{font-size:1rem;margin:0 0 12px}
+.ahead p:has(.st){margin:0 0 10px}
+.supports{margin:10px 0 0}
+.mcard{background:none;margin:14px 0}
+.mhead{padding:10px 14px}
+.btn{background:none;color:var(--link);padding:0;font-weight:600;border-radius:0}
+.btn:hover{text-decoration:underline}
+.mcard iframe{height:520px}
+.fig{border-radius:var(--r)}
+.srcnote{margin-top:32px;font-size:.8rem}
+.trow{display:flex;gap:28px;align-items:center;margin:0 0 10px}
+.trow .tsearch{flex:0 1 320px;min-width:0;width:auto;margin:0}
+#v-trace .tsearch,#v-docs .tsearch{padding-left:38px;background-repeat:no-repeat;background-position:12px center;background-size:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23919eab' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E")}
+.trow .vmode{flex:none;margin:0 0 0 auto}
+.vmode{display:inline-flex;gap:2px;margin:0 0 14px;border:1px solid var(--line);border-radius:var(--r);padding:2px}
+.vmode button{border:0;background:none;font:inherit;font-size:.82rem;font-weight:600;color:var(--muted);padding:4px 12px;border-radius:calc(var(--r) - 2px);cursor:pointer}
+.vmode button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+#v-trace .tree{display:none}
+.tabs2{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:0 0 14px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.tabs2::-webkit-scrollbar{display:none}
+.tabs2 button{border:0;background:none;font:inherit;font-weight:600;font-size:.9rem;color:var(--muted);padding:10px 14px;margin-bottom:-1px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs2 button:hover{color:var(--ink)}
+.tabs2 button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--purple)}
+.tabs2 .n{margin-left:7px;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:99px;background:rgba(145,158,171,.16);color:var(--muted)}
+.tabs2 button[aria-selected=true] .n{background:var(--tint2);color:var(--link)}
+#v-trace.mode-tree .tree{display:block}
+#v-trace.mode-tree .icards{display:none}
+.atable{display:none}
+.tbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 12px;font-size:.88rem;color:var(--muted)}
+.tbar select{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--ink)}
+.tbar input{margin-right:6px}
+#v-trace.mode-table .atable{display:block}
+#v-trace.mode-table .icards,#v-trace.mode-table .tree{display:none}
+.astats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 10px}
+.astat{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.astat b{display:block;font-size:1.5rem;font-weight:600;line-height:1.2}
+.astat span{font-size:.84rem;color:var(--muted)}
+.stgate{margin:0 0 18px;font-size:.88rem;color:var(--muted)}
+.stsrc{margin:0 0 26px}
+.sthead{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 10px;padding:6px 0;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.sthead a{margin-left:auto;font-weight:600}
+.ststatus{padding:1px 8px;border-radius:99px;font-size:.72rem;font-weight:700;background:rgba(145,158,171,.16)}
+.ststatus.ok{background:rgba(34,197,94,.16);color:#118d57}
+.ststatus.w{background:rgba(255,171,0,.16);color:#b76e00}
+html{overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable}
+.top-in{max-width:1480px;padding-left:24px;padding-right:24px}
+.nav2 a[data-nav=guide]{margin-top:10px;border-top:1px dashed var(--line);border-radius:0 0 var(--r) var(--r);padding-top:12px}
+.guide pre{position:relative;padding-right:84px}
+.guide .copybtn{position:absolute;top:8px;right:8px;font:inherit;font-size:.74rem;font-weight:600;padding:3px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);cursor:pointer}
+.guide .copybtn:hover{border-color:var(--ink)}
+.stale{margin:0 0 18px;padding:10px 14px;border-left:3px solid #ffab00;background:rgba(255,171,0,.1);border-radius:var(--r);font-size:.88rem;color:var(--ink)}
+.where{margin:10px 0 18px;padding:8px 12px;border-left:3px solid var(--line);background:var(--surface);font-size:.86rem;color:var(--muted);line-height:1.7}
+.where .wl{display:inline-block;min-width:5.5em;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.where code{font-size:.84rem}
+.srcfile{margin:28px 0 0;font-size:.82rem;color:var(--muted)}
+.foot-tech{margin-top:6px;font-size:.84rem}
+.foot-tech summary{cursor:pointer}
+.linkbtn{font:inherit;font-size:.9rem;color:var(--link);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+/* reference and journey pages */
+html[data-theme] th{background:none}
+.reference .reading,.journey .reading{max-width:none}
+.reference .reading>p,.journey .reading>p,.journey .reading>ul,.journey .reading>ol{max-width:72ch}
+.reference .reading>p>em:only-child,.journey .reading>p>em:only-child{font-style:normal;color:var(--muted)}
+.reference .reading h2,.journey .reading h2{margin-top:36px}
+.reference table,.journey table{margin:8px 0 0}
+.journey td a{text-decoration:none;font-weight:600}
+.journey td a:hover{text-decoration:underline}
+.journey .reading>blockquote{max-width:72ch}
+.back{display:inline-block;margin:0 0 18px;font-size:.8125rem;font-weight:600;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--ink)}
+.journey .reading>p>em:only-child{font-size:.875rem}
+.journey .reading>p:first-child{font-size:1rem}
+.journey .doc>.reading>h1:first-child{margin-bottom:6px}
+.journey .reading code{font-size:.84em}
+.pn{border-top:1px solid var(--line);margin-top:32px;padding-top:14px}
+.pn a{text-decoration:none;font-weight:600}
+.pn a:hover{text-decoration:underline}
+.reference td:first-child{white-space:nowrap;color:var(--muted);font-weight:600;width:1%}
+.reference table.bal td:first-child{white-space:normal;width:auto}
+.gst{font-size:.82rem;font-weight:600;white-space:nowrap}
+.gst::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;background:var(--muted);vertical-align:middle}
+.gst-passed::before{background:#1a7f4b}
+.gst-failed{color:#a33}
+.gst-failed::before{background:#a33}
+.dash{color:var(--muted)}
+
+body .chip.chip.chip{display:inline;background:none;border:0;border-radius:0;padding:0;font-size:inherit;font-weight:400;letter-spacing:0;color:var(--link);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+a.chip:hover{filter:none;text-decoration-thickness:2px}
+span.chip.chip.chip{color:inherit;text-decoration:none}
+.chips{gap:4px 14px}
+.irefs{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+a.iref{display:inline;color:var(--link);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;font-size:.92rem;line-height:1.5}
+a.iref:hover{text-decoration-thickness:2px}
+.irefs a.iref{display:block}
+.idn{flex:none;font-size:.72rem;color:var(--muted);margin-right:8px;white-space:nowrap}
+.icard .itype{font-size:.74rem;color:var(--muted);letter-spacing:.02em}
+
+[data-theme=minimal]{--ink:#1c252e;--bg:#fff;--surface:#f4f6f8;--muted:#637381;--line:rgba(145,158,171,.28);--purple:#00a76f;--link:#007867;--tint:rgba(0,167,111,.08);--tint2:rgba(0,167,111,.16);--on-purple:#fff;--r:8px}
+[data-theme=minimal] body{font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+[data-theme=minimal] h1{font-weight:800;letter-spacing:-.01em}
+[data-theme=minimal] h2{font-weight:700;color:#637381}
+[data-theme=minimal] header.top{background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border-bottom:1px dashed var(--line)}
+[data-theme=minimal] .brand{font-weight:800;letter-spacing:-.01em}
+[data-theme=minimal] .tsearch{background:#fff;border:1px solid rgba(145,158,171,.32);border-radius:8px;padding:9px 14px;color:var(--ink)}
+[data-theme=minimal] .tsearch:focus{outline:0;border-color:#1c252e;box-shadow:0 0 0 1px #1c252e}
+[data-theme=minimal] .side{border-right:1px dashed var(--line)}
+[data-theme=minimal] .nav2 a{border-radius:8px;min-height:44px;font-weight:500;font-size:.9rem;color:#637381}
+[data-theme=minimal] .nav2 a:hover{background:rgba(145,158,171,.08)}
+[data-theme=minimal] .nav2 a[aria-current=page]{background:rgba(0,167,111,.08);color:#007867;font-weight:700}
+[data-theme=minimal] .nav2 a[aria-current=page] .nm{color:#007867;opacity:1}
+[data-theme=minimal] .acard,[data-theme=minimal] .jcard,[data-theme=minimal] .icard{border:0;border-radius:16px;background:#fff;box-shadow:0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12);transition:box-shadow .2s,transform .2s}
+[data-theme=minimal] .acard:hover,[data-theme=minimal] .jcard:hover,[data-theme=minimal] .icard:hover{border:0;box-shadow:0 0 2px 0 rgba(145,158,171,.24),0 20px 40px -4px rgba(145,158,171,.24);transform:translateY(-2px)}
+[data-theme=minimal] .acard .thumb{border-radius:0}
+[data-theme=minimal] .acard .atype,[data-theme=minimal] .jcard .wk,[data-theme=minimal] .icard .itype{color:#919eab}
+[data-theme=minimal] .acard h3,[data-theme=minimal] .jcard h3,[data-theme=minimal] .icard h3{font-weight:700}
+[data-theme=minimal] .stats b{font-weight:800;color:#1c252e}
+[data-theme=minimal] .glist{border-top:0}
+[data-theme=minimal] .grow{border-bottom:1px dashed var(--line)}
+[data-theme=minimal] .grow .gb{height:6px;background:rgba(0,167,111,.16)}
+[data-theme=minimal] .grow .gb i{background:#00a76f;border-radius:99px}
+[data-theme=minimal] .grow .gs,[data-theme=minimal] .gst{display:inline-block;justify-self:start;font-size:.75rem;font-weight:700;line-height:24px;padding:0 8px;border-radius:6px;background:rgba(255,171,0,.16);color:#b76e00}
+[data-theme=minimal] .grow .gs.ok,[data-theme=minimal] .gst-passed{background:rgba(34,197,94,.16);color:#118d57}
+[data-theme=minimal] .grow .gs.no,[data-theme=minimal] .gst-failed{background:rgba(255,86,48,.16);color:#b71d18}
+[data-theme=minimal] .gst::before{display:none}
+[data-theme=minimal] table th{background:#f4f6f8;color:#637381;font-weight:600;font-size:.8125rem;text-transform:none;letter-spacing:0;border-bottom:0}
+[data-theme=minimal] table th:first-child{border-radius:8px 0 0 8px}
+[data-theme=minimal] table th:last-child{border-radius:0 8px 8px 0}
+[data-theme=minimal] table td{border-bottom:1px dashed var(--line)}
+[data-theme=minimal] table.props th{background:none;color:#637381;font-weight:500;border-radius:0;border-bottom:1px dashed var(--line)}
+[data-theme=minimal] .chip,[data-theme=minimal] .idc,[data-theme=minimal] .idtag{border-radius:6px;font-weight:700;font-size:.75rem;border:1px solid transparent}
+[data-theme=minimal] .t-O{background:#00a76f;color:#fff}
+[data-theme=minimal] .t-H{background:transparent;border-color:rgba(0,167,111,.5);color:#007867}
+[data-theme=minimal] .t-D{background:#1c252e;color:#fff}
+[data-theme=minimal] .t-E{background:transparent;border-color:rgba(28,37,46,.35);color:#1c252e}
+[data-theme=minimal] .t-M{background:rgba(145,158,171,.16);color:#454f5b}
+[data-theme=minimal] .t-P{background:transparent;border:1px dashed rgba(145,158,171,.8);color:#637381}
+[data-theme=minimal] .t-A{background:rgba(0,184,217,.16);color:#006c9c}
+[data-theme=minimal] .filters button{border:1px solid rgba(145,158,171,.32);border-radius:8px;background:#fff;color:#454f5b;font-weight:600;padding:5px 12px}
+[data-theme=minimal] .filters button:hover{background:rgba(145,158,171,.08)}
+[data-theme=minimal] .filters button[aria-pressed=true]{background:#1c252e;border-color:#1c252e;color:#fff}
+[data-theme=minimal] .tabs2 button[aria-selected=true]{color:#007867;border-bottom-color:#00a76f}
+[data-theme=minimal] .vmode{border:1px solid rgba(145,158,171,.32);border-radius:8px;padding:3px}
+[data-theme=minimal] .vmode button{border-radius:6px;font-weight:700}
+[data-theme=minimal] .vmode button[aria-pressed=true]{background:#1c252e;color:#fff}
+[data-theme=minimal] .btn{background:#1c252e;color:#fff;border-radius:8px;padding:6px 14px;font-weight:700;font-size:.8125rem}
+[data-theme=minimal] .btn:hover{text-decoration:none;background:#454f5b}
+[data-theme=minimal] .banner,[data-theme=minimal] .warnbox{background:rgba(255,171,0,.12);color:#7a4100;border:0;border-radius:8px;padding:12px 16px}
+[data-theme=minimal] .warnlist li{border-top:0;border-bottom:1px dashed var(--line)}
+[data-theme=minimal] details.help{border:1px dashed var(--line);border-radius:16px;padding:14px 20px}
+[data-theme=minimal] .backlinks{border-top:1px dashed var(--line)}
+[data-theme=minimal] .mcard{border:0;border-radius:16px;box-shadow:0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12);background:#fff;overflow:hidden}
+[data-theme=minimal] .fig{border:0;border-radius:16px;box-shadow:0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12)}
+[data-theme=minimal] .st{border:0;border-radius:6px;background:rgba(145,158,171,.16);color:#454f5b;font-weight:700;line-height:22px}
+[data-theme=minimal] .st-verified{background:rgba(34,197,94,.16);color:#118d57}
+[data-theme=minimal] .st-draft{background:rgba(255,171,0,.16);color:#b76e00;border:0}
+[data-theme=minimal] .st-simulated,[data-theme=minimal] .st-planned{background:rgba(0,184,217,.16);color:#006c9c;border:0}
+[data-theme=minimal] .pn{border-top:1px dashed var(--line)}
+[data-theme=minimal] code{background:rgba(145,158,171,.16);border-radius:6px}
+[data-theme=minimal] footer.foot{border-top:1px dashed var(--line)}
+[data-theme=minimal] .tree ul{border-left:1px dashed var(--line)}
+[data-theme=minimal] hr{border-top:1px dashed var(--line)}
+[data-theme=minimal] .dlink,[data-theme=minimal] .sthead{border-top:1px dashed var(--line)}
+[data-theme=minimal] .dlink:first-child{border-top:0}
+[data-theme=minimal] .wgroup,[data-theme=minimal] .astat{border:0;border-radius:16px;background:#fff;box-shadow:0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12)}
+[data-theme=minimal] pre{background:rgba(145,158,171,.12);border-radius:8px}
+[data-theme=minimal] pre code{background:none}
+</style>
+</head>
+<body data-case="JTL Shop 6.0">
+<a class="skip" href="#main">Skip the menu</a>
+<header class="top"><div class="top-in">
+<div class="brand"><svg class="logo" viewBox="18 50 214 150" fill="currentColor" aria-hidden="true"><path d="M80.5165 60.4055C76.2827 67.7288 75.4817 70.1317 74.9096 77.2261C74.5663 81.8032 74.7952 87.5244 75.4817 90.0418C76.8548 94.7332 76.0921 95.8546 74.4519 95.191C72.8194 94.5455 67.7008 93.4746 47.4474 93.0169C33.1442 92.6736 21.244 92.5592 21.0151 92.5592C20.7862 92.6736 23.1892 96.1064 26.1643 100.226C29.1393 104.345 45.8455 127.573 63.1238 151.832L94.4764 196L96.4216 192.338C97.4515 190.279 101.228 183.184 104.889 176.548C108.436 169.911 112.899 161.215 114.844 157.21C117.705 151.26 118.62 150.23 119.65 151.603C120.337 152.518 128.575 162.931 138.073 174.602L155.236 196L157.296 193.483C158.44 191.995 161.415 186.732 163.933 181.811C169.311 170.941 169.769 163.732 165.992 154.807L163.59 149.2L188.077 112.24C201.579 91.8726 215.081 71.3904 218.171 66.699C221.26 62.0075 224.693 56.9728 225.837 55.7141L228.126 53.1967H207.071C180.296 53.0823 173.316 54.4554 163.475 62.0075C155.122 68.1865 150.888 74.3655 140.247 94.9621L132.351 110.295L130.292 107.663C129.033 106.176 126.63 103.201 124.914 101.027C108.78 81.0022 87.9541 54.4554 87.4964 53.1967C86.4666 50.6794 85.5512 51.7092 80.5165 60.4055ZM213.365 62.0075C212.22 62.8085 184.758 103.544 169.54 127.116C160.958 140.389 157.91 142.982 156.953 141.076C156.601 140.364 155.292 138.4 154.092 136.727C152.49 135.011 149.286 131.006 146.883 127.688C142.65 121.738 141.547 122.036 140.933 122.996C140.292 124 139.583 125.309 138.988 126.429C137.845 128.582 137.272 128.718 140.59 132.265C147.456 139.588 156.953 152.289 158.669 156.294C161.072 162.244 160.843 171.055 157.983 177.806C156.61 180.896 155.236 183.413 154.779 183.299C154.435 183.299 148.485 175.976 141.505 167.165C134.64 158.24 127.431 149.314 125.715 147.255L122.396 143.364L125.829 137.414C127.66 134.096 131.894 126.2 135.212 119.907C158.669 75.2809 162.445 69.7885 171.599 65.5547C174.574 64.1816 178.007 62.5796 179.266 62.0075C181.44 60.9777 211.419 59.9478 213.479 60.8633C213.937 61.0921 213.937 61.5498 213.365 62.0075ZM98.7102 79.8579C104.66 87.41 113.7 98.8526 118.849 105.26L128.346 117.046L123.541 126.658C120.794 132.036 118.277 136.384 117.819 136.384C117.133 136.499 110.954 128.832 90.9292 103.315C83.0338 93.2457 80.9742 87.5244 81.6607 78.7137C82.3473 72.077 85.6656 63.495 87.0387 65.097C87.4964 65.6691 92.76 72.3058 98.7102 79.8579ZM77.3125 103.315C83.4915 106.405 88.5263 111.668 100.999 127.917C105.69 133.981 110.382 140.046 111.64 141.533C113.7 144.165 113.7 144.28 108.78 153.205C106.148 158.24 101.571 166.821 98.7102 172.428C94.362 180.896 93.3322 182.269 92.3023 180.553C91.7302 179.408 89.3273 176.09 87.1532 173C84.9791 169.911 80.6309 163.732 77.427 159.269C74.3375 154.692 67.2431 144.852 61.7507 137.185C56.2582 129.519 50.0792 121.051 48.0196 118.191C46.0743 115.33 42.4127 110.41 40.0098 107.206C37.6068 104.002 35.6616 101.027 35.6616 100.569C35.6616 99.9968 43.7858 99.8824 53.7409 100.111C70.1037 100.455 72.1634 100.798 77.3125 103.315Z"/></svg><span>JTL Shop 6.0</span></div>
+
+</div></header>
+<div class="shell">
+<aside class="side"><details class="menu" open><summary>Menu</summary><nav class="nav2" aria-label="Report sections"><a href="#/overview" data-nav="overview">Overview</a><a href="#/context" data-nav="context">Context<span class="nm">6</span></a><a href="#/journey" data-nav="journey">Stages<span class="nm">9</span></a><a href="#/docs" data-nav="docs">Work<span class="nm">32</span></a><a href="#/trace" data-nav="trace">Insights<span class="nm">0</span></a><a href="#/reference" data-nav="reference">Standards<span class="nm">3</span></a><a href="#/guide" data-nav="guide">Guide</a></nav></details></aside>
+<main id="main">
+<section class="view" id="v-overview"><div class="wrap"><h1>JTL Shop 6.0</h1><p class="lede">Agreement with product and business: <strong>Pending</strong></p><p class="where"><span class="wl">Source</span> <code>README.md</code> (project card), the items in <code>insights/</code> and <code>standards/gates.md</code>. To change content, edit the source file and rebuild the report.</p><div class="stats"><span><b>0</b>opportunities</span><span><b>0</b>hypotheses</span><span><b>0</b>metrics</span><span><b>0</b>decisions</span><span><b>0</b>evidence</span><span><b>0</b>findings</span><span class="w ok"><b>0</b>to review</span></div><h2>Gates</h2><div class="glist"><div class="grow"><div class="gn"><small>Discover</small><strong>Question + evidence</strong></div><div class="gs ">Open</div><div class="gb"><i style="width:0%"></i></div><div class="gc">0/7 checks</div></div><div class="grow"><div class="gn"><small>Define</small><strong>Evidence + agreement</strong></div><div class="gs ">Open</div><div class="gb"><i style="width:0%"></i></div><div class="gc">0/4 checks</div></div><div class="grow"><div class="gn"><small>Develop</small><strong>Alignment</strong></div><div class="gs ">Open</div><div class="gb"><i style="width:0%"></i></div><div class="gc">0/4 checks</div></div><div class="grow"><div class="gn"><small>Deliver</small><strong>Real users + buildability</strong></div><div class="gs ">Open</div><div class="gb"><i style="width:0%"></i></div><div class="gc">0/4 checks</div></div></div><h2>Warnings</h2><p class="ok">Nothing to fix: every decision traces back to an opportunity, and serious findings have a way forward.</p><details class="winfo"><summary>Housekeeping <span class="wcount">10</span></summary><div class="wgroups"><details class="wgroup" id="wg-principles"><summary><span class="wtitle">Principle without a check question</span><span class="wcount">10</span></summary><p class="whint">Write a yes/no question for each principle.</p><ul class="wgrid"><li><a class="chip t-P" href="#/principles" title="Visibility of system status">Principle 1</a></li><li><a class="chip t-P" href="#/principles" title="Match between system and the real world">Principle 2</a></li><li><a class="chip t-P" href="#/principles" title="User control and freedom">Principle 3</a></li><li><a class="chip t-P" href="#/principles" title="Consistency and standards">Principle 4</a></li><li><a class="chip t-P" href="#/principles" title="Error prevention">Principle 5</a></li><li><a class="chip t-P" href="#/principles" title="Recognition rather than recall">Principle 6</a></li><li><a class="chip t-P" href="#/principles" title="Flexibility and efficiency of use">Principle 7</a></li><li><a class="chip t-P" href="#/principles" title="Aesthetic and minimalist design">Principle 8</a></li><li><a class="chip t-P" href="#/principles" title="Help users recognise, diagnose and recover from errors">Principle 9</a></li><li><a class="chip t-P" href="#/principles" title="Help and documentation">Principle 10</a></li></ul></details></div></details><h2>Decision alignment</h2><p class="ok">No decisions yet.</p><details class="help"><summary>How to read the report, and key terms</summary><p>Key idea: <strong>every decision traces back to the user need behind it.</strong> Use the left menu to move between pages. Open the items marked ⚠ in Insights to see what needs a look.</p><dl><dt>Opportunity</dt><dd>What users need or struggle with, backed by evidence. Not a feature.</dd><dt>Hypothesis</dt><dd>What the team believes, with how it will know if it is right.</dd><dt>Decision</dt><dd>A specific design choice, with the reason.</dd><dt>Evidence</dt><dd>A test or study that checks a hypothesis, with its result. A <em>planned</em> or <em>simulated</em> label means it is not evidence from real users yet.</dd><dt>Metric</dt><dd>The number that tells if a hypothesis is right. An <em>assumed</em> label means the product owner has not confirmed it.</dd><dt>Principle</dt><dd>A design rule every decision should meet, for example the 10 usability heuristics by Nielsen (P1 to P10).</dd><dt>Gate</dt><dd>A check before moving to the next stage.</dd><dt>Alignment</dt><dd>How well each decision traces to a user need and meets the principles.</dd></dl></details></div></section>
+<section class="view reference" id="v-context"><div class="wrap"><div class="jlist"><h1>Context</h1><p class="lede">Background for the project: product and users, rules, design system, open questions.</p><div class="where"><span class="wl">Folder</span> <code>context/</code><br><span class="wl">Add new</span> drop a <code>.md</code> file into the folder and the page appears here. The AI tool reads this folder first.</div><div class="jcards"><a class="jcard" href="#/product-and-users"><h3>Product and users</h3><p>Half a page, anonymised. This file goes into the AI steps first, so write it for a reader who knows nothing about the project.</p></a><a class="jcard" href="#/accessibility-rules"><h3>Accessibility rules</h3><p>The requirements the design must meet. Edit them to match your company&#x27;s standard. If your company has none, use this list as a ba</p></a><a class="jcard" href="#/data-rules"><h3>Data rules</h3><p>Three lines, in your own words. Read your company&#x27;s AI policy first.</p></a><a class="jcard" href="#/design-system-notes"><h3>Design system notes</h3><p>Write this when you start building the prototype, in a form an AI coding tool can read. Short, concrete, no paragraph that needs i</p></a><a class="jcard" href="#/glossary"><h3>Glossary (optional)</h3><p>In your own words, with an example from your case. Start with the three terms you meet most often in the project.</p></a><a class="jcard" href="#/open-questions"><h3>Open questions</h3><p>What the AI says it needs to know that product-and-users.md does not say yet. Keep the useful ones.</p></a></div></div><section class="doc" id="product-and-users" data-title="Product and users"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Product and users</h1>
+<p><em>Half a page, anonymised. This file goes into the AI steps first, so write it for a reader who knows nothing about the project.</em></p>
+<h2>The product</h2>
+<p>What it is, in two sentences:</p>
+<h2>The users</h2>
+<p>Who they are, their main job to be done, and the situation in which they use the product:</p>
+<h2>Where it stands now</h2>
+<p>What exists today (screens, flows, figures you are allowed to share):</p>
+<h2>What success might look like</h2>
+<p><em>A guess is fine. Mark it <strong>assumed</strong> until the PO confirms.</em></p>
+<h2>What I do not know</h2></div><p class="srcfile">Source file: <code>context/product-and-users.md</code></p></section><section class="doc" id="accessibility-rules" data-title="Accessibility rules"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Accessibility rules</h1>
+<p><em>The requirements the design must meet. Edit them to match your company's standard. If your company has none, use this list as a baseline (WCAG 2.2 AA).</em></p>
+<ul><li>Text contrast of at least 4.5:1 (3:1 for large text and interface components such as input borders)</li><li>Everything works with a keyboard, in a sensible order, and focus is always visible</li><li>Every input has a visible label, and error messages say what went wrong and how to fix it</li><li>Touch targets of at least 44 x 44 px when possible (never below 24 x 24)</li><li>Meaning is never conveyed by colour alone</li><li>Images that carry meaning have a text alternative</li></ul>
+<p><strong>Rules specific to my company (if any):</strong></p></div><p class="srcfile">Source file: <code>context/accessibility-rules.md</code></p></section><section class="doc" id="data-rules" data-title="Data rules"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Data rules</h1>
+<p><em>Three lines, in your own words. Read your company's AI policy first.</em></p>
+<ol><li>What I am allowed to paste into an AI tool:</li><li>What I will not paste (or only paste after anonymising):</li><li>Which tool I use for what:</li></ol></div><p class="srcfile">Source file: <code>context/data-rules.md</code></p></section><section class="doc" id="design-system-notes" data-title="Design system notes"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Design system notes</h1>
+<p><em>Write this when you start building the prototype, in a form an AI coding tool can read. Short, concrete, no paragraph that needs interpreting.</em></p>
+<h2>Where the source of truth lives</h2>
+<p>(file, link or folder)</p>
+<h2>Tokens</h2>
+<ul><li>Colour: (name = value, and what it is used for)</li><li>Type: (font family, size, weight, line height)</li><li>Spacing and radius:</li></ul>
+<h2>Components</h2>
+<div class="table-wrap"><table class="bal" style="min-width:242px"><colgroup><col style="width:39.4%"><col style="width:30.5%"><col style="width:30.0%"></colgroup><thead><tr><th scope="col">Component</th><th scope="col">States</th><th scope="col">Rules</th></tr></thead><tbody><tr><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr></tbody></table></div>
+<h2>Patterns</h2>
+<p>(How screens are put together: layout grid, navigation, forms, empty states and error states)</p>
+<h2>Do and do not</h2>
+<ul><li>Do:</li><li>Do not:</li></ul>
+<h2>Accessibility rules</h2>
+<p>(Point to <code>accessibility-rules.md</code>, and list what is specific to each component)</p></div><p class="srcfile">Source file: <code>context/design-system-notes.md</code></p></section><section class="doc" id="glossary" data-title="Glossary (optional)"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Glossary (optional)</h1>
+<p><em>In your own words, with an example from your case. Start with the three terms you meet most often in the project.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:334px"><colgroup><col style="width:17.2%"><col style="width:20.9%"><col style="width:27.6%"><col style="width:34.3%"></colgroup><thead><tr><th scope="col">Term</th><th scope="col">In my words</th><th scope="col">Example from my case</th><th scope="col">What I will do differently</th></tr></thead><tbody><tr><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr></tbody></table></div></div><p class="srcfile">Source file: <code>context/glossary.md</code></p></section><section class="doc" id="open-questions" data-title="Open questions"><a class="back" href="#/context">← Context</a><div class="reading"><h1>Open questions</h1>
+<p><em>What the AI says it needs to know that <code>product-and-users.md</code> does not say yet. Keep the useful ones.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:320px"><colgroup><col style="width:24.2%"><col style="width:28.3%"><col style="width:27.3%"><col style="width:20.1%"></colgroup><thead><tr><th scope="col">Question</th><th scope="col">Why it matters</th><th scope="col">Who can answer</th><th scope="col">Status</th></tr></thead><tbody><tr><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr></tbody></table></div></div><p class="srcfile">Source file: <code>context/open-questions.md</code></p></section></div></section>
+<section class="view journey" id="v-journey"><div class="wrap"><div class="jlist"><h1>Stages</h1><p class="lede">Selected and kept up to date automatically from <code>work/</code> and <code>insights/</code>.</p><div class="jcards"><a class="jcard" href="#/stage-scope"><span class="wk">01 · Discover</span><h3>Scope</h3><p>Business question, outcome, agreement</p></a><a class="jcard" href="#/stage-evidence"><span class="wk">02 · Discover</span><h3>Evidence</h3><p>What was learned from the sources, one source per claim</p></a><a class="jcard" href="#/stage-problem-brief"><span class="wk">03 · Define</span><h3>Problem brief</h3><p>Opportunity, hypothesis, metric, principle</p></a><a class="jcard" href="#/stage-develop"><span class="wk">04 · Develop</span><h3>Options, flows, prototype</h3><p>The directions explored, decisions</p></a><a class="jcard" href="#/stage-alignment"><span class="wk">05 · Develop</span><h3>Alignment check</h3><p>Principle audit, verdict</p></a><a class="jcard" href="#/stage-findings"><span class="wk">06 · Deliver</span><h3>Findings</h3><p>Results of testing with users</p></a><a class="jcard" href="#/stage-handoff"><span class="wk">07 · Deliver</span><h3>Handoff and measurement</h3><p>Handoff pack, measurement plan</p></a><a class="jcard" href="#/stage-learning"><span class="wk">08 · Learn</span><h3>Learning</h3><p>What was learned after launch: metric against target, traced back to the opportunity</p></a><a class="jcard" href="#/stage-decision-log"><span class="wk">09 · All stages</span><h3>Decision log</h3><p>One line per decision, with its reason</p></a></div></div><section class="doc" id="stage-scope" data-title="Scope"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Scope</h1><p class="lede">Business question, outcome, agreement</p><p class="stgate"><a href="#/gates">Gate Discover (Question + evidence)</a>: 0/7 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/scope.md</code><span class="ststatus w">Planned only</span><a href="#/scope">Open in Work →</a></div><p><em>Discover stage. Define it together with the PO and business, or write it as assumptions if you cannot reach them.</em></p>
+<h2>Business question (in their words)</h2>
+<h2>Outcome and success metric</h2>
+<ul><li>Outcome:</li><li>Metric and baseline:</li><li>Confirmed by / date:</li><li>Status: confirmed / assumed</li></ul>
+<h2>Users and constraints</h2>
+<h2>What I already believe</h2>
+<p><em>Three to five statements. You will test them in Discover.</em> 1. 2. 3.</p>
+<h2>Agreement status</h2>
+<p><strong>agreed / pending / not available</strong> Who was asked, when, and what they said:</p>
+<h2>Open questions for the next conversation</h2></section></div><p class="srcfile">This page is built from: <code>work/scope.md</code></p><nav class="pn" aria-label="Previous and next page"><span></span><a href="#/stage-evidence">Evidence →</a></nav></section><section class="doc" id="stage-evidence" data-title="Evidence"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Evidence</h1><p class="lede">What was learned from the sources, one source per claim</p><p class="stgate"><a href="#/gates">Gate Discover (Question + evidence)</a>: 0/7 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/user-voice-synthesis.md</code><span class="ststatus w">Planned only</span><a href="#/user-voice-synthesis">Open in Work →</a></div><p><em>Working file for the user-voice flow. The AI returns only its own section, and you paste it in. Anonymised quotes live in <code>sources/anonymised/</code> with IDs (R01, I01-01 ...).</em></p>
+<h2>Scope</h2>
+<ul><li>The question:</li><li>Who we need to hear from:</li><li>What I already believe:</li></ul>
+<h2>Sources and guide</h2>
+<p><em>Step 2: the AI's suggestions go here, labelled. Step 3: replace them with your final list of sources and your interview guide.</em></p>
+<h2>Coding (verified)</h2>
+<p><em>Step 6. A copy of the draft that you corrected. Write the misquoted quotes, the misplaced quotes and the error rate at the top.</em></p>
+<h2>Themes</h2>
+<p><em>Step 7. The AI's themes with counts (number of quotes and number of people), one quote ID as an example, one counter-quote, and the check of my own belief.</em></p>
+<h2>Opportunities + limits</h2>
+<p><em>Step 8. Three to five needs (not features), each with its quote IDs. Then what this sample cannot tell you.</em></p></section><section class="stsrc"><div class="sthead"><code>work/competitor-analysis.md</code><span class="ststatus w">Planned only</span><a href="#/competitor-analysis">Open in Work →</a></div><p><em>Working file for the competitor flow. The sources you saved are in <code>sources/anonymised/</code>.</em></p>
+<h2>Scope</h2>
+<ul><li>The decision this analysis serves:</li><li>The criteria that matter (at most 6):</li><li>What I already believe:</li></ul>
+<h2>Competitors</h2>
+<p><em>Step 2: the AI's suggestions, labelled. Step 3: your final list, with a reason for each competitor chosen and each one dropped.</em></p>
+<h2>Evidence (verified)</h2>
+<p><em>Step 6. Your corrected copy. Write the error rate at the top.</em></p>
+<h2>Patterns</h2>
+<p><em>Step 7. The patterns and the gaps, the check of your starting belief, and the counter-case.</em></p>
+<h2>Insights + decision</h2>
+<p><em>Step 8. Three to five insights with links to the evidence, the answer to the decision in the scope, and what this analysis cannot tell you.</em></p></section></div><p class="srcfile">This page is built from: <code>work/user-voice-synthesis.md</code>, <code>work/competitor-analysis.md</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-scope">← Scope</a><a href="#/stage-problem-brief">Problem brief →</a></nav></section><section class="doc" id="stage-problem-brief" data-title="Problem brief"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Problem brief</h1><p class="lede">Opportunity, hypothesis, metric, principle</p><p class="stgate"><a href="#/gates">Gate Define (Evidence + agreement)</a>: 0/4 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/problem-brief.md</code><span class="ststatus w">Planned only</span><a href="#/problem-brief">Open in Work →</a></div><p><em>Define stage. A shared requirement. Sign it off with product and business, or record the agreement status.</em></p>
+<h2>Outcome and success metrics</h2>
+<p><em>Goal, signal, metric. Write <strong>assumed</strong> for anything the PO has not confirmed. Each metric is a file in <code>insights/metrics/</code> (M1, M2 ...) and that file is the single source.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:308px"><colgroup><col style="width:20.8%"><col style="width:21.3%"><col style="width:36.7%"><col style="width:21.3%"></colgroup><thead><tr><th scope="col">Goal</th><th scope="col">Signal</th><th scope="col">Metric (and baseline)</th><th scope="col">Status</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Opportunities (ranked)</h2>
+<p><em>A user need backed by evidence, not a feature. Each opportunity is a file in <code>insights/opportunities/</code> (O1, O2 ...) and that file is the single source: write it there directly, do not keep a duplicate table here. The summary table shows on the Problem brief page in Stages, built from those files.</em></p>
+<h2>Hypotheses</h2>
+<p><em>We believe that [decision] for [users] will [change what], and we will know by [test and metric]. Each hypothesis is a file in <code>insights/hypotheses/</code> (H1, H2 ...), with a <code>Serves</code> line pointing to the opportunity and a <code>Metric</code> line.</em></p>
+<h2>Principle checks to apply</h2>
+<p>(Point to <code>standards/principle-checks.md</code>)</p>
+<h2>Agreement</h2>
+<p>Status: agreed / pending / not available. Who, when, and what they said:</p></section><h2>Opportunities (ranked)</h2><div class="table-wrap"><table class="bal" style="min-width:506px"><colgroup><col style="width:13.8%"><col style="width:13.8%"><col style="width:21.3%"><col style="width:14.3%"><col style="width:20.2%"><col style="width:16.6%"></colgroup><thead><tr><th scope="col">Rank</th><th scope="col">ID</th><th scope="col">Opportunity</th><th scope="col">Impact</th><th scope="col">Confidence</th><th scope="col">Rank reason</th></tr></thead><tbody></tbody></table></div><h2>Hypotheses</h2><div class="table-wrap"><table class="bal" style="min-width:340px"><colgroup><col style="width:21.4%"><col style="width:30.4%"><col style="width:21.9%"><col style="width:26.3%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Hypothesis</th><th scope="col">Serves</th><th scope="col">Evidence</th></tr></thead><tbody></tbody></table></div><h2>Success metrics</h2><div class="table-wrap"><table class="bal" style="min-width:464px"><colgroup><col style="width:15.4%"><col style="width:15.9%"><col style="width:19.2%"><col style="width:15.9%"><col style="width:15.9%"><col style="width:17.6%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Metric</th><th scope="col">Baseline</th><th scope="col">Target</th><th scope="col">Result</th><th scope="col">Verdict</th></tr></thead><tbody></tbody></table></div></div><p class="srcfile">This page is built from: <code>work/problem-brief.md</code>, item tables from <code>insights/</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-evidence">← Evidence</a><a href="#/stage-develop">Options, flows, prototype →</a></nav></section><section class="doc" id="stage-develop" data-title="Options, flows, prototype"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Options, flows, prototype</h1><p class="lede">The directions explored, decisions</p><p class="stgate"><a href="#/gates">Gate Develop (Alignment)</a>: 0/4 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/options.md</code><span class="ststatus w">Planned only</span><a href="#/options">Open in Work →</a></div><p><em>Develop stage.</em></p>
+<h2>Three directions</h2>
+<p><em>At least three directions that are really different. If two directions are only variants of one idea, they count as one.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:394px"><colgroup><col style="width:21.5%"><col style="width:23.6%"><col style="width:16.5%"><col style="width:21.7%"><col style="width:16.7%"></colgroup><thead><tr><th scope="col">Direction</th><th scope="col">The idea in one line</th><th scope="col">Serves</th><th scope="col">Pulls against</th><th scope="col">Why not</th></tr></thead><tbody><tr><td>A</td><td></td><td></td><td></td><td></td></tr><tr><td>B</td><td></td><td></td><td></td><td></td></tr><tr><td>C</td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Chosen direction and why</h2>
+<p><em>Check against the opportunities and the principle checks. Record why the other directions were parked.</em></p>
+<h2>Flow</h2>
+<p>(A link, or a description of the main flow, step by step)</p>
+<h2>Content notes</h2>
+<p><em>The part the AI drafted and the part you rewrote. No final copy written by the AI goes out without you reviewing it.</em></p>
+<h2>Design decisions</h2>
+<p><em>Each design decision is a file in <code>insights/decisions/</code> (D1, D2 ...) and that file is the single source. Record the hypothesis it tests (<code>Tests</code>), the principle it follows (<code>Follows</code>) or pulls against (<code>Pulls against</code>). Do not keep a duplicate table here.</em></p></section><section class="stsrc"><div class="sthead"><code>work/prototype/index.md</code><span class="ststatus w">Planned only</span><a href="#/prototype">Open in Work →</a></div><p>A small design system, a rules file and an empty page, so you can build your first version without setting anything up. <strong>If you have your own design system, use it instead:</strong> write your own <code>design-system-notes.md</code> and rules file, and use this starter only as a pattern.</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">File</th><th scope="col">What it is</th></tr></thead><tbody><tr><td><code>design-system/tokens.css</code></td><td>The variables: colour, type, spacing, radius, touch target</td></tr><tr><td><code>design-system/components.css</code></td><td>Button, field, radio card, card, badge, alert, step indicator</td></tr><tr><td><code>design-system/components.html</code></td><td>Every component and state, on one page</td></tr><tr><td><code>design-system/README.md</code></td><td>The design system notes, written for an AI coding tool</td></tr><tr><td><code>project-rules.md</code></td><td>The rules file: give it to your AI coding tool</td></tr><tr><td><code>index.html</code></td><td>An empty page to build on</td></tr></tbody></table></div>
+<h2>Steps</h2>
+<ol><li>This folder is already at <code>work/prototype/</code> in your case folder. Start here.</li><li>Open <code>design-system/components.html</code> in a browser and look at what exists.</li><li>Give the AI coding tool <code>project-rules.md</code>, your flow and content notes, and one screen to build. Check the files it changed.</li><li>Save a working copy after each screen you are happy with.</li></ol></section><h2>Design decisions</h2><div class="table-wrap"><table class="bal" style="min-width:636px"><colgroup><col style="width:10.7%"><col style="width:13.6%"><col style="width:10.7%"><col style="width:16.0%"><col style="width:16.7%"><col style="width:10.7%"><col style="width:10.7%"><col style="width:10.7%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Decision</th><th scope="col">Tests</th><th scope="col">Follows principle</th><th scope="col">Pulls against principle</th><th scope="col">Owner</th><th scope="col">Date</th><th scope="col">State</th></tr></thead><tbody></tbody></table></div></div><p class="srcfile">This page is built from: <code>work/options.md</code>, <code>work/prototype/index.md</code>, item tables from <code>insights/</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-problem-brief">← Problem brief</a><a href="#/stage-alignment">Alignment check →</a></nav></section><section class="doc" id="stage-alignment" data-title="Alignment check"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Alignment check</h1><p class="lede">Principle audit, verdict</p><p class="stgate"><a href="#/gates">Gate Develop (Alignment)</a>: 0/4 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/alignment.md</code><span class="ststatus w">Planned only</span><a href="#/alignment">Open in Work →</a></div><p><em>End of the Develop stage. Does every decision trace back to a user need and pass the principles? The alignment table lives in <code>hub/README.md</code>; this file holds your audit and verdicts.</em></p>
+<h2>Alignment table</h2>
+<p><em>Paste or link the alignment table from the Insights section of the report (the Alignment table mode). Record every decision with no user need behind it, every opportunity with no decision, every hypothesis with no test.</em></p>
+<h2>Principle audit (top three decisions)</h2>
+<p><em>The AI argues where each decision violates a principle; you decide.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:344px"><colgroup><col style="width:26.1%"><col style="width:28.2%"><col style="width:24.0%"><col style="width:21.7%"></colgroup><thead><tr><th scope="col">Decision</th><th scope="col">Principle</th><th scope="col">Passes?</th><th scope="col">Reason</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Verdicts</h2>
+<div class="table-wrap"><table class="bal" style="min-width:254px"><colgroup><col style="width:24.3%"><col style="width:53.6%"><col style="width:22.1%"></colgroup><thead><tr><th scope="col">Finding</th><th scope="col">Fix / accept as a recorded trade-off / cut</th><th scope="col">Reason</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table></div></section></div><p class="srcfile">This page is built from: <code>work/alignment.md</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-develop">← Options, flows, prototype</a><a href="#/stage-findings">Findings →</a></nav></section><section class="doc" id="stage-findings" data-title="Findings"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Findings</h1><p class="lede">Results of testing with users</p><p class="stgate"><a href="#/gates">Gate Deliver (Real users + buildability)</a>: 0/4 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/findings.md</code><span class="ststatus w">Planned only</span><a href="#/findings">Open in Work →</a></div><p><em>Deliver stage, after the test. What real users did. The AI can help analyse; check every finding against the notes or the recording.</em></p>
+<h2>Results against the baseline</h2>
+<div class="table-wrap"><table class="bal" style="min-width:308px"><colgroup><col style="width:23.9%"><col style="width:28.7%"><col style="width:23.9%"><col style="width:23.4%"></colgroup><thead><tr><th scope="col">Metric</th><th scope="col">Baseline</th><th scope="col">Result</th><th scope="col">Met?</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Findings, weighted by importance</h2>
+<p><em>Ranked by importance, not by how many times it was mentioned. Link each finding to a recording or a note.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:344px"><colgroup><col style="width:22.8%"><col style="width:24.8%"><col style="width:24.8%"><col style="width:27.6%"></colgroup><thead><tr><th scope="col">Finding</th><th scope="col">Severity</th><th scope="col">Evidence</th><th scope="col">What changes</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>What changed because of this</h2></section><h2>Evidence</h2><div class="table-wrap"><table class="bal" style="min-width:320px"><colgroup><col style="width:22.5%"><col style="width:27.5%"><col style="width:22.5%"><col style="width:27.5%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Evidence</th><th scope="col">Tests</th><th scope="col">Measures</th></tr></thead><tbody></tbody></table></div><h2>Findings (by severity)</h2><div class="table-wrap"><table class="bal" style="min-width:598px"><colgroup><col style="width:11.8%"><col style="width:13.6%"><col style="width:14.9%"><col style="width:16.2%"><col style="width:12.4%"><col style="width:13.6%"><col style="width:17.4%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Finding</th><th scope="col">Severity</th><th scope="col">Principle</th><th scope="col">Found in</th><th scope="col">Affects</th><th scope="col">Resolution</th></tr></thead><tbody></tbody></table></div></div><p class="srcfile">This page is built from: <code>work/findings.md</code>, item tables from <code>insights/</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-alignment">← Alignment check</a><a href="#/stage-handoff">Handoff and measurement →</a></nav></section><section class="doc" id="stage-handoff" data-title="Handoff and measurement"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Handoff and measurement</h1><p class="lede">Handoff pack, measurement plan</p><p class="stgate"><a href="#/gates">Gate Deliver (Real users + buildability)</a>: 0/4 checks passed · Open</p><section class="stsrc"><div class="sthead"><code>work/handoff.md</code><span class="ststatus w">Planned only</span><a href="#/handoff">Open in Work →</a></div><p><em>Deliver stage, at handoff. What a developer needs to build it without coming back with questions.</em></p>
+<h2>The prototype</h2>
+<p>A link or a folder. This is a reference, not production code.</p>
+<h2>Decisions and reasons</h2>
+<p>(Point to the decision log in <code>insights/case-log.md</code>)</p>
+<h2>Acceptance notes</h2>
+<p><em>What must be true when the product has been built.</em> -</p>
+<h2>Open questions</h2>
+<p>-</p></section><section class="stsrc"><div class="sthead"><code>work/measurement-plan.md</code><span class="ststatus w">Planned only</span><a href="#/measurement-plan">Open in Work →</a></div><p><em>Deliver stage, at handoff. What to track after launch, and who is responsible. Give it to the PO even if you cannot see the data yourself.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:288px"><colgroup><col style="width:20.4%"><col style="width:29.6%"><col style="width:24.8%"><col style="width:25.3%"></colgroup><thead><tr><th scope="col">Metric</th><th scope="col">Where to track it</th><th scope="col">Who owns it</th><th scope="col">Review date</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>How the AI-assisted workflow performed</h2>
+<p><em>Counts, not impressions: time per step, the error rate caught at the gates, the number of redos.</em></p></section></div><p class="srcfile">This page is built from: <code>work/handoff.md</code>, <code>work/measurement-plan.md</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-findings">← Findings</a><a href="#/stage-learning">Learning →</a></nav></section><section class="doc" id="stage-learning" data-title="Learning"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Learning</h1><p class="lede">What was learned after launch: metric against target, traced back to the opportunity</p><section class="stsrc"><div class="sthead"><code>work/learning.md</code><span class="ststatus w">Planned only</span><a href="#/learning">Open in Work →</a></div><p><em>After launch. What the metrics measured against their targets, what was learned, and which opportunities to reopen. The results table below is built by the report from the metric files; you write this part.</em></p>
+<h2>What we shipped</h2>
+<p>[What was shipped, when, and to whom.]</p>
+<h2>What the numbers said</h2>
+<p>[One paragraph: which metrics were met, which were not, and how far you trust the numbers (sample, measuring period). The detailed table is below.]</p>
+<h2>What we learned</h2>
+<ul><li>[Lesson 1]</li><li>[Lesson 2]</li></ul>
+<h2>Opportunities to revisit</h2>
+<p><em>Which opportunities need re-ranking, splitting or closing, and why. Write the codes (O1, O2...) to link back to the need.</em></p>
+<ul><li>[O?]: [why reopen it]</li></ul>
+<h2>What changes next</h2>
+<p>[Changes for the next round: new decisions, new hypotheses. Add them to <code>insights/case-log.md</code>.]</p></section><h2>Outcomes: metric, result and the need behind it</h2><div class="table-wrap"><table class="bal" style="min-width:682px"><colgroup><col style="width:10.2%"><col style="width:10.7%"><col style="width:10.7%"><col style="width:10.7%"><col style="width:13.4%"><col style="width:11.9%"><col style="width:15.3%"><col style="width:17.1%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Metric</th><th scope="col">Target</th><th scope="col">Result</th><th scope="col">Measured on</th><th scope="col">Verdict</th><th scope="col">Hypothesis</th><th scope="col">Opportunity behind it</th></tr></thead><tbody></tbody></table></div></div><p class="srcfile">This page is built from: <code>work/learning.md</code>, item tables from <code>insights/</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-handoff">← Handoff and measurement</a><a href="#/stage-decision-log">Decision log →</a></nav></section><section class="doc" id="stage-decision-log" data-title="Decision log"><a class="back" href="#/journey">← Stages</a><div class="reading"><h1>Decision log</h1><p class="lede">One line per decision, with its reason</p><section class="stsrc"><div class="sthead"><code>insights/case-log.md</code><a href="#/stage-decision-log">Open in Work →</a></div><p><em>One line per decision, with the reason. Record what was cut and the trade-offs accepted too. Say where the AI was used.</em></p>
+<p><em>The report checks the Items column: the codes must exist (for example D2, E1), and every decision should have at least one line here. A code in the Items column becomes a link.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:304px"><colgroup><col style="width:22.1%"><col style="width:27.2%"><col style="width:22.6%"><col style="width:28.0%"></colgroup><thead><tr><th scope="col">Date</th><th scope="col">Decision</th><th scope="col">Reason</th><th scope="col">Items (IDs)</th></tr></thead><tbody><tr><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr></tbody></table></div></section></div><p class="srcfile">This page is built from: <code>work/../insights/case-log.md</code></p><nav class="pn" aria-label="Previous and next page"><a href="#/stage-learning">← Learning</a><span></span></nav></section></div></section>
+<section class="view docs" id="v-docs"><div class="wrap"><div class="jlist"><h1>Work</h1><p class="lede">Everything made in the project: analysis, personas, surveys, flows, wireframes, prototypes. Each document links to the decisions it supports.</p><div class="where"><span class="wl">Folder</span> <code>work/</code><br><span class="wl">Add new</span> drop a single <code>.md</code> file into the folder; for several files (images, PDFs, video) create a subfolder with an <code>index.md</code>. Or ask the AI tool: "add this document to the project".</div><input id="dsearch" class="tsearch" type="search" placeholder="Search documents" aria-label="Search documents"><div class="tabs2" role="tablist" aria-label="Filter by stage"><button type="button" role="tab" aria-selected="true" data-fstage="">All<span class="n">32</span></button><button type="button" role="tab" aria-selected="false" data-fstage="Discover">Discover<span class="n">9</span></button><button type="button" role="tab" aria-selected="false" data-fstage="Define">Define<span class="n">7</span></button><button type="button" role="tab" aria-selected="false" data-fstage="Develop">Develop<span class="n">8</span></button><button type="button" role="tab" aria-selected="false" data-fstage="Deliver">Deliver<span class="n">7</span></button><button type="button" role="tab" aria-selected="false" data-fstage="Learn">Learn<span class="n">1</span></button></div><p class="tcount" id="dcount" aria-live="polite"></p><div class="acards" id="acards"><a class="acard" href="#/scope" data-type="scope" data-stage="Discover" data-text="scope the business question, the outcome it should move, who you build for, and what you assume. scope"><h3>Scope</h3><p>The business question, the outcome it should move, who you build for, and what you assume.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/stakeholder-map" data-type="stakeholder-map" data-stage="Discover" data-text="stakeholder map who decides, who is affected, and what each of them needs from this project. stakeholder-map"><h3>Stakeholder map</h3><p>Who decides, who is affected, and what each of them needs from this project.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/assumptions-map" data-type="assumptions-map" data-stage="Discover" data-text="assumptions map list what you believe about users, the problem and the solution, then rank by importance and uncertainty to decide what to test first. assumptions-map"><h3>Assumptions map</h3><p>List what you believe about users, the problem and the solution, then rank by importance and uncertainty to decide what to test first.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/evaluate-current-experience" data-type="evaluate-current-experience" data-stage="Discover" data-text="evaluate current experience audit the existing product against usability heuristics to see where it hurts users today. evaluate-current-experience"><h3>Evaluate current experience</h3><p>Audit the existing product against usability heuristics to see where it hurts users today.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/analytics-review" data-type="analytics-review" data-stage="Discover" data-text="analytics review read the numbers you already have: where users drop off, what they use, what they ignore. analytics-review"><h3>Analytics review</h3><p>Read the numbers you already have: where users drop off, what they use, what they ignore.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/field-observation" data-type="field-observation" data-stage="Discover" data-text="field observation watch people do the real task in their real context, and note what they do rather than what they say. field-observation"><h3>Field observation</h3><p>Watch people do the real task in their real context, and note what they do rather than what they say.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/survey-results" data-type="survey-results" data-stage="Discover" data-text="survey results what a survey said, with sample size, who answered and how much to trust it. survey-results"><h3>Survey results</h3><p>What a survey said, with sample size, who answered and how much to trust it.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/user-voice-synthesis" data-type="interview-synthesis" data-stage="Discover" data-text="user interview insights what users said in interviews, grouped into insights with the source of each claim. interview-synthesis"><h3>User interview insights</h3><p>What users said in interviews, grouped into insights with the source of each claim.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/competitor-analysis" data-type="competitor-analysis" data-stage="Discover" data-text="competitor analysis how alternatives solve the same problem, and where the gaps and opportunities are. competitor-analysis"><h3>Competitor analysis</h3><p>How alternatives solve the same problem, and where the gaps and opportunities are.</p><span class="ameta">Discover · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/affinity-map" data-type="affinity-map" data-stage="Define" data-text="affinity map group raw observations and quotes into themes so patterns become visible. affinity-map"><h3>Affinity map</h3><p>Group raw observations and quotes into themes so patterns become visible.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/personas" data-type="personas" data-stage="Define" data-text="personas a small set of realistic user types built from evidence, used to keep decisions grounded. personas"><h3>Personas</h3><p>A small set of realistic user types built from evidence, used to keep decisions grounded.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/journey-map" data-type="journey-map" data-stage="Define" data-text="current journey map the steps a person takes today, what they think and feel, and where it breaks. journey-map"><h3>Current journey map</h3><p>The steps a person takes today, what they think and feel, and where it breaks.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/frame-opportunity" data-type="frame-opportunity" data-stage="Define" data-text="frame opportunity turn a finding into a clear opportunity: who needs what, why it matters, and a how-might-we question. frame-opportunity"><h3>Frame opportunity</h3><p>Turn a finding into a clear opportunity: who needs what, why it matters, and a How-might-we question.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/prioritization" data-type="prioritization" data-stage="Define" data-text="prioritize opportunities rank opportunities by impact, confidence and effort so the team agrees what comes first. prioritization"><h3>Prioritize opportunities</h3><p>Rank opportunities by impact, confidence and effort so the team agrees what comes first.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/design-principles" data-type="design-principles" data-stage="Define" data-text="design principles 3 to 5 project-specific rules that every design decision should follow. design-principles"><h3>Design principles</h3><p>3 to 5 project-specific rules that every design decision should follow.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/problem-brief" data-type="problem-brief" data-stage="Define" data-text="problem brief the problem worth solving: ranked opportunities, hypotheses and success metrics. problem-brief"><h3>Problem brief</h3><p>The problem worth solving: ranked opportunities, hypotheses and success metrics.</p><span class="ameta">Define · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/ideation" data-type="ideation" data-stage="Develop" data-text="ideation generate many possible solutions quickly, then choose a few to develop. ideation"><h3>Ideation</h3><p>Generate many possible solutions quickly, then choose a few to develop.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/options" data-type="options" data-stage="Develop" data-text="solutions the solution directions explored, the one chosen, and why the others were parked. options"><h3>Solutions</h3><p>The solution directions explored, the one chosen, and why the others were parked.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/user-flow" data-type="user-flow" data-stage="Develop" data-text="user flow the path a user takes through the product to complete one goal, including decisions and errors. user-flow"><h3>User flow</h3><p>The path a user takes through the product to complete one goal, including decisions and errors.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/information-architecture" data-type="information-architecture" data-stage="Develop" data-text="information architecture how content and features are grouped, labelled and navigated. information-architecture"><h3>Information architecture</h3><p>How content and features are grouped, labelled and navigated.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/wireframes" data-type="wireframes" data-stage="Develop" data-text="wireframes low-fidelity layouts of the key screens, to test the structure before visual design. wireframes"><h3>Wireframes</h3><p>Low-fidelity layouts of the key screens, to test the structure before visual design.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/prototype" data-type="prototype" data-stage="Develop" data-text="prototype where the prototype lives: a starter design system and the rules file for the ai coding tool. prototype"><h3>Prototype</h3><p>Where the prototype lives: a starter design system and the rules file for the AI coding tool.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span> · 1 files/links</span></a><a class="acard" href="#/concept-test" data-type="concept-test" data-stage="Develop" data-text="concept test show a rough idea or prototype to a few users to check they understand it and want it, before building. concept-test"><h3>Concept test</h3><p>Show a rough idea or prototype to a few users to check they understand it and want it, before building.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/alignment" data-type="alignment" data-stage="Develop" data-text="alignment check check each decision against the user need and the design principles; record the verdict. alignment"><h3>Alignment check</h3><p>Check each decision against the user need and the design principles; record the verdict.</p><span class="ameta">Develop · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/test-plan" data-type="test-plan" data-stage="Deliver" data-text="test plan what you will test, with whom, how, and what would change your mind. test-plan"><h3>Test plan</h3><p>What you will test, with whom, how, and what would change your mind.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/usability-test-report" data-type="usability-test-report" data-stage="Deliver" data-text="usability test report what happened when real people used the design: success, time, errors and the problems found. usability-test-report"><h3>Usability test report</h3><p>What happened when real people used the design: success, time, errors and the problems found.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/findings" data-type="findings" data-stage="Deliver" data-text="findings what real users did in the test: results against the baseline and the problems found. findings"><h3>Findings</h3><p>What real users did in the test: results against the baseline and the problems found.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/design-qa" data-type="design-qa" data-stage="Deliver" data-text="design qa checklist check that what was built matches the design, the principles and the accessibility rules. design-qa"><h3>Design QA checklist</h3><p>Check that what was built matches the design, the principles and the accessibility rules.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/handoff" data-type="handoff" data-stage="Deliver" data-text="handoff everything a developer needs to build it without asking again. handoff"><h3>Handoff</h3><p>Everything a developer needs to build it without asking again.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/measurement-plan" data-type="measurement-plan" data-stage="Deliver" data-text="measurement plan how you will know it worked: metrics, targets, where the data comes from. measurement-plan"><h3>Measurement plan</h3><p>How you will know it worked: metrics, targets, where the data comes from.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/rollout-plan" data-type="rollout-plan" data-stage="Deliver" data-text="rollout plan how the change reaches users: who gets it first, how you will know it works, and when you roll back. rollout-plan"><h3>Rollout plan</h3><p>How the change reaches users: who gets it first, how you will know it works, and when you roll back.</p><span class="ameta">Deliver · <span class="st st-planned">Planned</span></span></a><a class="acard" href="#/learning" data-type="learning" data-stage="Learn" data-text="learning after launch: results against targets, what you learned, and what to revisit. learning"><h3>Learning</h3><p>After launch: results against targets, what you learned, and what to revisit.</p><span class="ameta">Learn · <span class="st st-planned">Planned</span></span></a></div></div><section class="doc" id="scope" data-title="Scope"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Scope · Discover</p><h1>Scope</h1><p class="sum">The business question, the outcome it should move, who you build for, and what you assume.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover stage. Define it together with the PO and business, or write it as assumptions if you cannot reach them.</em></p>
+<h2>Business question (in their words)</h2>
+<h2>Outcome and success metric</h2>
+<ul><li>Outcome:</li><li>Metric and baseline:</li><li>Confirmed by / date:</li><li>Status: confirmed / assumed</li></ul>
+<h2>Users and constraints</h2>
+<h2>What I already believe</h2>
+<p><em>Three to five statements. You will test them in Discover.</em> 1. 2. 3.</p>
+<h2>Agreement status</h2>
+<p><strong>agreed / pending / not available</strong> Who was asked, when, and what they said:</p>
+<h2>Open questions for the next conversation</h2></div><p class="srcfile">Source file: <code>work/scope.md</code></p></section><section class="doc" id="stakeholder-map" data-title="Stakeholder map"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Stakeholder map · Discover</p><h1>Stakeholder map</h1><p class="sum">Who decides, who is affected, and what each of them needs from this project.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>At the start, or whenever a decision keeps stalling.</p>
+<h2>How</h2>
+<ol><li>List everyone who decides, is affected, or can block the work.</li><li>Mark influence (high/low) and interest (high/low).</li><li>Write what each one needs and what they are worried about.</li><li>Decide who to interview first and who to keep informed.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:522px"><colgroup><col style="width:20.3%"><col style="width:13.1%"><col style="width:17.9%"><col style="width:16.5%"><col style="width:17.9%"><col style="width:14.4%"></colgroup><thead><tr><th scope="col">Stakeholder</th><th scope="col">Role</th><th scope="col">Influence</th><th scope="col">Interest</th><th scope="col">Needs / worries</th><th scope="col">Next step</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>From the notes I paste, list the stakeholders, rate influence and interest, and summarize what each needs. Mark anything you are guessing.</p></blockquote></div><p class="srcfile">Source file: <code>work/stakeholder-map.md</code></p></section><section class="doc" id="assumptions-map" data-title="Assumptions map"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Assumptions map · Discover</p><h1>Assumptions map</h1><p class="sum">List what you believe about users, the problem and the solution, then rank by importance and uncertainty to decide what to test first.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>The team has strong opinions and few facts, or before you invest in research.</p>
+<h2>How</h2>
+<ol><li>Write every assumption as one sentence ('We believe that...').</li><li>Group them: users, problem, solution, business.</li><li>Place each on two axes: how important if wrong, and how little evidence you have.</li><li>Pick the top-right ones: important and unproven. These become hypotheses to test.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:442px"><colgroup><col style="width:21.8%"><col style="width:15.1%"><col style="width:24.6%"><col style="width:21.7%"><col style="width:16.8%"></colgroup><thead><tr><th scope="col">Assumption</th><th scope="col">Group</th><th scope="col">Importance (1-5)</th><th scope="col">Evidence (1-5)</th><th scope="col">Test with</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Read context/product-and-users.md and work/scope.md. List the assumptions hidden in them, group them, and rank by importance and uncertainty. Propose first.</p></blockquote></div><p class="srcfile">Source file: <code>work/assumptions-map.md</code></p></section><section class="doc" id="evaluate-current-experience" data-title="Evaluate current experience"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Evaluate current experience · Discover</p><h1>Evaluate current experience</h1><p class="sum">Audit the existing product against usability heuristics to see where it hurts users today.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You already have a product or service, and want a fast, evidence-based view of its problems before you talk to users.</p>
+<h2>How</h2>
+<ol><li>Pick 3 to 5 key tasks a user does in the current product.</li><li>Walk through each task and check every screen against the 10 usability heuristics (see Standards).</li><li>Log each problem with a severity from 0 to 4.</li><li>Group problems by task and rank them.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:446px"><colgroup><col style="width:15.0%"><col style="width:17.1%"><col style="width:20.2%"><col style="width:18.7%"><col style="width:29.0%"></colgroup><thead><tr><th scope="col">Task</th><th scope="col">Problem</th><th scope="col">Heuristic</th><th scope="col">Severity</th><th scope="col">Evidence (screenshot / link)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Walk through &lt;task&gt; in &lt;product or link&gt;. Check each step against the usability heuristics in standards/principle-checks.md and list problems with a severity. Propose first, do not create items yet.</p></blockquote></div><p class="srcfile">Source file: <code>work/evaluate-current-experience.md</code></p></section><section class="doc" id="analytics-review" data-title="Analytics review"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Analytics review · Discover</p><h1>Analytics review</h1><p class="sum">Read the numbers you already have: where users drop off, what they use, what they ignore.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>A live product exists and you want a quantitative baseline before designing.</p>
+<h2>How</h2>
+<ol><li>Choose the 3 questions you want the data to answer.</li><li>Collect the funnel, usage and retention numbers for the same period.</li><li>Note what the data shows and what it cannot explain.</li><li>Turn the unexplained parts into questions for interviews or tests.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:390px"><colgroup><col style="width:20.8%"><col style="width:17.3%"><col style="width:16.8%"><col style="width:17.3%"><col style="width:27.8%"></colgroup><thead><tr><th scope="col">Question</th><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Period</th><th scope="col">What it cannot explain</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Here is an export of our analytics. Answer these questions: &lt;q1&gt;, &lt;q2&gt;, &lt;q3&gt;. Say clearly what the data cannot explain. Do not invent numbers.</p></blockquote></div><p class="srcfile">Source file: <code>work/analytics-review.md</code></p></section><section class="doc" id="field-observation" data-title="Field observation"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Field observation · Discover</p><h1>Field observation</h1><p class="sum">Watch people do the real task in their real context, and note what they do rather than what they say.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You suspect people's words differ from their behaviour, or the context (place, tools, interruptions) matters.</p>
+<h2>How</h2>
+<ol><li>Define what you are watching and get consent.</li><li>Observe for 30 to 60 minutes; write what happens, not what you think.</li><li>Capture workarounds, interruptions and tools used.</li><li>Afterwards, separate observations from interpretations.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:342px"><colgroup><col style="width:17.2%"><col style="width:24.7%"><col style="width:21.5%"><col style="width:36.6%"></colgroup><thead><tr><th scope="col">Time</th><th scope="col">What happened</th><th scope="col">Where / tool</th><th scope="col">Interpretation (label as guess)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Here are my observation notes (anonymised). Separate what was observed from what I interpreted, and list the workarounds and surprises.</p></blockquote></div><p class="srcfile">Source file: <code>work/field-observation.md</code></p></section><section class="doc" id="survey-results" data-title="Survey results"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Survey results · Discover</p><h1>Survey results</h1><p class="sum">What a survey said, with sample size, who answered and how much to trust it.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Discover: understand the problem and people. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You need numbers about attitudes or behaviour from many people.</p>
+<h2>How</h2>
+<ol><li>Write the question each survey item answers.</li><li>Record sample size and who responded.</li><li>Summarize each item with the number, not just the average.</li><li>State the limits: who is missing, how people were recruited.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:324px"><colgroup><col style="width:23.9%"><col style="width:26.2%"><col style="width:30.5%"><col style="width:19.4%"></colgroup><thead><tr><th scope="col">Question</th><th scope="col">Answer (n, %)</th><th scope="col">What it suggests</th><th scope="col">Limit</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Summarize this anonymised survey export per question with counts and percentages. List the limits (sample, bias). Do not draw conclusions the data cannot support.</p></blockquote></div><p class="srcfile">Source file: <code>work/survey-results.md</code></p></section><section class="doc" id="user-voice-synthesis" data-title="User interview insights"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Interview synthesis · Discover</p><h1>User interview insights</h1><p class="sum">What users said in interviews, grouped into insights with the source of each claim.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Working file for the user-voice flow. The AI returns only its own section, and you paste it in. Anonymised quotes live in <code>sources/anonymised/</code> with IDs (R01, I01-01 ...).</em></p>
+<h2>Scope</h2>
+<ul><li>The question:</li><li>Who we need to hear from:</li><li>What I already believe:</li></ul>
+<h2>Sources and guide</h2>
+<p><em>Step 2: the AI's suggestions go here, labelled. Step 3: replace them with your final list of sources and your interview guide.</em></p>
+<h2>Coding (verified)</h2>
+<p><em>Step 6. A copy of the draft that you corrected. Write the misquoted quotes, the misplaced quotes and the error rate at the top.</em></p>
+<h2>Themes</h2>
+<p><em>Step 7. The AI's themes with counts (number of quotes and number of people), one quote ID as an example, one counter-quote, and the check of my own belief.</em></p>
+<h2>Opportunities + limits</h2>
+<p><em>Step 8. Three to five needs (not features), each with its quote IDs. Then what this sample cannot tell you.</em></p></div><p class="srcfile">Source file: <code>work/user-voice-synthesis.md</code></p></section><section class="doc" id="competitor-analysis" data-title="Competitor analysis"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Competitor analysis · Discover</p><h1>Competitor analysis</h1><p class="sum">How alternatives solve the same problem, and where the gaps and opportunities are.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Working file for the competitor flow. The sources you saved are in <code>sources/anonymised/</code>.</em></p>
+<h2>Scope</h2>
+<ul><li>The decision this analysis serves:</li><li>The criteria that matter (at most 6):</li><li>What I already believe:</li></ul>
+<h2>Competitors</h2>
+<p><em>Step 2: the AI's suggestions, labelled. Step 3: your final list, with a reason for each competitor chosen and each one dropped.</em></p>
+<h2>Evidence (verified)</h2>
+<p><em>Step 6. Your corrected copy. Write the error rate at the top.</em></p>
+<h2>Patterns</h2>
+<p><em>Step 7. The patterns and the gaps, the check of your starting belief, and the counter-case.</em></p>
+<h2>Insights + decision</h2>
+<p><em>Step 8. Three to five insights with links to the evidence, the answer to the decision in the scope, and what this analysis cannot tell you.</em></p></div><p class="srcfile">Source file: <code>work/competitor-analysis.md</code></p></section><section class="doc" id="affinity-map" data-title="Affinity map"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Affinity map · Define</p><h1>Affinity map</h1><p class="sum">Group raw observations and quotes into themes so patterns become visible.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You have a pile of notes, quotes and observations from Discover.</p>
+<h2>How</h2>
+<ol><li>Put each observation on its own note with its source.</li><li>Group notes that belong together without naming the groups first.</li><li>Name each group with a sentence that says what is true, not a topic.</li><li>Count notes per group and mark the strongest themes.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:332px"><colgroup><col style="width:32.9%"><col style="width:20.0%"><col style="width:22.5%"><col style="width:24.6%"></colgroup><thead><tr><th scope="col">Theme (a sentence)</th><th scope="col">Notes</th><th scope="col">Sources</th><th scope="col">Strength</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Group these anonymised observations into themes. Name each theme as a sentence, list the source IDs, and show how many sources support it. Propose first.</p></blockquote></div><p class="srcfile">Source file: <code>work/affinity-map.md</code></p></section><section class="doc" id="personas" data-title="Personas"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Personas · Define</p><h1>Personas</h1><p class="sum">A small set of realistic user types built from evidence, used to keep decisions grounded.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You have enough research to see distinct patterns of needs and behaviour.</p>
+<h2>How</h2>
+<ol><li>Pick the dimensions that differ most between your users (goal, context, skill).</li><li>Create 2 to 4 personas; every statement must trace to a source.</li><li>Write goals, frustrations and the situation they are in.</li><li>Mark what is evidence and what is assumption.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:436px"><colgroup><col style="width:18.8%"><col style="width:16.6%"><col style="width:25.2%"><col style="width:18.8%"><col style="width:20.5%"></colgroup><thead><tr><th scope="col">Persona</th><th scope="col">Goal</th><th scope="col">Frustration</th><th scope="col">Context</th><th scope="col">Evidence</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>From work/user-voice-synthesis.md create 2 to 4 personas. Every claim must cite a source ID; mark assumptions clearly.</p></blockquote></div><p class="srcfile">Source file: <code>work/personas.md</code></p></section><section class="doc" id="journey-map" data-title="Current journey map"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Journey map · Define</p><h1>Current journey map</h1><p class="sum">The steps a person takes today, what they think and feel, and where it breaks.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You need to see the whole experience, not one screen, and find where to intervene.</p>
+<h2>How</h2>
+<ol><li>Choose one persona and one goal.</li><li>List the steps from trigger to outcome.</li><li>For each step note actions, thoughts, emotions and touchpoints.</li><li>Mark the pain points and the moments that matter most.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:410px"><colgroup><col style="width:16.1%"><col style="width:16.6%"><col style="width:25.4%"><col style="width:23.2%"><col style="width:18.7%"></colgroup><thead><tr><th scope="col">Step</th><th scope="col">Action</th><th scope="col">Thinking / feeling</th><th scope="col">Touchpoint</th><th scope="col">Pain point</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Draft the current journey for &lt;persona&gt; trying to &lt;goal&gt;, using only the research I gave you. Mark any step you are guessing.</p></blockquote></div><p class="srcfile">Source file: <code>work/journey-map.md</code></p></section><section class="doc" id="frame-opportunity" data-title="Frame opportunity"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Frame opportunity · Define</p><h1>Frame opportunity</h1><p class="sum">Turn a finding into a clear opportunity: who needs what, why it matters, and a How-might-we question.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You have themes and need to decide which problem is worth solving.</p>
+<h2>How</h2>
+<ol><li>Write the need as: [user] needs [outcome] because [insight].</li><li>Add evidence: sources and how many people.</li><li>Write 1 to 3 How-might-we questions that do not contain a solution.</li><li>Record the opportunity as an item (O1, O2...) with a rank and a reason.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:382px"><colgroup><col style="width:16.4%"><col style="width:16.4%"><col style="width:24.6%"><col style="width:20.4%"><col style="width:22.1%"></colgroup><thead><tr><th scope="col">User</th><th scope="col">Need</th><th scope="col">Because (insight)</th><th scope="col">Evidence</th><th scope="col">How might we...</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>From these themes, propose opportunities framed as 'user needs outcome because insight' with evidence and a How-might-we. Propose first; do not create items.</p></blockquote></div><p class="srcfile">Source file: <code>work/frame-opportunity.md</code></p></section><section class="doc" id="prioritization" data-title="Prioritize opportunities"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Prioritization · Define</p><h1>Prioritize opportunities</h1><p class="sum">Rank opportunities by impact, confidence and effort so the team agrees what comes first.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>More than 3 opportunities compete for attention.</p>
+<h2>How</h2>
+<ol><li>List the opportunities with their evidence.</li><li>Rate impact on users and confidence in the evidence (high/medium/low).</li><li>Add a rough effort estimate with the team.</li><li>Rank them and write one sentence of reasoning for each.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:510px"><colgroup><col style="width:21.7%"><col style="width:14.6%"><col style="width:20.5%"><col style="width:14.6%"><col style="width:14.1%"><col style="width:14.6%"></colgroup><thead><tr><th scope="col">Opportunity</th><th scope="col">Impact</th><th scope="col">Confidence</th><th scope="col">Effort</th><th scope="col">Rank</th><th scope="col">Reason</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Rank the opportunities in insights/opportunities by impact and confidence from the evidence given. I decide the final order; just show your reasoning.</p></blockquote></div><p class="srcfile">Source file: <code>work/prioritization.md</code></p></section><section class="doc" id="design-principles" data-title="Design principles"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Design principles · Define</p><h1>Design principles</h1><p class="sum">3 to 5 project-specific rules that every design decision should follow.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define: decide which problem is worth solving. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>The team keeps debating style and direction, or you need a shared yardstick.</p>
+<h2>How</h2>
+<ol><li>Collect the values that came up in research and strategy.</li><li>Write each principle as a short instruction with a 'so that'.</li><li>Add an example of what it means and what it rules out.</li><li>Share and agree; add them to Standards as checks.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:332px"><colgroup><col style="width:27.2%"><col style="width:26.1%"><col style="width:23.1%"><col style="width:23.7%"></colgroup><thead><tr><th scope="col">Principle</th><th scope="col">So that...</th><th scope="col">Example</th><th scope="col">Rules out</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>From the research and scope, propose 3 to 5 design principles with a 'so that' and one example each. Propose first.</p></blockquote></div><p class="srcfile">Source file: <code>work/design-principles.md</code></p></section><section class="doc" id="problem-brief" data-title="Problem brief"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Problem brief · Define</p><h1>Problem brief</h1><p class="sum">The problem worth solving: ranked opportunities, hypotheses and success metrics.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Define stage. A shared requirement. Sign it off with product and business, or record the agreement status.</em></p>
+<h2>Outcome and success metrics</h2>
+<p><em>Goal, signal, metric. Write <strong>assumed</strong> for anything the PO has not confirmed. Each metric is a file in <code>insights/metrics/</code> (M1, M2 ...) and that file is the single source.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:308px"><colgroup><col style="width:20.8%"><col style="width:21.3%"><col style="width:36.7%"><col style="width:21.3%"></colgroup><thead><tr><th scope="col">Goal</th><th scope="col">Signal</th><th scope="col">Metric (and baseline)</th><th scope="col">Status</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Opportunities (ranked)</h2>
+<p><em>A user need backed by evidence, not a feature. Each opportunity is a file in <code>insights/opportunities/</code> (O1, O2 ...) and that file is the single source: write it there directly, do not keep a duplicate table here. The summary table shows on the Problem brief page in Stages, built from those files.</em></p>
+<h2>Hypotheses</h2>
+<p><em>We believe that [decision] for [users] will [change what], and we will know by [test and metric]. Each hypothesis is a file in <code>insights/hypotheses/</code> (H1, H2 ...), with a <code>Serves</code> line pointing to the opportunity and a <code>Metric</code> line.</em></p>
+<h2>Principle checks to apply</h2>
+<p>(Point to <code>standards/principle-checks.md</code>)</p>
+<h2>Agreement</h2>
+<p>Status: agreed / pending / not available. Who, when, and what they said:</p></div><p class="srcfile">Source file: <code>work/problem-brief.md</code></p></section><section class="doc" id="ideation" data-title="Ideation"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Ideation · Develop</p><h1>Ideation</h1><p class="sum">Generate many possible solutions quickly, then choose a few to develop.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop: explore and shape possible solutions. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>A How-might-we question is agreed and you want options, not the first idea.</p>
+<h2>How</h2>
+<ol><li>Restate the How-might-we.</li><li>Set a timer; each person writes or sketches 8 ideas (Crazy 8s) or uses brainwriting.</li><li>Cluster similar ideas and add wild ones deliberately.</li><li>Dot-vote to pick 2 or 3 directions and note why the rest were parked.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:350px"><colgroup><col style="width:17.7%"><col style="width:33.0%"><col style="width:23.7%"><col style="width:25.5%"></colgroup><thead><tr><th scope="col">Idea</th><th scope="col">Opportunity it serves</th><th scope="col">Direction</th><th scope="col">Keep / park (why)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>For the How-might-we '&lt;question&gt;', suggest 10 different solution directions across different approaches. Group them and say what each assumes.</p></blockquote></div><p class="srcfile">Source file: <code>work/ideation.md</code></p></section><section class="doc" id="options" data-title="Solutions"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Options · Develop</p><h1>Solutions</h1><p class="sum">The solution directions explored, the one chosen, and why the others were parked.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop stage.</em></p>
+<h2>Three directions</h2>
+<p><em>At least three directions that are really different. If two directions are only variants of one idea, they count as one.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:394px"><colgroup><col style="width:21.5%"><col style="width:23.6%"><col style="width:16.5%"><col style="width:21.7%"><col style="width:16.7%"></colgroup><thead><tr><th scope="col">Direction</th><th scope="col">The idea in one line</th><th scope="col">Serves</th><th scope="col">Pulls against</th><th scope="col">Why not</th></tr></thead><tbody><tr><td>A</td><td></td><td></td><td></td><td></td></tr><tr><td>B</td><td></td><td></td><td></td><td></td></tr><tr><td>C</td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Chosen direction and why</h2>
+<p><em>Check against the opportunities and the principle checks. Record why the other directions were parked.</em></p>
+<h2>Flow</h2>
+<p>(A link, or a description of the main flow, step by step)</p>
+<h2>Content notes</h2>
+<p><em>The part the AI drafted and the part you rewrote. No final copy written by the AI goes out without you reviewing it.</em></p>
+<h2>Design decisions</h2>
+<p><em>Each design decision is a file in <code>insights/decisions/</code> (D1, D2 ...) and that file is the single source. Record the hypothesis it tests (<code>Tests</code>), the principle it follows (<code>Follows</code>) or pulls against (<code>Pulls against</code>). Do not keep a duplicate table here.</em></p></div><p class="srcfile">Source file: <code>work/options.md</code></p></section><section class="doc" id="user-flow" data-title="User flow"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">User flow · Develop</p><h1>User flow</h1><p class="sum">The path a user takes through the product to complete one goal, including decisions and errors.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop: explore and shape possible solutions. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You need to agree on how a task works before drawing screens.</p>
+<h2>How</h2>
+<ol><li>Name the user goal and the starting point.</li><li>Draw the happy path step by step.</li><li>Add decisions, errors and edge cases.</li><li>Check each step against the opportunity it serves.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:378px"><colgroup><col style="width:16.2%"><col style="width:21.6%"><col style="width:19.9%"><col style="width:24.1%"><col style="width:18.2%"></colgroup><thead><tr><th scope="col">Step</th><th scope="col">Screen / state</th><th scope="col">User action</th><th scope="col">System response</th><th scope="col">Edge case</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Describe the user flow for &lt;goal&gt; as numbered steps with decisions and errors. List what is unclear instead of guessing.</p></blockquote></div><p class="srcfile">Source file: <code>work/user-flow.md</code></p></section><section class="doc" id="information-architecture" data-title="Information architecture"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Information architecture · Develop</p><h1>Information architecture</h1><p class="sum">How content and features are grouped, labelled and navigated.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop: explore and shape possible solutions. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>The product has many areas, or people cannot find things.</p>
+<h2>How</h2>
+<ol><li>List the content and features.</li><li>Group them (card sort with users if possible).</li><li>Name the groups using users' words.</li><li>Draw the sitemap and test findability with a few tasks.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:324px"><colgroup><col style="width:19.7%"><col style="width:31.8%"><col style="width:24.3%"><col style="width:24.3%"></colgroup><thead><tr><th scope="col">Group</th><th scope="col">Label (user's words)</th><th scope="col">Contains</th><th scope="col">Evidence</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Propose a sitemap for these features and content. Use the labels in our research, and flag where a card sort is needed.</p></blockquote></div><p class="srcfile">Source file: <code>work/information-architecture.md</code></p></section><section class="doc" id="wireframes" data-title="Wireframes"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Wireframes · Develop</p><h1>Wireframes</h1><p class="sum">Low-fidelity layouts of the key screens, to test the structure before visual design.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop: explore and shape possible solutions. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>The flow is agreed and you want to check layout and content hierarchy.</p>
+<h2>How</h2>
+<ol><li>Pick the 5 to 8 screens that carry the flow.</li><li>Sketch layout and content priority, no visual styling.</li><li>Annotate each screen with the decision or solution it carries.</li><li>Review with the team and note open questions.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:336px"><colgroup><col style="width:18.4%"><col style="width:20.3%"><col style="width:35.4%"><col style="width:25.9%"></colgroup><thead><tr><th scope="col">Screen</th><th scope="col">Purpose</th><th scope="col">Decision / solution it carries</th><th scope="col">Open question</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Describe wireframes (layout and content priority) for the screens in work/user-flow.md. Annotate each with the decision it serves.</p></blockquote></div><p class="srcfile">Source file: <code>work/wireframes.md</code></p></section><section class="doc" id="prototype" data-title="Prototype"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Prototype · Develop</p><h1>Prototype</h1><p class="sum">Where the prototype lives: a starter design system and the rules file for the AI coding tool.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><h2>Media</h2><div class="mcard"><div class="mhead"><strong>project-rules.md</strong><span class="mtag">Source document</span><a class="btn" href="work/prototype/project-rules.md" target="_blank" rel="noopener">Open ↗</a></div></div><div class="reading"><p>A small design system, a rules file and an empty page, so you can build your first version without setting anything up. <strong>If you have your own design system, use it instead:</strong> write your own <code>design-system-notes.md</code> and rules file, and use this starter only as a pattern.</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">File</th><th scope="col">What it is</th></tr></thead><tbody><tr><td><code>design-system/tokens.css</code></td><td>The variables: colour, type, spacing, radius, touch target</td></tr><tr><td><code>design-system/components.css</code></td><td>Button, field, radio card, card, badge, alert, step indicator</td></tr><tr><td><code>design-system/components.html</code></td><td>Every component and state, on one page</td></tr><tr><td><code>design-system/README.md</code></td><td>The design system notes, written for an AI coding tool</td></tr><tr><td><code>project-rules.md</code></td><td>The rules file: give it to your AI coding tool</td></tr><tr><td><code>index.html</code></td><td>An empty page to build on</td></tr></tbody></table></div>
+<h2>Steps</h2>
+<ol><li>This folder is already at <code>work/prototype/</code> in your case folder. Start here.</li><li>Open <code>design-system/components.html</code> in a browser and look at what exists.</li><li>Give the AI coding tool <code>project-rules.md</code>, your flow and content notes, and one screen to build. Check the files it changed.</li><li>Save a working copy after each screen you are happy with.</li></ol></div><p class="srcfile">Source file: <code>work/prototype/index.md</code></p></section><section class="doc" id="concept-test" data-title="Concept test"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Concept test · Develop</p><h1>Concept test</h1><p class="sum">Show a rough idea or prototype to a few users to check they understand it and want it, before building.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Develop: explore and shape possible solutions. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You have 2 or 3 directions and need to know which one to take forward.</p>
+<h2>How</h2>
+<ol><li>Define what you need to learn and what would change your mind.</li><li>Prepare the concept and 3 tasks or questions.</li><li>Run with 5 people; record what they say and do.</li><li>Summarize per concept: understood, wanted, confused by.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:486px"><colgroup><col style="width:16.5%"><col style="width:22.1%"><col style="width:22.1%"><col style="width:16.5%"><col style="width:22.8%"></colgroup><thead><tr><th scope="col">Concept</th><th scope="col">Participant</th><th scope="col">Understood?</th><th scope="col">Wanted?</th><th scope="col">Confusion / quote</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Create a short concept-test script for these directions: &lt;list&gt;. Include tasks and neutral questions. Do not lead the participant.</p></blockquote></div><p class="srcfile">Source file: <code>work/concept-test.md</code></p></section><section class="doc" id="alignment" data-title="Alignment check"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Alignment · Develop</p><h1>Alignment check</h1><p class="sum">Check each decision against the user need and the design principles; record the verdict.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>End of the Develop stage. Does every decision trace back to a user need and pass the principles? The alignment table lives in <code>hub/README.md</code>; this file holds your audit and verdicts.</em></p>
+<h2>Alignment table</h2>
+<p><em>Paste or link the alignment table from the Insights section of the report (the Alignment table mode). Record every decision with no user need behind it, every opportunity with no decision, every hypothesis with no test.</em></p>
+<h2>Principle audit (top three decisions)</h2>
+<p><em>The AI argues where each decision violates a principle; you decide.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:344px"><colgroup><col style="width:26.1%"><col style="width:28.2%"><col style="width:24.0%"><col style="width:21.7%"></colgroup><thead><tr><th scope="col">Decision</th><th scope="col">Principle</th><th scope="col">Passes?</th><th scope="col">Reason</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Verdicts</h2>
+<div class="table-wrap"><table class="bal" style="min-width:254px"><colgroup><col style="width:24.3%"><col style="width:53.6%"><col style="width:22.1%"></colgroup><thead><tr><th scope="col">Finding</th><th scope="col">Fix / accept as a recorded trade-off / cut</th><th scope="col">Reason</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr></tbody></table></div></div><p class="srcfile">Source file: <code>work/alignment.md</code></p></section><section class="doc" id="test-plan" data-title="Test plan"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Test plan · Deliver</p><h1>Test plan</h1><p class="sum">What you will test, with whom, how, and what would change your mind.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver stage, before the test.</em></p>
+<h2>What we are testing</h2>
+<p>The hypothesis (ID) and what would change my mind:</p>
+<h2>Tasks</h2>
+<p><em>Each task is something the user tries to do, without being told how.</em> 1. 2.</p>
+<h2>Participants</h2>
+<p>Who and how many (3 to 5 people are enough to see the big problems). Record that they agreed:</p>
+<h2>Script</h2>
+<p><em>The opening, the tasks, the follow-up questions. Ask about what happened, not for opinions about ideas.</em></p>
+<h2>What we measure</h2>
+<div class="table-wrap"><table class="bal" style="min-width:276px"><colgroup><col style="width:49.5%"><col style="width:27.6%"><col style="width:23.0%"></colgroup><thead><tr><th scope="col">Metric</th><th scope="col">Baseline</th><th scope="col">Target</th></tr></thead><tbody><tr><td>Task success (completed without help, for example 4 out of 5)</td><td></td><td></td></tr><tr><td>Time on task</td><td></td><td></td></tr><tr><td>Errors</td><td></td><td></td></tr><tr><td>Satisfaction (System Usability Scale, SUS)</td><td></td><td></td></tr></tbody></table></div></div><p class="srcfile">Source file: <code>work/test-plan.md</code></p></section><section class="doc" id="usability-test-report" data-title="Usability test report"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Usability test report · Deliver</p><h1>Usability test report</h1><p class="sum">What happened when real people used the design: success, time, errors and the problems found.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver: test, hand off and launch. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>After a usability test, to turn observations into decisions.</p>
+<h2>How</h2>
+<ol><li>Record participants and method (real vs simulated).</li><li>Report task success, time and errors against the baseline.</li><li>List findings with severity and the decision they affect.</li><li>State what changes because of the test.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:386px"><colgroup><col style="width:16.8%"><col style="width:22.4%"><col style="width:16.8%"><col style="width:17.3%"><col style="width:26.8%"></colgroup><thead><tr><th scope="col">Task</th><th scope="col">Success rate</th><th scope="col">Time</th><th scope="col">Errors</th><th scope="col">Finding (severity)</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>From these anonymised test notes write a report: per task results, findings with severity 0 to 4, and which decision each affects. Propose findings first.</p></blockquote></div><p class="srcfile">Source file: <code>work/usability-test-report.md</code></p></section><section class="doc" id="findings" data-title="Findings"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Findings · Deliver</p><h1>Findings</h1><p class="sum">What real users did in the test: results against the baseline and the problems found.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver stage, after the test. What real users did. The AI can help analyse; check every finding against the notes or the recording.</em></p>
+<h2>Results against the baseline</h2>
+<div class="table-wrap"><table class="bal" style="min-width:308px"><colgroup><col style="width:23.9%"><col style="width:28.7%"><col style="width:23.9%"><col style="width:23.4%"></colgroup><thead><tr><th scope="col">Metric</th><th scope="col">Baseline</th><th scope="col">Result</th><th scope="col">Met?</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Findings, weighted by importance</h2>
+<p><em>Ranked by importance, not by how many times it was mentioned. Link each finding to a recording or a note.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:344px"><colgroup><col style="width:22.8%"><col style="width:24.8%"><col style="width:24.8%"><col style="width:27.6%"></colgroup><thead><tr><th scope="col">Finding</th><th scope="col">Severity</th><th scope="col">Evidence</th><th scope="col">What changes</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>What changed because of this</h2></div><p class="srcfile">Source file: <code>work/findings.md</code></p></section><section class="doc" id="design-qa" data-title="Design QA checklist"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Design qa · Deliver</p><h1>Design QA checklist</h1><p class="sum">Check that what was built matches the design, the principles and the accessibility rules.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver: test, hand off and launch. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>Before launch, when a build is available.</p>
+<h2>How</h2>
+<ol><li>Compare each key screen with the design.</li><li>Check spacing, states, copy and responsive behaviour.</li><li>Check accessibility rules from Context.</li><li>Log each difference with severity and an owner.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:414px"><colgroup><col style="width:17.9%"><col style="width:25.1%"><col style="width:21.6%"><col style="width:17.4%"><col style="width:17.9%"></colgroup><thead><tr><th scope="col">Screen</th><th scope="col">Difference</th><th scope="col">Severity</th><th scope="col">Owner</th><th scope="col">Status</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Compare the built screens (screenshots) with the design and the accessibility rules in context/accessibility-rules.md. List differences with severity.</p></blockquote></div><p class="srcfile">Source file: <code>work/design-qa.md</code></p></section><section class="doc" id="handoff" data-title="Handoff"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Handoff · Deliver</p><h1>Handoff</h1><p class="sum">Everything a developer needs to build it without asking again.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver stage, at handoff. What a developer needs to build it without coming back with questions.</em></p>
+<h2>The prototype</h2>
+<p>A link or a folder. This is a reference, not production code.</p>
+<h2>Decisions and reasons</h2>
+<p>(Point to the decision log in <code>insights/case-log.md</code>)</p>
+<h2>Acceptance notes</h2>
+<p><em>What must be true when the product has been built.</em> -</p>
+<h2>Open questions</h2>
+<p>-</p></div><p class="srcfile">Source file: <code>work/handoff.md</code></p></section><section class="doc" id="measurement-plan" data-title="Measurement plan"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Measurement plan · Deliver</p><h1>Measurement plan</h1><p class="sum">How you will know it worked: metrics, targets, where the data comes from.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver stage, at handoff. What to track after launch, and who is responsible. Give it to the PO even if you cannot see the data yourself.</em></p>
+<div class="table-wrap"><table class="bal" style="min-width:288px"><colgroup><col style="width:20.4%"><col style="width:29.6%"><col style="width:24.8%"><col style="width:25.3%"></colgroup><thead><tr><th scope="col">Metric</th><th scope="col">Where to track it</th><th scope="col">Who owns it</th><th scope="col">Review date</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>How the AI-assisted workflow performed</h2>
+<p><em>Counts, not impressions: time per step, the error rate caught at the gates, the number of redos.</em></p></div><p class="srcfile">Source file: <code>work/measurement-plan.md</code></p></section><section class="doc" id="rollout-plan" data-title="Rollout plan"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Rollout plan · Deliver</p><h1>Rollout plan</h1><p class="sum">How the change reaches users: who gets it first, how you will know it works, and when you roll back.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>Deliver: test, hand off and launch. Method card: fill this in when you run the method.</em></p>
+<h2>When to use</h2>
+<p>You are about to launch and need to agree on risk and measurement.</p>
+<h2>How</h2>
+<ol><li>Define the audience for each step of the rollout.</li><li>Link the metrics and targets you will watch.</li><li>Set the stop or rollback conditions.</li><li>Agree who decides and who communicates.</li></ol>
+<h2>Output</h2>
+<div class="table-wrap"><table class="bal" style="min-width:394px"><colgroup><col style="width:16.1%"><col style="width:20.0%"><col style="width:26.1%"><col style="width:21.8%"><col style="width:16.1%"></colgroup><thead><tr><th scope="col">Step</th><th scope="col">Audience</th><th scope="col">Metric to watch (target)</th><th scope="col">Rollback if</th><th scope="col">Owner</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<h2>Ask the AI tool</h2>
+<blockquote><p>Draft a staged rollout plan for &lt;release&gt;, linking the metrics in insights/metrics and clear rollback conditions. Propose first.</p></blockquote></div><p class="srcfile">Source file: <code>work/rollout-plan.md</code></p></section><section class="doc" id="learning" data-title="Learning"><a class="back" href="#/docs">← Work</a><header class="ahead"><p class="kind">Learning · Learn</p><h1>Learning</h1><p class="sum">After launch: results against targets, what you learned, and what to revisit.</p></header><p class="warnbox">⚠ This document is <strong>Planned</strong>: only planned, not carried out yet.</p><div class="reading"><p><em>After launch. What the metrics measured against their targets, what was learned, and which opportunities to reopen. The results table below is built by the report from the metric files; you write this part.</em></p>
+<h2>What we shipped</h2>
+<p>[What was shipped, when, and to whom.]</p>
+<h2>What the numbers said</h2>
+<p>[One paragraph: which metrics were met, which were not, and how far you trust the numbers (sample, measuring period). The detailed table is below.]</p>
+<h2>What we learned</h2>
+<ul><li>[Lesson 1]</li><li>[Lesson 2]</li></ul>
+<h2>Opportunities to revisit</h2>
+<p><em>Which opportunities need re-ranking, splitting or closing, and why. Write the codes (O1, O2...) to link back to the need.</em></p>
+<ul><li>[O?]: [why reopen it]</li></ul>
+<h2>What changes next</h2>
+<p>[Changes for the next round: new decisions, new hypotheses. Add them to <code>insights/case-log.md</code>.]</p></div><p class="srcfile">Source file: <code>work/learning.md</code></p></section></div></section>
+<section class="view" id="v-trace"><div class="wrap"><div class="trace"><div class="pane-tree"><h1>Insights</h1><p class="lede">Opportunities, hypotheses, decisions, evidence, findings and metrics, linked to each other. Filter by type, or switch to Tree to see the chain of reasons from need to decision.</p><div class="where"><span class="wl">Folder</span> <code>insights/</code><br><span class="wl">Add new</span> copy a template from <code>insights/_templates/</code> into the matching type folder (one file per card).</div><div class="trow"><input id="tsearch" class="tsearch" type="search" placeholder="Search by ID or name" aria-label="Search insights"><div class="vmode" role="group" aria-label="View"><button type="button" data-vmode="cards" aria-pressed="true">Cards</button><button type="button" data-vmode="tree" aria-pressed="false">Tree</button><button type="button" data-vmode="table" aria-pressed="false">Matrix</button></div></div><div class="tabs2" role="tablist" aria-label="Filter by type"><button type="button" role="tab" aria-selected="true" data-type="">All<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="O">Opportunities<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="H">Hypotheses<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="M">Metrics<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="D">Decisions<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="E">Evidence<span class="n">0</span></button><button type="button" role="tab" aria-selected="false" data-type="F">Findings<span class="n">0</span></button></div><p class="tcount" id="tcount" aria-live="polite"></p><div class="icards"><div class="empty"><p><strong>Nothing here yet.</strong></p></div></div><p class="ok">No decisions yet.</p><ul class="tree" id="tree"><li class="n"><span class="nt">Nothing here yet.</span></li></ul></div><div class="pane-detail"></div></div></div></section>
+<section class="view reference" id="v-reference"><div class="wrap"><div class="jlist"><h1>Standards</h1><p class="lede">Yardsticks to check the work against: gates, principle checks, severity levels.</p><div class="where"><span class="wl">Folder</span> <code>standards/</code><br><span class="wl">Add new</span> drop a <code>.md</code> file into the folder and the page appears here.</div><div class="jcards"><a class="jcard" href="#/gates"><h3>Gates</h3><p>The four gates and the checks in each</p></a><a class="jcard" href="#/principles"><h3>Principle checks</h3><p>10 usability heuristics (Heuristic Evaluation): principles every decision should meet</p></a><a class="jcard" href="#/severity"><h3>Severity levels</h3><p>Severity scale for usability problems, 0 to 4</p></a></div></div><section class="doc" id="gates" data-title="Gates"><a class="back" href="#/reference">← Standards</a><div class="reading"><h1>Gates</h1>
+<p>The four gates (checkpoints) a project goes through. Each check has a status: <code>open</code> (not done), <code>passed</code> or <code>failed</code>. <strong>Do not rename a check, only change its status.</strong> A gate passes when all of its checks pass. A check marked <strong>hard stop</strong> cannot be passed with a reason: it must really be met.</p>
+<h2>Gate 1: Discover (Question + evidence)</h2>
+<div class="table-wrap"><table class="bal" style="min-width:330px"><colgroup><col style="width:14.8%"><col style="width:51.4%"><col style="width:15.3%"><col style="width:18.5%"></colgroup><thead><tr><th scope="col">Check</th><th scope="col">What</th><th scope="col">Status</th><th scope="col">Auto check</th></tr></thead><tbody><tr><td>1a</td><td>The business question and outcome are agreed with the product owner, or marked <strong>assumed</strong> with the agreement status</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1b</td><td>Every insight traces back to a source you can open (quote, participant ID, timestamp). <strong>Hard stop</strong></td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1c</td><td>Nothing is guessed: unknowns and counterexamples are recorded; the AI draft sits next to the checked version, with the error rate and a list of what the AI left out. <strong>Hard stop</strong></td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1d</td><td>The evidence comes from at least two kinds of source, the sample size is stated, and what the sample cannot tell you is written down</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1e</td><td>At least one counterexample was sought and recorded ("searched, none found" counts), and the synthesis prompt does not state your own hypothesis</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1f</td><td>Participants consented, the transcript was anonymised before it was pasted, and the raw data is kept outside what the AI reads. <strong>Hard stop</strong></td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>1g</td><td>The tool, version, key prompts and your changes to the AI output are logged</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr></tbody></table></div>
+<h2>Gate 2: Define (Evidence + agreement)</h2>
+<div class="table-wrap"><table class="bal" style="min-width:362px"><colgroup><col style="width:15.2%"><col style="width:41.8%"><col style="width:15.7%"><col style="width:27.2%"></colgroup><thead><tr><th scope="col">Check</th><th scope="col">What</th><th scope="col">Status</th><th scope="col">Auto check</th></tr></thead><tbody><tr><td>2a</td><td>Every opportunity points to the evidence behind it</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>2b</td><td>The problem brief is signed by product and business, or the agreement status is recorded</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>2c</td><td>Every hypothesis has a test and a metric (an unconfirmed metric is marked <strong>assumed</strong>)</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>2d</td><td>The principle checks are written as yes/no questions</td><td><span class="gst gst-open">Open</span></td><td>Not met: 0 of 10 principles have a yes/no question</td></tr></tbody></table></div>
+<h2>Gate 3: Develop (Alignment)</h2>
+<div class="table-wrap"><table class="bal" style="min-width:330px"><colgroup><col style="width:15.4%"><col style="width:49.4%"><col style="width:15.9%"><col style="width:19.3%"></colgroup><thead><tr><th scope="col">Check</th><th scope="col">What</th><th scope="col">Status</th><th scope="col">Auto check</th></tr></thead><tbody><tr><td>3a</td><td>At least three different directions were explored; the choice and its reason are recorded</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>3b</td><td>Every decision traces back to an opportunity with evidence and to a hypothesis (no decision without a user need, no opportunity left out)</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>3c</td><td>Every decision passes the principle checks, or the conflict is recorded as a trade-off</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>3d</td><td>The prototype uses the design system and the accessibility rules that were checked</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr></tbody></table></div>
+<h2>Gate 4: Deliver (Real users + buildability)</h2>
+<div class="table-wrap"><table class="bal" style="min-width:330px"><colgroup><col style="width:16.0%"><col style="width:47.3%"><col style="width:16.5%"><col style="width:20.2%"></colgroup><thead><tr><th scope="col">Check</th><th scope="col">What</th><th scope="col">Status</th><th scope="col">Auto check</th></tr></thead><tbody><tr><td>4a</td><td>Real users tested the hypotheses; results are set next to the baseline</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>4b</td><td>Findings trace back to the original notes or recordings and are ranked by importance</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>4c</td><td>A developer can build without coming back with questions (handoff pack and decision log are complete)</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr><tr><td>4d</td><td>The measurement plan was given to the product owner</td><td><span class="gst gst-open">Open</span></td><td>Manual check</td></tr></tbody></table></div>
+<p>The <strong>Automatic check</strong> column (in the report) shows whether the current data meets that check. It does not change the status you set; if you set <code>passed</code> and the data does not support it, the report shows a warning.</p>
+<p>After you change a status here, ask the AI tool to update the Gates table on the Overview page (<a href="#/overview"><code>README.md</code></a>).</p></div><p class="srcfile">Source file: <code>standards/gates.md</code></p></section><section class="doc" id="principles" data-title="Principle checks"><a class="back" href="#/reference">← Standards</a><div class="reading"><h1>Principle checks</h1>
+<p><em>Written when the Define stage starts. This is the set of principles used in <strong>Heuristic Evaluation</strong>: checking a design against Nielsen's 10 usability heuristics. Turn each principle into a yes/no question for your product. Add your organisation's own principles below, numbered from P11.</em></p>
+<h2>How to use</h2>
+<ol><li><strong>Write a yes/no question for your product</strong> in the last column of the table below. Each principle in the "Details" part has suggested questions: pick, adapt them to your product, then write them into the table.</li><li><strong>Evaluate the design:</strong> for each decision or screen, go through every question. An answer of "no" is a violation.</li><li><strong>Record each violation with its severity</strong> (0 to 4), using <a href="#/severity">Severity levels</a>.</li><li><strong>Evaluate independently, then merge:</strong> one person usually finds only part of the problems. If you can, ask 3 to 5 people to evaluate separately, then merge the results.</li><li><strong>Link back to the hub:</strong> a decision that passes gets <code>follows</code> pointing at the principle; a decision that violates it and that you accept gets <code>pulls_against</code> and the reason (see <code>../toolkit/skills/how-the-hub-works.md</code>).</li></ol>
+<h2>Principle table</h2>
+<div class="table-wrap"><table class="bal" style="min-width:264px"><colgroup><col style="width:19.6%"><col style="width:43.2%"><col style="width:37.1%"></colgroup><thead><tr><th scope="col">ID</th><th scope="col">Principle</th><th scope="col">Yes/no check for my product</th></tr></thead><tbody><tr><td>P1</td><td>Visibility of system status</td><td class="dash">—</td></tr><tr><td>P2</td><td>Match between system and the real world</td><td class="dash">—</td></tr><tr><td>P3</td><td>User control and freedom</td><td class="dash">—</td></tr><tr><td>P4</td><td>Consistency and standards</td><td class="dash">—</td></tr><tr><td>P5</td><td>Error prevention</td><td class="dash">—</td></tr><tr><td>P6</td><td>Recognition rather than recall</td><td class="dash">—</td></tr><tr><td>P7</td><td>Flexibility and efficiency of use</td><td class="dash">—</td></tr><tr><td>P8</td><td>Aesthetic and minimalist design</td><td class="dash">—</td></tr><tr><td>P9</td><td>Help users recognise, diagnose and recover from errors</td><td class="dash">—</td></tr><tr><td>P10</td><td>Help and documentation</td><td class="dash">—</td></tr><tr><td>P11</td><td>(your organisation's own principle, if any)</td><td class="dash">—</td></tr></tbody></table></div>
+<hr>
+<h1>Details of the 10 heuristics</h1>
+<p>Each entry has four parts: <strong>It means</strong> (an explanation in plain words), <strong>Ask when evaluating</strong> (yes/no questions to copy into the table above), <strong>Signs of a violation</strong>, and <strong>Example</strong>.</p>
+<h2>P1 · Visibility of system status</h2>
+<p><strong>It means:</strong> the system always tells users what is happening, through timely and visible feedback. Users do not have to guess whether their action took effect.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>After each action, does the user see feedback right away (saved, sent, loading)?</li><li>For anything that takes more than a few seconds, is progress or a "working" state shown?</li><li>Does the user know where they are in a multi-step process (which step out of how many)?</li><li>Is the current state of an item (selected, off, confirmed) visible without opening it?</li></ul>
+<p><strong>Signs of a violation:</strong> pressing a button and nothing happens; a blank page while loading; users pressing again and again because they are not sure the first press worked.</p>
+<p><strong>Example:</strong> a progress bar while uploading a file; a "Saved" label after pressing Save; a "Step 2 of 4" indicator at the top of a form.</p>
+<h2>P2 · Match between system and the real world</h2>
+<p><strong>It means:</strong> the system speaks the users' language: words, concepts and an order that are familiar to them, not the system's internal jargon.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Do labels, buttons and messages use words that real users use (no internal terms, error codes, technical names)?</li><li>Does the order of the steps follow the natural order of what the user is doing in real life?</li><li>Do icons and metaphors resemble things the user already knows?</li><li>Does information appear in the user's logic (for example by trip) rather than by the system's data structure?</li></ul>
+<p><strong>Signs of a violation:</strong> users ask "what does this word mean?"; labels taken from database table names; unexplained abbreviations.</p>
+<p><strong>Example:</strong> "Shopping cart" instead of "Selected items list"; saved credit cards laid out like physical cards.</p>
+<h2>P3 · User control and freedom</h2>
+<p><strong>It means:</strong> users often press the wrong thing. They need a clearly marked "emergency exit" to leave an unwanted state without going through a long process.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Can the user cancel or go back at every step of a process?</li><li>Is there undo for actions that are easy to get wrong?</li><li>Can the user leave an open window or mode without losing the work in progress?</li><li>Can a delete or an overwrite be reversed, or is there a confirmation first?</li></ul>
+<p><strong>Signs of a violation:</strong> no Cancel button; the only way out is to close the whole app; one wrong delete is gone for good.</p>
+<p><strong>Example:</strong> a "Deleted. Undo" message that shows for a few seconds; a Back button that keeps the data already entered.</p>
+<h2>P4 · Consistency and standards</h2>
+<p><strong>It means:</strong> the same thing looks and works the same everywhere. Users should not have to wonder whether two different words or actions mean the same thing. Follow the conventions of the platform and the industry.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Does the same action have the same name and the same position on every screen?</li><li>Does the same component (button, input, card) have the same shape and behaviour?</li><li>Does the product follow the platform's conventions (iOS, Android, web) for familiar things?</li><li>Does a word always refer to the same concept?</li></ul>
+<p><strong>Signs of a violation:</strong> "Save" on one screen but "Confirm" on another for the same job; two different kinds of primary button; an icon that means one thing but is used for two jobs.</p>
+<p><strong>Example:</strong> the primary button is always at the bottom right and the same colour; the logo at the top left leads to the home page.</p>
+<h2>P5 · Error prevention</h2>
+<p><strong>It means:</strong> even better than a clear error message is a design that keeps the error from happening. Remove the situations that invite errors, or check and ask for confirmation before the user commits.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>For a high-stakes action (delete, pay, send), is there a confirmation step or a way to undo?</li><li>Does the input help the user enter the right thing (a format hint, sensible defaults, limits)?</li><li>Does the system block invalid choices instead of letting the user choose and then reporting an error?</li><li>Are two easily confused actions placed far apart, or clearly different in form?</li></ul>
+<p><strong>Signs of a violation:</strong> letting the user enter a date in the past and only then saying "invalid date"; a Delete button right next to Save, in the same style.</p>
+<p><strong>Example:</strong> a date picker that disables the dates that cannot be chosen; a Delete button in a warning colour that asks for confirmation.</p>
+<h2>P6 · Recognition rather than recall</h2>
+<p><strong>It means:</strong> reduce the load on memory. Put options, information and actions right in front of the user so they can recognise them, instead of forcing them to remember from the previous screen.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Is the information needed for a step shown at that step (the user is not made to remember it from an earlier one)?</li><li>Can the user pick from a list instead of retyping something from memory?</li><li>Are actions and options visible instead of hidden behind invisible gestures?</li><li>If there is history or suggestions (recently used items, autofill), can the user use them?</li></ul>
+<p><strong>Signs of a violation:</strong> being made to retype a code seen on the previous screen; a function reachable only through a hidden gesture with no hint.</p>
+<p><strong>Example:</strong> showing recent searches; an order summary next to the payment step.</p>
+<h2>P7 · Flexibility and efficiency of use</h2>
+<p><strong>It means:</strong> the system serves both newcomers and experienced users. There are shortcuts, customisation and fast ways for frequent users, without confusing newcomers.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Do experienced users have shortcuts (keyboard shortcuts, quick actions, bulk actions)?</li><li>Does the system remember repeated choices, settings or data so they do not have to be redone?</li><li>Can newcomers follow the full, clear path?</li><li>Can users customise the parts they use often?</li></ul>
+<p><strong>Signs of a violation:</strong> long-time users go through the same five steps every time; no way to act on many items at once.</p>
+<p><strong>Example:</strong> keyboard shortcuts for common actions; "buy again" from a previous order; multi-select.</p>
+<h2>P8 · Aesthetic and minimalist design</h2>
+<p><strong>It means:</strong> the interface does not carry extra or barely relevant information. Every additional piece of information competes for attention with the important information and makes it harder to see.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Does each screen have one clear main job, and does it stand out from the rest?</li><li>Does every element on the screen serve what the user is doing?</li><li>Is the text short, and is rarely used information tucked away (expandable when needed)?</li><li>Does decoration slow the user down or make reading harder?</li></ul>
+<p><strong>Signs of a violation:</strong> a screen full of text and buttons of equal weight; banners, popups and icons competing with each other; long explanatory text nobody reads.</p>
+<p><strong>Example:</strong> a checkout screen that keeps only the necessary fields; advanced features behind "More options".</p>
+<h2>P9 · Help users recognise, diagnose and recover from errors</h2>
+<p><strong>It means:</strong> error messages use plain language (no error codes), say precisely what the problem is, and constructively suggest a solution.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Is the error message written in plain words, without error codes or technical terms?</li><li>Does it say what is wrong and where (pointing to the exact field or step)?</li><li>Does it say what the user needs to do next, and is there a button to do it?</li><li>Is the work the user already entered kept so they can fix it without starting over?</li></ul>
+<p><strong>Signs of a violation:</strong> "An error occurred. Code 500."; an error shown in red at the top of the page without saying which field is wrong; clearing the whole form after an error.</p>
+<p><strong>Example:</strong> "This email is already in use. Sign in or use another email." with a Sign in button.</p>
+<h2>P10 · Help and documentation</h2>
+<p><strong>It means:</strong> it is best when the system can be used without explanation. But when help is needed, it must be easy to find, tied to the task at hand, give concrete steps and not be too long.</p>
+<p><strong>Ask when evaluating:</strong></p>
+<ul><li>Can the user find help at the right time and in the right place (in context)?</li><li>Is the help content searchable and organised by what the user wants to do, not by feature structure?</li><li>Does it have short, concrete, easy-to-follow steps?</li><li>For things the user meets for the first time, is there a short hint (onboarding, tip)?</li></ul>
+<p><strong>Signs of a violation:</strong> help is one long PDF; you have to leave the screen you are on to find it; there is no way to search.</p>
+<p><strong>Example:</strong> a "?" icon next to a confusing field that opens a one-line explanation; a help-centre search by task.</p>
+<hr>
+<h1>Sources</h1>
+<ul><li>Nielsen, J. (1994). <em>10 Usability Heuristics for User Interface Design.</em> Nielsen Norman Group. Nielsen refined this set of 10 heuristics in 1994 from an analysis of 249 usability problems; Nielsen Norman Group has updated the explanations since.</li><li>Nielsen, J. (1994). <em>How to Conduct a Heuristic Evaluation.</em> Nielsen Norman Group.</li><li>Nielsen, J., &amp; Molich, R. (1990). <em>Heuristic evaluation of user interfaces.</em> Proceedings of ACM CHI'90.</li></ul>
+<p>The explanations and questions above are rewritten in plain words so you can use them in a project right away. When you need an exact citation, read the original at Nielsen Norman Group.</p></div><p class="srcfile">Source file: <code>standards/principle-checks.md</code></p></section><section class="doc" id="severity" data-title="Severity levels"><a class="back" href="#/reference">← Standards</a><div class="reading"><h1>Severity levels</h1>
+<p><em>The scale for how serious a usability problem is, used when you evaluate a design (Heuristic Evaluation) or record findings from a test with users. Based on Nielsen's 0 to 4 scale. Use the same scale for every finding so the levels can be compared with each other.</em></p>
+<h2>The 0 to 4 scale</h2>
+<div class="table-wrap"><table class="bal" style="min-width:506px"><colgroup><col style="width:11.3%"><col style="width:17.1%"><col style="width:24.6%"><col style="width:25.9%"><col style="width:21.2%"></colgroup><thead><tr><th scope="col">Level</th><th scope="col">Name</th><th scope="col">Meaning</th><th scope="col">Example</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><strong>0</strong></td><td>Not a problem</td><td>You do not agree this is a usability problem</td><td>One evaluator finds a label slightly odd, but real users understand it right away</td><td>Record it and drop it, with the reason</td></tr><tr><td><strong>1</strong></td><td>Cosmetic</td><td>A matter of appearance only, it does not get in the way of the user's work</td><td>Two icons are a few pixels out of line; capitalisation of labels is inconsistent</td><td>Fix only if there is time</td></tr><tr><td><strong>2</strong></td><td>Minor</td><td>A small problem: annoying or a little slow, the user still completes the task</td><td>A button is a bit far away so the user has to scroll; an error message does not say clearly how to fix it</td><td>Low priority; put it in the backlog</td></tr><tr><td><strong>3</strong></td><td>Major</td><td>A big problem: many users get blocked, lose a lot of time or have to take a detour</td><td>Cannot find where to share; has to re-enter data after an error</td><td>Important, high priority; fix before launch, or record clearly why it is accepted</td></tr><tr><td><strong>4</strong></td><td>Catastrophe</td><td>So serious that the user cannot complete the main task, or it causes lost data or lost money</td><td>The pay button does not work; an accidental delete that cannot be undone</td><td><strong>Must be fixed before release</strong></td></tr></tbody></table></div>
+<h2>How to decide a level</h2>
+<p>A problem is rated on three factors, looked at together, not added up:</p>
+<div class="table-wrap"><table class="bal" style="min-width:292px"><colgroup><col style="width:23.4%"><col style="width:37.6%"><col style="width:39.1%"></colgroup><thead><tr><th scope="col">Factor</th><th scope="col">Question</th><th scope="col">Leans toward a higher level when</th></tr></thead><tbody><tr><td><strong>Frequency</strong></td><td>How often does this problem happen? How many people meet it?</td><td>Most users meet it, or meet it in the main task</td></tr><tr><td><strong>Impact</strong></td><td>When they meet it, is it easy or hard to get past?</td><td>They are blocked, lose data, or do not know how to continue</td></tr><tr><td><strong>Persistence</strong></td><td>Is it met once, or again and again?</td><td>Users cannot learn to avoid it and meet it every time</td></tr></tbody></table></div>
+<p>For example: a rare error that wipes out all the data can be level 4. An annoyance that happens on every visit but costs one second can be level 2.</p>
+<h2>How to rate</h2>
+<ol><li><strong>Rate after you have seen the whole design,</strong> not halfway through. You need the overall picture to compare problems with each other.</li><li><strong>Each person rates separately,</strong> then compare. A single rater is often off; the average of 3 or more people is more reliable.</li><li><strong>Rate the problem, not the solution.</strong> Severity is about the impact on users, not about how easy it is to fix.</li><li><strong>Write a short reason</strong> for levels 3 and 4, so others understand why.</li></ol>
+<h2>Using this scale in the hub</h2>
+<ul><li>Each finding is a file in <code>insights/findings/</code> with the properties <code>severity</code> (0 to 4) and <code>principle</code> (see <a href="#/principles">Principle checks</a>). The report ranks findings by level by itself, and the Findings page in Stages shows the list.</li><li>At the Deliver gate, check 4b requires findings to be ranked by importance: use this scale.</li><li>Level <strong>4</strong> blocks handoff: the report warns while a level 4 finding still has <code>resolution: open</code>, and flags the decision that is affected.</li><li>Level <strong>3</strong> needs a clear decision: fix it, or accept it as a trade-off and record it in <code>insights/case-log.md</code>.</li><li>Levels <strong>0 to 2</strong> can go into the backlog after launch.</li></ul>
+<h2>How to record a finding</h2>
+<div class="table-wrap"><table class="bal" style="min-width:466px"><colgroup><col style="width:24.9%"><col style="width:20.1%"><col style="width:20.3%"><col style="width:19.7%"><col style="width:15.0%"></colgroup><thead><tr><th scope="col">Finding</th><th scope="col">Principle violated</th><th scope="col">Severity (0 to 4)</th><th scope="col">Evidence</th><th scope="col">What to do</th></tr></thead><tbody><tr><td>One sentence describing the problem, from the user's point of view</td><td>The principle code, for example P1</td><td>0 to 4, with a short reason if it is 3 or 4</td><td>An evidence code or a recording</td><td>Fix / accept / defer</td></tr></tbody></table></div>
+<h2>Sources</h2>
+<ul><li>Nielsen, J. (1994). <em>Severity Ratings for Usability Problems.</em> Nielsen Norman Group.</li><li>Nielsen, J. (1994). <em>How to Conduct a Heuristic Evaluation.</em> Nielsen Norman Group.</li></ul></div><p class="srcfile">Source file: <code>standards/severity-levels.md</code></p></section></div></section>
+<section class="view journey guide" id="v-guide"><div class="wrap"><div class="jlist"><div class="reading"><h1>Guide</h1>
+<h2>1. What this workspace is, and who it is for</h2>
+<p><strong>What it is.</strong> One folder for one product, where you and your AI tool work together. Documents, research, decisions and measured results sit in the right place and are linked to each other, so the AI always has enough context.</p>
+<p><strong>Who it is for.</strong> PMs, designers, researchers, or anyone building a product on their own. You do not need to know how to code.</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">You work in</th><th scope="col">To do what</th></tr></thead><tbody><tr><td><code>work/</code></td><td>The work you have done: analysis, wireframes, prototype</td></tr><tr><td><code>insights/</code></td><td>What you learned and what you decided, linked back to user needs</td></tr><tr><td><code>context/</code></td><td>Background for the AI to read first</td></tr><tr><td>The left menu</td><td>For <strong>viewing</strong> only: built automatically from the three folders above</td></tr></tbody></table></div>
+<h2>2. I have a new product or project</h2>
+<div class="table-wrap"><table class="bal" style="min-width:288px"><colgroup><col style="width:16.6%"><col style="width:36.2%"><col style="width:47.2%"></colgroup><thead><tr><th scope="col">Step</th><th scope="col">What to do</th><th scope="col">Say to the AI</th></tr></thead><tbody><tr><td>1</td><td>Create the project (open the workspace folder with an AI tool)</td><td><code>Create a new project called &lt;project-name&gt;</code></td></tr><tr><td>2</td><td>Tell the AI about the product and the users</td><td><code>Help me fill in the background about the product and users. Ask me one question at a time.</code></td></tr><tr><td>3</td><td>Write the scope of the project</td><td><code>Help me write the scope: the business question, the desired outcome, the main users.</code></td></tr><tr><td>4</td><td>Add the research data (anonymised)</td><td><code>Extract insights from the file &lt;file-name&gt;. Propose first, do not create.</code></td></tr><tr><td>5</td><td>Look at the hub</td><td>Double-click <code>index.html</code> in the project folder</td></tr></tbody></table></div>
+<p>Then you go through the stages:</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Stage</th><th scope="col">What you are doing</th></tr></thead><tbody><tr><td><strong>Discover</strong></td><td>Understand the problem and the users</td></tr><tr><td><strong>Define</strong></td><td>Decide which problem is worth solving</td></tr><tr><td><strong>Develop</strong></td><td>Explore solutions, draw wireframes, build a prototype</td></tr><tr><td><strong>Deliver</strong></td><td>Test with users and hand off</td></tr><tr><td><strong>Learn</strong></td><td>Read the results after release</td></tr></tbody></table></div>
+<h2>3. I have a new task or piece of work</h2>
+<div class="table-wrap"><table class="bal" style="min-width:330px"><colgroup><col style="width:28.9%"><col style="width:28.3%"><col style="width:42.9%"></colgroup><thead><tr><th scope="col">I have</th><th scope="col">What to do</th><th scope="col">Say to the AI</th></tr></thead><tbody><tr><td>A new interview or survey</td><td>Save the file (anonymised) in <code>work/</code></td><td><code>Extract insights from the file &lt;file-name&gt;. Propose first, do not create.</code></td></tr><tr><td>Images, wireframes, a prototype</td><td>Drop them into a new folder in <code>work/</code></td><td><code>Add the files in the folder &lt;folder-name&gt; to the report.</code></td></tr><tr><td>A design decision</td><td>No file needed first</td><td><code>Record a decision: &lt;one sentence&gt;. It tests hypothesis H1. Reason: &lt;...&gt;. Not accepted yet.</code></td></tr><tr><td>A new need or hypothesis</td><td>No file needed first</td><td><code>Record a user need: &lt;one sentence&gt;. Impact &lt;high/medium/low&gt;, because &lt;reason&gt;.</code></td></tr><tr><td>A measured result after launch</td><td>No file needed first</td><td><code>Metric M1 measured &lt;number&gt; on &lt;date&gt;, the target was &lt;...&gt;. Verdict: &lt;met / missed&gt;.</code></td></tr></tbody></table></div>
+<p><strong>Where things go:</strong> work you have done lives in <code>work/</code>; what you learned and decided lives in <code>insights/</code>. Each piece of information is written in one place only.</p>
+<h2>4. I want to preview the hub</h2>
+<div class="table-wrap"><table class="bal" style="min-width:306px"><colgroup><col style="width:26.4%"><col style="width:25.1%"><col style="width:48.5%"></colgroup><thead><tr><th scope="col">Way</th><th scope="col">When</th><th scope="col">What to do</th></tr></thead><tbody><tr><td><strong>Quick look</strong></td><td>You only need to look</td><td>Double-click <code>index.html</code> in the project folder: it opens in the browser, nothing to install</td></tr><tr><td><strong>Look and auto-refresh</strong></td><td>You are editing files all the time</td><td>Tell the AI: <em>"Open a preview of the hub that refreshes when I save a file"</em>, then open the address it gives you</td></tr><tr><td><strong>Send to someone</strong></td><td>Sharing</td><td>Tell the AI: <em>"Pack the report into a zip file to send"</em></td></tr></tbody></table></div>
+<p>The report changes only when it is rebuilt. Just added a file and do not see it? Tell the AI: <em>"Rebuild the report"</em>, then reload the page.</p>
+<h2>5. Words for working with the AI</h2>
+<p><strong>Things in the workspace</strong></p>
+<div class="table-wrap"><table><thead><tr><th scope="col">Word</th><th scope="col">Meaning</th></tr></thead><tbody><tr><td><strong>Hub</strong></td><td>The whole project folder and the <code>index.html</code> report that shows it</td></tr><tr><td><strong>Item</strong></td><td>A need, hypothesis, metric, decision, evidence or finding. Each item is one file in <code>insights/</code></td></tr><tr><td><strong>Working file</strong></td><td>A file in <code>work/</code> (for example <code>scope.md</code>)</td></tr><tr><td><strong>Step card</strong></td><td>A ready-made procedure for the AI to run (it lives in <code>toolkit/skills/</code>, outside the case and shared). You do not need to name it: say what you want done and the AI picks the right procedure</td></tr><tr><td><strong>Context</strong></td><td>The files in <code>context/</code> that the AI reads first in every step</td></tr></tbody></table></div>
+<p><strong>Words you say to the AI</strong></p>
+<div class="table-wrap"><table><thead><tr><th scope="col">You say</th><th scope="col">The AI understands</th></tr></thead><tbody><tr><td>"Propose first, do not create"</td><td>List it for me to approve, do not write any file yet</td></tr><tr><td>"Anonymise"</td><td>Replace real names, company names and figures with made-up ones before giving them to the AI</td></tr><tr><td>"assumed"</td><td>Nobody has confirmed this number</td></tr><tr><td>"Draft" / "verified"</td><td>Not checked yet / I have checked it</td></tr><tr><td>"Proposed" / "accepted"</td><td>A decision just suggested / a decision that has been accepted</td></tr><tr><td>"Link to H1"</td><td>Record the relationship to item H1 (for example the decision tests hypothesis H1)</td></tr><tr><td>"Rebuild the report"</td><td>Refresh the report from the current files so the menu and the tables match the latest changes</td></tr></tbody></table></div>
+<p>To understand more deeply how the workspace works, tell the AI: <em>"Explain to me how this workspace works."</em></p></div></div></div></section>
+<div class="wrap" style="padding-top:0"><footer class="foot">This report is generated automatically from the project files.<details class="foot-tech"><summary>For whoever updates the report</summary><p>Edit the project source files, then ask the AI tool to rebuild the report, or run the export script of the product-workspace skill.</p></details></footer></div>
+</main>
+</div>
+<script>
+(function(){
+  var root=document.documentElement; root.classList.add('js');
+  var VIEWS=['overview','context','journey','docs','trace','reference','guide'];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  var docs={}; $$('.doc').forEach(function(d){docs[d.id]=d});
+  $$('.nback').forEach(function(b){b.addEventListener('click',function(){showPanel('root')})});
+  var caseName=document.body.getAttribute('data-case');
+  function route(){
+    var id=decodeURIComponent((location.hash||'').replace(/^#\/?/,''))||'overview';
+    var doc=null, view='overview';
+    if(VIEWS.indexOf(id)>-1){view=id}
+    else if(docs[id]){doc=docs[id]; var v=doc.closest('.view'); view=v?v.id.slice(2):'overview'}
+    $$('.view').forEach(function(v){v.classList.toggle('on',v.id==='v-'+view)});
+    $$('.side a[data-nav]').forEach(function(a){
+      if(a.getAttribute('data-nav')===view){a.setAttribute('aria-current','page')}else{a.removeAttribute('aria-current')}
+    });
+    var mn=$('.side details.menu'); if(mn&&window.innerWidth<=900){mn.open=false}
+    $$('.doc').forEach(function(d){d.classList.remove('on')});
+    if(doc){doc.classList.add('on')}
+    var j=$('#v-journey'); if(j){j.classList.toggle('has-doc',view==='journey'&&!!doc)}
+    var t=$('#v-trace'); if(t){t.classList.toggle('has-item',view==='trace'&&!!doc)}
+    var rv=$('#v-reference'); if(rv){rv.classList.toggle('has-doc',view==='reference'&&!!doc)}
+    var cv=$('#v-context'); if(cv){cv.classList.toggle('has-doc',view==='context'&&!!doc)}
+    var dv=$('#v-docs'); if(dv){dv.classList.toggle('has-doc',view==='docs'&&!!doc)}
+    $$('.subtabs a').forEach(function(a){
+      if(doc&&a.getAttribute('href')==='#/'+doc.id){a.setAttribute('aria-current','page')}else{a.removeAttribute('aria-current')}
+    });
+    $$('.tree a.node').forEach(function(a){
+      var on=view==='trace'&&doc&&a.getAttribute('data-id')===doc.id;
+      a.classList.toggle('sel',!!on);
+    });
+    var sel=$('.tree a.node.sel');
+    if(sel){var p=sel.parentElement; while(p&&p.id!=='tree'){if(p.tagName==='DETAILS'){p.open=true} p=p.parentElement}}
+    document.title=(doc?doc.getAttribute('data-title')+' · ':'')+caseName;
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',route);
+  // guide page: a Copy button on every prompt
+  $$('#v-guide pre').forEach(function(pre){
+    var b=document.createElement('button'); b.type='button'; b.className='copybtn'; b.textContent='Copy';
+    b.addEventListener('click',function(){
+      var txt=pre.innerText.replace(/\s*Copy\s*$/,'');
+      function done(){b.textContent='Copied'; setTimeout(function(){b.textContent='Copy'},1500)}
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fallback)}else{fallback()} }catch(e){fallback()}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select();
+        try{document.execCommand('copy'); done()}catch(e){} document.body.removeChild(t);
+      }
+    });
+    pre.appendChild(b);
+  });
+
+  // tree filtering
+  var tree=$('#tree'), q=$('#tsearch'), types={}, warnOnly=false, area='', showClosed=false;
+  function scoped(el){
+    if(!showClosed&&el.getAttribute('data-closed')==='1') return false;
+    var a=el.getAttribute('data-area'); if(area&&a&&a!==area) return false;
+    return true;
+  }
+  var ta=$('#tarea'), tc=$('#tclosed');
+  if(ta){ta.addEventListener('change',function(){area=ta.value;apply()})}
+  if(tc){tc.addEventListener('change',function(){showClosed=tc.checked;apply()})}
+  function applyCards(){
+    var s=(q&&q.value||'').trim().toLowerCase(), any=!!s||warnOnly||area!==''||Object.keys(types).length>0, n=0;
+    $$('.icard').forEach(function(c){
+      var ok=scoped(c)&&(!s||c.getAttribute('data-text').indexOf(s)>-1)&&(Object.keys(types).length===0||types[c.getAttribute('data-type')])&&(!warnOnly||c.getAttribute('data-warn')==='1');
+      c.hidden=!ok; if(ok){n++}
+    });
+    var tr=0;
+    $$('.atable tbody tr').forEach(function(r){
+      var ok=scoped(r)&&(!s||r.getAttribute('data-text').indexOf(s)>-1)&&(Object.keys(types).length===0||types['D'])&&(!warnOnly||r.getAttribute('data-warn')==='1');
+      r.hidden=!ok; if(ok){tr++}
+    });
+    var t=$('#tcount'); if(t){t.textContent=any?((($('#v-trace')||{classList:{contains:function(){return false}}}).classList.contains('mode-table')?tr:n)+' matches'):''}
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-open-table]'); if(!b) return;
+    var tv=$('#v-trace'); tv.classList.remove('mode-tree'); tv.classList.add('mode-table');
+    $$('.vmode button').forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-vmode')==='table'?'true':'false')});
+    location.hash='#/trace';
+  });
+  $$('.vmode button').forEach(function(b){b.addEventListener('click',function(){
+    var tv=$('#v-trace'); tv.classList.toggle('mode-tree',b.getAttribute('data-vmode')==='tree'); tv.classList.toggle('mode-table',b.getAttribute('data-vmode')==='table');
+    $$('.vmode button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+  })});
+  function apply(){
+    applyCards();
+    if(!tree) return;
+    var s=(q.value||'').trim().toLowerCase(), any=!!s||warnOnly||area!==''||Object.keys(types).length>0, shown=0;
+    function walk(ul){
+      var vis=false;
+      [].slice.call(ul.children).forEach(function(li){
+        var own=scoped(li)&&(!s||(li.getAttribute('data-text')||'').indexOf(s)>-1)
+          &&(Object.keys(types).length===0||types[li.getAttribute('data-type')])
+          &&(!warnOnly||li.getAttribute('data-warn')==='1');
+        var sub=li.querySelector(':scope > details > ul')||li.querySelector(':scope > ul');
+        var cv=sub?walk(sub):false;
+        var isItem=!!li.getAttribute('data-type');
+        if(own&&isItem&&any){shown++}
+        var show=(own&&(!sub||!any||true))||cv;
+        if(any&&!own&&!cv){show=false}
+        li.hidden=!show;
+        if(any&&cv){var d=li.querySelector(':scope > details'); if(d){d.open=true}}
+        vis=vis||show;
+      });
+      return vis;
+    }
+    walk(tree);
+    var c=$('#tcount'); if(c&&$('#v-trace').classList.contains('mode-tree')){c.textContent=any?(shown+' matches'):''}
+  }
+  if(q){q.addEventListener('input',function(){apply()})}
+  $$('#v-trace .filters button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var on=b.getAttribute('aria-pressed')!=='true';
+      b.setAttribute('aria-pressed',on?'true':'false');
+      if(b.getAttribute('data-warn')){warnOnly=on}
+      else{var k=b.getAttribute('data-type'); if(on){types[k]=true}else{delete types[k]}}
+      apply();
+    });
+  });
+  apply();
+  var cards=$$('#acards .acard'), fs={}, ft={};
+  function applyDocs(){
+    var q=(($('#dsearch')||{}).value||'').trim().toLowerCase(), n=0;
+    cards.forEach(function(c){
+      var ok=(!q||c.getAttribute('data-text').indexOf(q)>-1)&&(!Object.keys(ft).length||ft[c.getAttribute('data-type')])&&(!Object.keys(fs).length||fs[c.getAttribute('data-stage')]);
+      c.hidden=!ok; if(ok){n++}
+    });
+    var c=$('#dcount'); if(c){c.textContent=(q||Object.keys(ft).length||Object.keys(fs).length)?(n+' documents match'):''}
+  }
+  var ds=$('#dsearch'); if(ds){ds.addEventListener('input',applyDocs)}
+  $$('#v-docs .filters button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on?'true':'false');
+      var k=b.getAttribute('data-ftype');
+      if(k){if(on){ft[k]=true}else{delete ft[k]}}
+      applyDocs();
+    });
+  });
+  function tabGroup(sel,onPick){
+    $$(sel+' button').forEach(function(b){
+      b.addEventListener('click',function(){
+        $$(sel+' button').forEach(function(x){x.setAttribute('aria-selected',x===b?'true':'false')});
+        onPick(b);
+      });
+    });
+  }
+  tabGroup('#v-docs .tabs2',function(b){fs={}; var s=b.getAttribute('data-fstage'); if(s){fs[s]=true} applyDocs()});
+  tabGroup('#v-trace .tabs2',function(b){types={}; var t=b.getAttribute('data-type'); if(t){types[t]=true} apply()});
+  var sel=$('#themeselect');
+  if(sel){
+    try{var saved=localStorage.getItem('hub-theme'); if(saved){sel.value=saved; root.setAttribute('data-theme',saved)}}catch(e){}
+    sel.addEventListener('change',function(){
+      root.setAttribute('data-theme',sel.value);
+      try{localStorage.setItem('hub-theme',sel.value)}catch(e){}
+    });
+  }
+  route();
+})();
+</script>
+</body>
+</html>
