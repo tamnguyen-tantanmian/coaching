@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop 6 Font Token Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --paper: #F2F5F3;
+    --surface: #FFFFFF;
+    --surface-2: #F8FAF9;
+    --ink: #141917;
+    --ink-2: #4D5A56;
+    --ink-3: #78857F;
+    --line: #D3DDD8;
+    --line-soft: #E4EBE7;
+
+    --heading: #0B6E62;
+    --heading-bg: #DDEEEB;
+    --subheading: #22589E;
+    --subheading-bg: #DEE9F6;
+    --body-slot: #4F5C58;
+    --body-bg: #E5EAE8;
+    --accent-slot: #8B3566;
+    --accent-bg: #F5E1EC;
+
+    --lock: #8A5A07;
+    --lock-bg: #F8EFDB;
+    --edit: #16674A;
+    --edit-bg: #DEEFE7;
+
+    --display: "Newsreader", Georgia, serif;
+    --sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0D110F;
+      --surface: #161B19;
+      --surface-2: #1C2320;
+      --ink: #E6ECE9;
+      --ink-2: #9AA8A3;
+      --ink-3: #77857F;
+      --line: #2A342F;
+      --line-soft: #222B27;
+
+      --heading: #4FC7B6;
+      --heading-bg: #0C2F2A;
+      --subheading: #79B0EE;
+      --subheading-bg: #10243D;
+      --body-slot: #A3B0AB;
+      --body-bg: #232A27;
+      --accent-slot: #E08BBA;
+      --accent-bg: #331625;
+
+      --lock: #D8A44F;
+      --lock-bg: #33260D;
+      --edit: #5FC79A;
+      --edit-bg: #11301F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0D110F;
+    --surface: #161B19;
+    --surface-2: #1C2320;
+    --ink: #E6ECE9;
+    --ink-2: #9AA8A3;
+    --ink-3: #77857F;
+    --line: #2A342F;
+    --line-soft: #222B27;
+
+    --heading: #4FC7B6;
+    --heading-bg: #0C2F2A;
+    --subheading: #79B0EE;
+    --subheading-bg: #10243D;
+    --body-slot: #A3B0AB;
+    --body-bg: #232A27;
+    --accent-slot: #E08BBA;
+    --accent-bg: #331625;
+
+    --lock: #D8A44F;
+    --lock-bg: #33260D;
+    --edit: #5FC79A;
+    --edit-bg: #11301F;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 40px 20px 80px;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 12px 0 0;
+    text-wrap: balance;
+  }
+
+  .lede { font-size: 17px; color: var(--ink-2); max-width: 66ch; margin: 14px 0 0; }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  h3 { font-family: var(--sans); font-weight: 600; font-size: 15px; margin: 0; }
+
+  p { margin: 0; max-width: 72ch; }
+
+  section { display: flex; flex-direction: column; gap: 16px; }
+
+  .sec-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; flex-wrap: wrap; }
+  .sec-head .layer {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  figure { margin: 0; }
+  figure svg {
+    display: block; width: 100%; height: auto;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 4px 0;
+  }
+  figcaption { font-size: 13px; color: var(--ink-2); margin-top: 10px; max-width: 72ch; }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 11px 13px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-3);
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  code, .tok {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+  }
+  .panel-label { font-weight: 600; white-space: nowrap; }
+
+  .slot {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .s-heading { background: var(--heading-bg); color: var(--heading); }
+  .s-subheading { background: var(--subheading-bg); color: var(--subheading); }
+  .s-body { background: var(--body-bg); color: var(--body-slot); }
+  .s-accent { background: var(--accent-bg); color: var(--accent-slot); }
+
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .p-edit { background: var(--edit-bg); color: var(--edit); }
+  .p-lock { background: var(--lock-bg); color: var(--lock); }
+
+  .default-mark { color: var(--ink); font-weight: 600; }
+  .dim { color: var(--ink-3); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card .k {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .card ul { margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 5px; }
+  .card li { font-size: 13.5px; line-height: 1.45; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 16px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+</style>
+<style>
+  html { color-scheme: light dark; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">JTL-Shop 6.0 · Theme builder · Typography</p>
+    <h1>Font token map</h1>
+    <p class="lede">Seven text styles, each pointing at one of four font slots. This is the shared contract between Figma, the front end, and the theme panel — one row per thing, three names for it.</p>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Structure</span>
+      <h2>How it fits together</h2>
+    </div>
+    <figure>
+      <svg viewBox="0 0 900 214" role="img" aria-label="Four font slots across the top — Heading, Subheading, Body, Accent — with seven text styles below. H1 and H2 point at Heading, H3 and H4 at Subheading, Paragraph and S1 at Body, and S2 at Accent.">
+        <defs>
+          <marker id="mh" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="var(--heading)"></polygon></marker>
+          <marker id="ms" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="var(--subheading)"></polygon></marker>
+          <marker id="mb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="var(--body-slot)"></polygon></marker>
+          <marker id="ma" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="var(--accent-slot)"></polygon></marker>
+        </defs>
+
+        <text x="32" y="15" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="1.1" fill="currentColor" fill-opacity="0.5">4 FONT SLOTS — EACH HOLDS ONE FAMILY</text>
+
+        <rect x="32" y="24" width="200" height="38" rx="4" fill="var(--heading-bg)" stroke="var(--heading)" stroke-width="1.2"></rect>
+        <text x="132" y="41" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="13" font-weight="600" fill="var(--heading)">Heading</text>
+        <text x="132" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--heading)" fill-opacity="0.75">Inter</text>
+
+        <rect x="244" y="24" width="200" height="38" rx="4" fill="var(--subheading-bg)" stroke="var(--subheading)" stroke-width="1.2"></rect>
+        <text x="344" y="41" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="13" font-weight="600" fill="var(--subheading)">Subheading</text>
+        <text x="344" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--subheading)" fill-opacity="0.75">Inter</text>
+
+        <rect x="456" y="24" width="200" height="38" rx="4" fill="var(--body-bg)" stroke="var(--body-slot)" stroke-width="1.2"></rect>
+        <text x="556" y="41" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="13" font-weight="600" fill="var(--body-slot)">Body</text>
+        <text x="556" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--body-slot)" fill-opacity="0.8">Inter</text>
+
+        <rect x="668" y="24" width="200" height="38" rx="4" fill="var(--accent-bg)" stroke="var(--accent-slot)" stroke-width="1.2"></rect>
+        <text x="768" y="41" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="13" font-weight="600" fill="var(--accent-slot)">Accent</text>
+        <text x="768" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--accent-slot)" fill-opacity="0.75">Inter</text>
+
+        <line x1="90"  y1="140" x2="124" y2="66" stroke="var(--heading)" stroke-width="1.4" marker-end="url(#mh)"></line>
+        <line x1="210" y1="140" x2="140" y2="66" stroke="var(--heading)" stroke-width="1.4" marker-end="url(#mh)"></line>
+        <line x1="330" y1="140" x2="336" y2="66" stroke="var(--subheading)" stroke-width="1.4" marker-end="url(#ms)"></line>
+        <line x1="450" y1="140" x2="352" y2="66" stroke="var(--subheading)" stroke-width="1.4" marker-end="url(#ms)"></line>
+        <line x1="570" y1="140" x2="548" y2="66" stroke="var(--body-slot)" stroke-width="1.4" marker-end="url(#mb)"></line>
+        <line x1="690" y1="140" x2="564" y2="66" stroke="var(--body-slot)" stroke-width="1.4" marker-end="url(#mb)"></line>
+        <line x1="810" y1="140" x2="776" y2="66" stroke="var(--accent-slot)" stroke-width="1.4" marker-end="url(#ma)"></line>
+
+        <text x="868" y="107" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="9.5" fill="currentColor" fill-opacity="0.45">merchant can re-point any arrow</text>
+
+        <text x="32" y="132" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="1.1" fill="currentColor" fill-opacity="0.5">7 TEXT STYLES</text>
+
+        <rect x="34"  y="140" width="112" height="30" rx="4" fill="none" stroke="var(--heading)" stroke-opacity="0.55"></rect>
+        <text x="90"  y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">H1</text>
+        <rect x="154" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--heading)" stroke-opacity="0.55"></rect>
+        <text x="210" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">H2</text>
+        <rect x="274" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--subheading)" stroke-opacity="0.55"></rect>
+        <text x="330" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">H3</text>
+        <rect x="394" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--subheading)" stroke-opacity="0.55"></rect>
+        <text x="450" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">H4</text>
+        <rect x="514" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--body-slot)" stroke-opacity="0.55"></rect>
+        <text x="570" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Paragraph</text>
+        <rect x="634" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--body-slot)" stroke-opacity="0.55"></rect>
+        <text x="690" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">S1 · Price</text>
+        <rect x="754" y="140" width="112" height="30" rx="4" fill="none" stroke="var(--accent-slot)" stroke-opacity="0.55"></rect>
+        <text x="810" y="159" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">S2 · Label</text>
+
+        <rect x="34" y="182" width="832" height="26" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.28" stroke-dasharray="4 3"></rect>
+        <text x="450" y="199" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="currentColor" fill-opacity="0.55">DERIVED — h5 · body-sm · caption · cta · price-sm · input — no controls, follows the styles above</text>
+      </svg>
+      <figcaption>The default wiring. Every slot has at least one style pointing at it, so no slot ships as a dead control — and setting Heading to a display face changes H1 and H2 only, which is the case that was impossible before.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Layer 1</span>
+      <h2>Font slots</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Figma variable</th>
+            <th>FE token</th>
+            <th>Default</th>
+            <th>Referenced by (default)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="slot s-heading">Heading</span></td>
+            <td><code>Font/Heading</code></td>
+            <td><code>--font-heading</code></td>
+            <td class="num">Inter</td>
+            <td>H1, H2</td>
+          </tr>
+          <tr>
+            <td><span class="slot s-subheading">Subheading</span></td>
+            <td><code>Font/Subheading</code></td>
+            <td><code>--font-subheading</code></td>
+            <td class="num">Inter</td>
+            <td>H3, H4</td>
+          </tr>
+          <tr>
+            <td><span class="slot s-body">Body</span></td>
+            <td><code>Font/Body</code></td>
+            <td><code>--font-body</code></td>
+            <td class="num">Inter</td>
+            <td>Paragraph, S1</td>
+          </tr>
+          <tr>
+            <td><span class="slot s-accent">Accent</span></td>
+            <td><code>Font/Accent</code></td>
+            <td><code>--font-accent</code></td>
+            <td class="num">Inter</td>
+            <td>S2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2)">A slot holds a <strong>family, not a weight</strong>. Regular / Semibold / Bold are pulled from whatever family sits in the slot, and a missing weight resolves upward (600 → 700) with a notice on the slot row. Never let the browser synthesise one.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Layer 2 · naming</span>
+      <h2>Text styles — three names for one thing</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Panel label</th>
+            <th>Figma</th>
+            <th>FE token prefix</th>
+            <th>Default slot</th>
+            <th>Applies to</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel-label">H1</td>
+            <td><code>Type/H1</code></td>
+            <td><code>--type-h1-*</code></td>
+            <td><span class="slot s-heading">Heading</span></td>
+            <td>Hero headline · PDP product name · PLP category title</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H2</td>
+            <td><code>Type/H2</code></td>
+            <td><code>--type-h2-*</code></td>
+            <td><span class="slot s-heading">Heading</span></td>
+            <td>Section title within a page</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H3</td>
+            <td><code>Type/H3</code></td>
+            <td><code>--type-h3-*</code></td>
+            <td><span class="slot s-subheading">Subheading</span></td>
+            <td>Product card title · accordion header · tab</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H4</td>
+            <td><code>Type/H4</code></td>
+            <td><code>--type-h4-*</code></td>
+            <td><span class="slot s-subheading">Subheading</span></td>
+            <td>Sub-section · filter group title</td>
+          </tr>
+          <tr>
+            <td class="panel-label">Paragraph</td>
+            <td><code>Type/Paragraph</code></td>
+            <td><code>--type-paragraph-*</code></td>
+            <td><span class="slot s-body">Body</span></td>
+            <td>Product copy · CMS pages · input values</td>
+          </tr>
+          <tr>
+            <td class="panel-label">S1 · Price</td>
+            <td><code>Type/S1-Price</code></td>
+            <td><code>--type-price-*</code></td>
+            <td><span class="slot s-body">Body</span></td>
+            <td>PDP price · cart total</td>
+          </tr>
+          <tr>
+            <td class="panel-label">S2 · Label</td>
+            <td><code>Type/S2-Label</code></td>
+            <td><code>--type-label-*</code></td>
+            <td><span class="slot s-accent">Accent</span></td>
+            <td>Badge · tag · overline · eyebrow</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2)">The panel label is what a merchant sees; the Figma and FE names are what the two teams type. <strong>S1 and S2 keep their number in the panel and their role in code</strong> — merchants read position, developers read meaning.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Layer 2 · values</span>
+      <h2>Defaults</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Style</th>
+            <th class="num">Size</th>
+            <th class="num">Fluid min</th>
+            <th class="num">Range</th>
+            <th class="num">Line height</th>
+            <th class="num">Weight</th>
+            <th>Tracking</th>
+            <th>Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel-label">H1</td>
+            <td class="num">56</td><td class="num">42</td><td class="num dim">32–72</td>
+            <td class="num">1.10</td><td class="num">700</td>
+            <td>Tight <span class="dim">−0.02em</span></td><td>Default</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H2</td>
+            <td class="num">40</td><td class="num">30</td><td class="num dim">28–56</td>
+            <td class="num">1.15</td><td class="num">700</td>
+            <td>Tight <span class="dim">−0.02em</span></td><td>Default</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H3</td>
+            <td class="num">32</td><td class="num">24</td><td class="num dim">22–44</td>
+            <td class="num">1.20</td><td class="num">600</td>
+            <td>Normal <span class="dim">0</span></td><td>Default</td>
+          </tr>
+          <tr>
+            <td class="panel-label">H4</td>
+            <td class="num">24</td><td class="num">18</td><td class="num dim">18–32</td>
+            <td class="num">1.30</td><td class="num">600</td>
+            <td>Normal <span class="dim">0</span></td><td>Default</td>
+          </tr>
+          <tr>
+            <td class="panel-label">Paragraph</td>
+            <td class="num">16</td><td class="num">16</td><td class="num dim">14–20</td>
+            <td class="num">1.60</td><td class="num">400</td>
+            <td class="dim">n/a</td><td class="dim">n/a</td>
+          </tr>
+          <tr>
+            <td class="panel-label">S1 · Price</td>
+            <td class="num">24</td><td class="num">24</td><td class="num dim">16–32</td>
+            <td class="num">1.20</td><td class="num">700</td>
+            <td>Normal <span class="dim">0</span></td><td>Default</td>
+          </tr>
+          <tr>
+            <td class="panel-label">S2 · Label</td>
+            <td class="num">12</td><td class="num">12</td><td class="num dim">10–16</td>
+            <td class="num">1.40</td><td class="num">600</td>
+            <td>Loose <span class="dim">+0.06em</span></td><td>Uppercase</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="k">Fluid rule</span>
+        <p style="font-size:13.5px"><code>min = base × 0.75</code> for base ≥ 24px; below 24 nothing scales. Interpolate between 360px and 1024px viewport. Paragraph, S1 and S2 hold their size at every width.</p>
+      </div>
+      <div class="card">
+        <span class="k">Why price scales differently</span>
+        <p style="font-size:13.5px">Price is a conversion element, not a heading. Shrinking it on the device where most traffic converts is the wrong trade, so it holds at 24.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Layer 3</span>
+      <h2>Derived — build no controls for these</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>FE token</th>
+            <th>Figma</th>
+            <th>Derived from</th>
+            <th class="num">Resolves to</th>
+            <th>Applies to</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--type-h5-*</code></td><td><code>Type/Derived/H5</code></td>
+            <td class="num">H4 × 0.75</td><td class="num">18 / 600</td>
+            <td>Deep sub-heading, supporting line</td>
+          </tr>
+          <tr>
+            <td><code>--type-body-sm-*</code></td><td><code>Type/Derived/BodySm</code></td>
+            <td class="num">Paragraph × 0.875</td><td class="num">14 / 400</td>
+            <td>Table cells, footer links, secondary copy</td>
+          </tr>
+          <tr>
+            <td><code>--type-caption-*</code></td><td><code>Type/Derived/Caption</code></td>
+            <td class="num">max(12, Paragraph × 0.75)</td><td class="num">12 / 400</td>
+            <td>Helper text, meta, legal, breadcrumb</td>
+          </tr>
+          <tr>
+            <td><code>--type-cta-*</code></td><td><code>Type/Derived/Cta</code></td>
+            <td class="num">Paragraph, weight 600</td><td class="num">16 / 600</td>
+            <td>Primary and secondary buttons</td>
+          </tr>
+          <tr>
+            <td><code>--type-price-sm-*</code></td><td><code>Type/Derived/PriceSm</code></td>
+            <td class="num">S1 × 0.67</td><td class="num">16 / 600</td>
+            <td>Card price, cart line price</td>
+          </tr>
+          <tr>
+            <td><code>--type-input-*</code></td><td><code>Type/Derived/Input</code></td>
+            <td class="num">Paragraph, floored at 16</td><td class="num">16 / 400</td>
+            <td>All form inputs — the floor is not negotiable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2)">Both price tokens carry <code>font-variant-numeric: tabular-nums</code> permanently. Without it, prices in a PLP grid don't align and the PDP price jitters when quantity changes.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="layer">Ownership</span>
+      <h2>Who changes what</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Property</th><th>Owner</th><th>Constraint</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Family in each font slot</td><td><span class="pill p-edit">Merchant</span></td><td>Max 4 families, structurally</td></tr>
+          <tr><td>Which slot a text style points at</td><td><span class="pill p-edit">Merchant</span></td><td>One of 4, or <code>Custom…</code></td></tr>
+          <tr><td>Size per text style</td><td><span class="pill p-edit">Merchant</span></td><td>Clamped to the range above</td></tr>
+          <tr><td>Line height · Tracking · Case</td><td><span class="pill p-edit">Merchant</span></td><td>Three named steps only, never a free number</td></tr>
+          <tr><td>Weight</td><td><span class="pill p-lock">System</span></td><td>Comes from the style's role, resolved out of the slot's family</td></tr>
+          <tr><td>Fluid minimum ratio</td><td><span class="pill p-lock">System</span></td><td><code>× 0.75</code>, fixed</td></tr>
+          <tr><td>Every derived token</td><td><span class="pill p-lock">System</span></td><td>No control is rendered for these</td></tr>
+          <tr><td>Tabular numerals on price</td><td><span class="pill p-lock">System</span></td><td>Always on</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--ink-2)">ARC-17's <code>tokenOverrides</code> is <code>Partial&lt;ThemeTokens&gt;</code>, which permits overriding <em>any</em> token including the locked ones. The System rows need an <code>EditableTokens</code> subset type or write validation, or this column is only a wish.</p>
+  </section>
+
+  <footer>
+    Companion to <span style="white-space:nowrap">typography-spec-handoff.md</span> (v2 token set) · <span style="white-space:nowrap">font-model-spec-handoff.md</span> (panel behaviour) · ARC-17 (token architecture)
+  </footer>
+
+</div>
+</body>
+</html>

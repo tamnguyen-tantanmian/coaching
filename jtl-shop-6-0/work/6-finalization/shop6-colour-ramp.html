@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop 6 Colour Ramp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F6F6F8; --surface: #FFFFFF; --surface-2: #FAFAFC;
+    --ink: #15151A; --ink-2: #5A5A66; --ink-3: #8A8A96;
+    --line: #E3E3E8; --line-soft: #EEEEF2;
+    --pass: #1B6E4B; --pass-bg: #E2F2EA;
+    --fail: #A32C25; --fail-bg: #FAE6E4;
+    --warn: #8A5A07; --warn-bg: #F8EFDB;
+    --display: "Newsreader", Georgia, serif;
+    --sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101013; --surface: #1A1A1E; --surface-2: #202026;
+      --ink: #ECECEF; --ink-2: #9C9CA8; --ink-3: #74747F;
+      --line: #2C2C33; --line-soft: #24242A;
+      --pass: #5FC79A; --pass-bg: #123023;
+      --fail: #EE8A82; --fail-bg: #331A18;
+      --warn: #D8A44F; --warn-bg: #33260D;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101013; --surface: #1A1A1E; --surface-2: #202026;
+    --ink: #ECECEF; --ink-2: #9C9CA8; --ink-3: #74747F;
+    --line: #2C2C33; --line-soft: #24242A;
+    --pass: #5FC79A; --pass-bg: #123023;
+    --fail: #EE8A82; --fail-bg: #331A18;
+    --warn: #D8A44F; --warn-bg: #33260D;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.55;
+    margin: 0; padding-inline: 20px; padding-block: 36px 72px;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; display: flex; flex-direction: column; gap: 38px; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--ink-3); margin: 0;
+  }
+  h1 {
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(30px, 5vw, 42px); line-height: 1.08;
+    letter-spacing: -0.015em; margin: 10px 0 0; text-wrap: balance;
+  }
+  .lede { color: var(--ink-2); max-width: 64ch; margin: 12px 0 0; }
+  h2 { font-weight: 700; font-size: 19px; letter-spacing: -0.005em; margin: 0; }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line); padding-bottom: 9px;
+  }
+  .sec-head .n {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  section { display: flex; flex-direction: column; gap: 14px; }
+  p { margin: 0; max-width: 70ch; }
+  .note { font-size: 13.5px; color: var(--ink-2); }
+
+  .panel {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px;
+    display: flex; flex-wrap: wrap; gap: 20px 26px; align-items: flex-end;
+  }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field > label, .field > .lbl {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  .hexrow { display: flex; align-items: center; gap: 8px; }
+  input[type="color"] {
+    -webkit-appearance: none; appearance: none;
+    width: 40px; height: 36px; padding: 0;
+    border: 1px solid var(--line); border-radius: 7px; background: none; cursor: pointer;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+  input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+  input[type="text"] {
+    font-family: var(--mono); font-size: 13.5px; width: 9ch; padding: 8px 9px;
+    border: 1px solid var(--line); border-radius: 7px;
+    background: var(--surface-2); color: var(--ink);
+  }
+  input:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  .seg button {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    padding: 8px 13px; border: none; background: var(--surface-2);
+    color: var(--ink-2); cursor: pointer;
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+  .ghost {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    padding: 8px 13px; border: 1px solid var(--line); border-radius: 7px;
+    background: var(--surface-2); color: var(--ink-2); cursor: pointer;
+  }
+  .ghost + .ghost { margin-left: 7px; }
+
+  .swatches { display: flex; gap: 6px; }
+  .swatches button {
+    width: 30px; height: 30px; border-radius: 6px; padding: 0;
+    border: 1px solid rgba(128,128,140,.35); cursor: pointer;
+  }
+  .swatches button[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .swname { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+
+  .rule { height: 1px; width: 100%; }
+  .status {
+    border: 1px solid var(--line); border-radius: 10px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .status .cap {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  td .verdict { margin-left: 6px; }
+
+  .ramp { display: flex; flex-direction: column; gap: 8px; }
+  .step {
+    display: grid; grid-template-columns: 112px minmax(0, 1.15fr) minmax(0, 0.95fr);
+    gap: 16px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 11px;
+  }
+  .step.anchor { border-color: var(--ink); border-width: 1.5px; }
+  .chip {
+    height: 58px; border-radius: 7px; border: 1px solid rgba(128,128,140,.28);
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+  }
+  .who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .who .name { font-weight: 700; font-size: 14.5px; }
+  .who .tok { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+  .who .use { font-size: 13px; color: var(--ink-2); }
+  .vals {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-2);
+    font-variant-numeric: tabular-nums; display: flex; flex-direction: column; gap: 2px;
+  }
+  .vals b { color: var(--ink); font-weight: 500; }
+  .pin {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    padding: 1px 6px; border-radius: 3px; background: var(--warn-bg);
+    color: var(--warn); align-self: flex-start; margin-top: 2px;
+  }
+  @media (max-width: 720px) {
+    .step { grid-template-columns: 74px minmax(0,1fr); }
+    .vals { grid-column: 1 / -1; }
+  }
+
+  /* ---- side-by-side schemes ---- */
+  .compare { display: grid; grid-template-columns: minmax(0, 330px); gap: 16px; }
+  .scheme {
+    border: 1px solid var(--line); border-radius: 10px; padding: 16px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .scheme .hd { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .scheme .cap {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.09em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .scheme .sw { display: flex; gap: 4px; }
+  .scheme .sw i { width: 13px; height: 13px; border-radius: 3px; display: block; border: 1px solid rgba(128,128,140,.3); }
+  .card {
+    border-radius: 10px; padding: 15px; border: 1px solid;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-weight: 600; font-size: 10.5px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 4px 9px; border-radius: 4px;
+  }
+  .card .t { font-weight: 600; font-size: 15px; line-height: 1.3; }
+  .card .m { font-size: 12.5px; }
+  .prices { display: flex; align-items: baseline; gap: 9px; }
+  .card .p { font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .card .op { font-size: 13px; text-decoration: line-through; font-variant-numeric: tabular-nums; }
+  .acts { display: flex; gap: 8px; margin-top: 3px; }
+  .btn {
+    font-family: var(--sans); font-weight: 600; font-size: 13.5px;
+    padding: 10px 14px; border-radius: 8px; border: none; cursor: default; flex: 1;
+  }
+
+  .states {
+    border: 1px solid var(--line); border-radius: 10px; padding: 18px;
+    display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start;
+  }
+  .unit { display: flex; flex-direction: column; gap: 8px; }
+  .unit .cap {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; opacity: .6;
+  }
+  .unit .btn { flex: none; }
+  .inp { border-radius: 8px; padding: 10px 12px; font-size: 14px; width: 200px; border: 1px solid; }
+  .lnk { font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 520px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line-soft); }
+  thead th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.07em;
+    text-transform: uppercase; font-weight: 500; color: var(--ink-3);
+    background: var(--surface-2); border-bottom: 1px solid var(--line);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .verdict { font-family: var(--mono); font-size: 11px; padding: 2px 7px; border-radius: 3px; }
+  .v-pass { background: var(--pass-bg); color: var(--pass); }
+  .v-fail { background: var(--fail-bg); color: var(--fail); }
+
+  pre {
+    margin: 0; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px; overflow-x: auto;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--ink);
+  }
+  pre .c { color: var(--ink-3); }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 3px solid var(--warn); border-radius: 8px;
+    padding: 13px 16px; font-size: 13.5px; color: var(--ink-2);
+  }
+  .callout b { color: var(--ink); }
+  .callout[hidden] { display: none !important; }
+
+  footer {
+    border-top: 1px solid var(--line); padding-top: 16px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-3);
+  }
+</style>
+<style>
+  html { color-scheme: light dark; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">JTL-Shop 6.0 · Theme builder · Colour</p>
+    <h1>Colour ramp</h1>
+    <p class="lede">Four roles the merchant sets. Primary and Secondary each generate a brand ramp; Background and Text are the two poles the whole neutral scale is mixed between. Nothing else is stored.</p>
+  </header>
+
+  <section>
+    <div class="panel">
+      <div class="field">
+        <label for="hex-primary">Primary</label>
+        <div class="hexrow"><input type="color" id="pick-primary" aria-label="Primary colour"><input type="text" id="hex-primary" spellcheck="false" aria-label="Primary hex"></div>
+      </div>
+      <div class="field">
+        <label for="hex-secondary">Secondary</label>
+        <div class="hexrow"><input type="color" id="pick-secondary" aria-label="Secondary colour"><input type="text" id="hex-secondary" spellcheck="false" aria-label="Secondary hex"></div>
+      </div>
+      <div class="field">
+        <label for="hex-background">Background</label>
+        <div class="hexrow"><input type="color" id="pick-background" aria-label="Background colour"><input type="text" id="hex-background" spellcheck="false" aria-label="Background hex"></div>
+      </div>
+      <div class="field">
+        <label for="hex-text">Text</label>
+        <div class="hexrow"><input type="color" id="pick-text" aria-label="Text colour"><input type="text" id="hex-text" spellcheck="false" aria-label="Text hex"></div>
+      </div>
+      <div class="field">
+        <span class="lbl">Primary options</span>
+        <div class="swatches" id="pri-presets"></div>
+        <span class="swname" id="priName"></span>
+      </div>
+      <div class="field">
+        <span class="lbl">Secondary options</span>
+        <div class="swatches" id="sec-presets"></div>
+        <span class="swname" id="secName"></span>
+      </div>
+      <div class="field">
+        <span class="lbl">Load</span>
+        <div>
+          <button class="ghost" type="button" id="load-board">Reset to board values</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl">Brand ramps</span>
+        <div class="seg" id="mode">
+          <button type="button" data-mode="gen" aria-pressed="true">Generated</button>
+          <button type="button" data-mode="fix" aria-pressed="false">Fixed hex</button>
+        </div>
+      </div>
+    </div>
+    <p class="note" id="modeNote"></p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">In use</span><h2>The card, painted from the tokens</h2></div>
+    <p class="note">Every colour below comes from the four roles above — nothing is hand-picked.</p>
+    <div class="compare" id="compare"></div>
+    <div class="states" id="states">
+      <div class="unit">
+        <span class="cap">Primary · hover</span>
+        <button class="btn" id="s-hover" type="button" tabindex="-1">Add to cart</button>
+      </div>
+      <div class="unit">
+        <span class="cap">Primary · disabled</span>
+        <button class="btn" id="s-dis" type="button" tabindex="-1">Add to cart</button>
+      </div>
+      <div class="unit">
+        <span class="cap">Secondary · hover</span>
+        <button class="btn" id="s-hover2" type="button" tabindex="-1">Save for later</button>
+      </div>
+      <div class="unit">
+        <span class="cap">Secondary · disabled</span>
+        <button class="btn" id="s-dis2" type="button" tabindex="-1">Save for later</button>
+      </div>
+      <div class="unit">
+        <span class="cap">Input · rest, focused</span>
+        <div class="inp" id="s-inp">Email address</div>
+        <div class="inp" id="s-inp-f">Email address</div>
+        <span class="lnk" id="s-link">View size guide</span>
+      </div>
+    </div>
+  </section>
+
+
+  <section>
+    <div class="sec-head"><span class="n">Brand ramp</span><h2>Primary</h2></div>
+    <div class="ramp" id="ramp-primary"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">Brand ramp</span><h2>Secondary</h2></div>
+    <div class="ramp" id="ramp-secondary"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">Neutral scale</span><h2>Background → Text</h2></div>
+    <p class="note">Not a ramp of its own — every neutral is a mix between the two poles. This is what your board currently calls <code style="font-family:var(--mono);font-size:12px">second-1…5</code>.</p>
+    <div class="ramp" id="ramp-neutral"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">System-owned</span><h2>Status colours</h2></div>
+    <p class="note">Fixed values. Never derived from Primary or Secondary and never editable — red meaning error is a safety affordance, not a brand decision. Only the banner copy follows the merchant, because it is body text.</p>
+    <div class="ramp" id="ramp-status"></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Status</th><th>Banner copy on <code>-bg</code></th><th>Label on the solid</th><th><code>-fg</code> on the page</th><th><code>-fg</code> on its <code>-bg</code></th></tr></thead>
+        <tbody id="statusTable"></tbody>
+      </table>
+    </div>
+    <p class="note" id="statusNote"></p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">Contrast</span><h2>Checked live, every pairing</h2></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pair</th><th>Used by</th><th>Ratio</th><th>Target</th></tr></thead>
+        <tbody id="cr"></tbody>
+      </table>
+    </div>
+    <p class="note" id="crNote"></p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">Implementation</span><h2>What the front end writes</h2></div>
+    <pre id="css"></pre>
+    <p class="note">Native CSS relative colour and <code style="font-family:var(--mono);font-size:12px">color-mix</code> — no library. Or compute the same values in <code style="font-family:var(--mono);font-size:12px">resolveTheme</code> and inject them as <code style="font-family:var(--mono);font-size:12px">--t-*</code>, which fits ARC-17's token flow.</p>
+    <div class="callout"><b>The guard.</b> The lightness targets assume a mid-lightness brand colour. If a merchant picks near-white or near-black, the targets compress toward their base instead of inverting the ramp — try <code style="font-family:var(--mono);font-size:12px">#F5F0E6</code> or <code style="font-family:var(--mono);font-size:12px">#141B2E</code> as Primary.</div>
+  </section>
+
+  <footer>Status colours — success, warning, error, info — stay system-owned and are never derived from a brand role</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  function toLin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function toSrgb(c) { return c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055; }
+  function cbrt(x) { return x < 0 ? -Math.pow(-x, 1 / 3) : Math.pow(x, 1 / 3); }
+
+  function hexToRgb(h) {
+    h = h.replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  function rgbToHex(r, g, b) {
+    function p(v) { v = Math.round(Math.min(255, Math.max(0, v))); return (v < 16 ? '0' : '') + v.toString(16); }
+    return ('#' + p(r) + p(g) + p(b)).toUpperCase();
+  }
+  function hexToLab(hex) {
+    var v = hexToRgb(hex).map(toLin);
+    var l = 0.4122214708 * v[0] + 0.5363325363 * v[1] + 0.0514459929 * v[2];
+    var m = 0.2119034982 * v[0] + 0.6806995451 * v[1] + 0.1073969566 * v[2];
+    var s = 0.0883024619 * v[0] + 0.2817188376 * v[1] + 0.6299787005 * v[2];
+    var l_ = cbrt(l), m_ = cbrt(m), s_ = cbrt(s);
+    return {
+      L: 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_,
+      a: 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
+      b: 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_
+    };
+  }
+  function labToRgbRaw(L, a, b) {
+    var l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+    var m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+    var s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+    var l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
+    return [
+      4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+      -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+      -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+    ];
+  }
+  function inGamut(v) { return v.every(function (x) { return x >= -0.0005 && x <= 1.0005; }); }
+  function labToHex(L, a, b) {
+    L = Math.min(1, Math.max(0, L));
+    var rgb = labToRgbRaw(L, a, b);
+    if (!inGamut(rgb)) {
+      var lo = 0, hi = 1;
+      for (var i = 0; i < 24; i++) {
+        var mid = (lo + hi) / 2;
+        if (inGamut(labToRgbRaw(L, a * mid, b * mid))) lo = mid; else hi = mid;
+      }
+      rgb = labToRgbRaw(L, a * lo, b * lo);
+    }
+    return rgbToHex(toSrgb(rgb[0]) * 255, toSrgb(rgb[1]) * 255, toSrgb(rgb[2]) * 255);
+  }
+  function lch(hex) {
+    var o = hexToLab(hex);
+    return { L: o.L, C: Math.sqrt(o.a * o.a + o.b * o.b), H: (Math.atan2(o.b, o.a) * 180 / Math.PI + 360) % 360 };
+  }
+  function lchToHex(L, C, H) {
+    var h = H * Math.PI / 180;
+    return labToHex(L, C * Math.cos(h), C * Math.sin(h));
+  }
+  function mix(a, b, t) {
+    var A = hexToLab(a), B = hexToLab(b);
+    return labToHex(A.L + (B.L - A.L) * t, A.a + (B.a - A.a) * t, A.b + (B.b - A.b) * t);
+  }
+  function relLum(hex) { var v = hexToRgb(hex).map(toLin); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; }
+  function contrast(a, b) { var x = relLum(a), y = relLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function bestOn(f) { return contrast('#000000', f) >= contrast('#FFFFFF', f) ? '#000000' : '#FFFFFF'; }
+
+  var BRAND = [
+    { key: 'subtle', suffix: '-subtle', was: '-1', k: 0.10, use: 'Tinted backgrounds — badge fill, selected row, hover wash' },
+    { key: 'muted',  suffix: '-muted',  was: '-2', k: 0.43, use: 'Disabled fill, borders on tinted surfaces' },
+    { key: 'base',   suffix: '',        was: '',   k: 1,    use: 'Button fill, active nav, focus ring — the stored value' },
+    { key: 'strong', suffix: '-strong', was: '-4', k: 0.92, use: 'Hover and pressed states, text links on background' },
+    { key: 'deep',   suffix: '-deep',   was: '-5', k: 0.44, use: 'Text and icons sitting on the subtle step' }
+  ];
+  var NEUTRAL = [
+    { key: 'background', name: 'background', t: 0,    use: 'The page ground — the stored value' },
+    { key: 'surface',    name: 'surface',    t: 0.02, use: 'Raised surfaces — cards, sheets, menus' },
+    { key: 'divider',    name: 'divider',    t: 0.09, use: 'Decorative rules and card outlines — carries no meaning, so no contrast floor' },
+    { key: 'border',     name: 'border',     t: 0.45, use: 'Input and control outlines — must clear 3:1, it is what identifies the field' },
+    { key: 'textMuted',  name: 'text-muted', t: 0.70, use: 'Placeholder, helper text, captions, timestamps' },
+    { key: 'text',       name: 'text',       t: 1,    use: 'Body copy and headings — the stored value' }
+  ];
+  var BOARD_PRIMARY = { subtle: '#FFF0EB', muted: '#FDB8A5', base: '#FF6633', strong: '#C2380A', deep: '#531C09' };
+  var BOARD = { primary: '#FF6633', secondary: '#111827', background: '#FFFFFF', text: '#111827' };
+
+  function brandRamp(baseHex) {
+    var b = lch(baseHex);
+    var t = { subtle: 0.966, muted: 0.842, strong: 0.543, deep: 0.309 }, clamped = false;
+    if (b.L >= t.muted - 0.04) {
+      var head = 1 - b.L;
+      t.muted = b.L + head * 0.42; t.subtle = b.L + head * 0.82; clamped = true;
+    }
+    if (b.L <= t.strong + 0.04) {
+      t.strong = b.L * 0.74; t.deep = b.L * 0.44; clamped = true;
+    }
+    var out = { _clamped: clamped, _targets: t };
+    BRAND.forEach(function (s) {
+      if (s.key === 'base') { out.base = baseHex.toUpperCase(); return; }
+      out[s.key] = lchToHex(t[s.key], b.C * s.k, b.H);
+    });
+    return out;
+  }
+
+  function tokens(s, pinned) {
+    var P = brandRamp(s.primary), S = brandRamp(s.secondary), N = {};
+    if (pinned) {
+      P.subtle = BOARD_PRIMARY.subtle; P.muted = BOARD_PRIMARY.muted;
+      P.strong = BOARD_PRIMARY.strong; P.deep = BOARD_PRIMARY.deep;
+    }
+    NEUTRAL.forEach(function (n) { N[n.key] = mix(s.background, s.text, n.t); });
+    return { P: P, S: S, N: N };
+  }
+
+  // ---------- card ----------
+  function makeCard() {
+    var c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML =
+      '<div class="badges"><span class="badge b1">New arrival</span><span class="badge b2">Last pieces</span></div>' +
+      '<span class="t">Alouette cropped wool coat</span>' +
+      '<span class="m">Camel · Sizes 34–44</span>' +
+      '<div class="prices"><span class="p">€ 489,00</span><span class="op">€ 610,00</span></div>' +
+      '<div class="rule"></div>' +
+      '<div class="acts"><button class="btn cta" type="button" tabindex="-1">Add to cart</button>' +
+      '<button class="btn sec" type="button" tabindex="-1">Save</button></div>';
+    return c;
+  }
+  function paintCard(c, T) {
+    c.style.background = T.N.surface;
+    c.style.borderColor = T.N.divider;
+    var b1 = c.querySelector('.b1');
+    b1.style.background = T.P.subtle; b1.style.color = T.P.deep;
+    var b2 = c.querySelector('.b2');
+    b2.style.background = T.S.subtle; b2.style.color = T.S.deep;
+    c.querySelector('.t').style.color = T.N.text;
+    c.querySelector('.m').style.color = T.N.textMuted;
+    c.querySelector('.p').style.color = T.N.text;
+    c.querySelector('.op').style.color = T.N.textMuted;
+    c.querySelector('.rule').style.background = T.N.divider;
+    var cta = c.querySelector('.cta');
+    cta.style.background = T.P.base; cta.style.color = bestOn(T.P.base);
+    var sec = c.querySelector('.sec');
+    sec.style.background = T.S.base; sec.style.color = bestOn(T.S.base);
+  }
+  function makeScheme(label) {
+    var w = document.createElement('div');
+    w.className = 'scheme';
+    var hd = document.createElement('div'); hd.className = 'hd';
+    var cap = document.createElement('span'); cap.className = 'cap'; cap.textContent = label;
+    var sw = document.createElement('span'); sw.className = 'sw';
+    for (var i = 0; i < 4; i++) sw.appendChild(document.createElement('i'));
+    hd.appendChild(cap); hd.appendChild(sw);
+    var card = makeCard();
+    w.appendChild(hd); w.appendChild(card);
+    return { wrap: w, cap: cap, sw: sw, card: card };
+  }
+  function paintScheme(o, s, T) {
+    o.wrap.style.background = T.N.background;
+    o.wrap.style.borderColor = T.N.divider;
+    o.cap.style.color = T.N.textMuted;
+    var vals = [s.primary, s.secondary, s.background, s.text];
+    Array.prototype.forEach.call(o.sw.children, function (i, ix) { i.style.background = vals[ix]; });
+    paintCard(o.card, T);
+  }
+
+  var schemeLive = makeScheme('Preview');
+  document.getElementById('compare').appendChild(schemeLive.wrap);
+
+  // ---------- state ----------
+  var state = { primary: BOARD.primary, secondary: BOARD.secondary, background: BOARD.background, text: BOARD.text, mode: 'gen' };
+  var ROLES = ['primary', 'secondary', 'background', 'text'];
+
+  ROLES.forEach(function (r) {
+    var pick = document.getElementById('pick-' + r), hex = document.getElementById('hex-' + r);
+    pick.addEventListener('input', function () { state[r] = this.value.toUpperCase(); hex.value = state[r]; render(); });
+    hex.addEventListener('input', function () {
+      var v = this.value.trim().replace('#', '');
+      if (/^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) {
+        var f = v.length === 3 ? v[0] + v[0] + v[1] + v[1] + v[2] + v[2] : v;
+        state[r] = ('#' + f).toUpperCase(); pick.value = state[r]; render();
+      }
+    });
+  });
+  function setAll(p, s, bg, t) {
+    state.primary = p; state.secondary = s; state.background = bg; state.text = t;
+    ROLES.forEach(function (r) {
+      document.getElementById('pick-' + r).value = state[r];
+      document.getElementById('hex-' + r).value = state[r];
+    });
+    render();
+  }
+  document.getElementById('load-board').addEventListener('click', function () {
+    setAll(BOARD.primary, BOARD.secondary, BOARD.background, BOARD.text);
+  });
+
+  var PRIMARY_OPTIONS = [
+    { hex: '#FF6633', label: 'Tangerine — board default' },
+    { hex: '#F5F0E6', label: 'Near-white — guard compresses the light end' },
+    { hex: '#141B2E', label: 'Near-black — guard compresses the dark end' }
+  ];
+  var STATUS = [
+    { n: 'Info', solid: '#0055FF', bg: '#D6E4FF', fg: '#0041CD', msg: 'Delivery estimates update at checkout.' },
+    { n: 'Success', solid: '#10C683', bg: '#C5FCE8', fg: '#006641', msg: 'Added to your cart.' },
+    { n: 'Warning', solid: '#FFBF00', bg: '#FFF0C2', fg: '#6D5000', msg: 'Only 2 left in this size.' },
+    { n: 'Error', solid: '#F21C0D', bg: '#FFDEDB', fg: '#A30300', msg: 'Payment could not be processed.' }
+  ];
+  var STATUS_ROWS = [
+    { key: 'bg', suffix: '-bg', use: 'Banner and alert background' },
+    { key: 'solid', suffix: '', use: 'Badge and chip fill only — never an icon or text on a light surface' },
+    { key: 'fg', suffix: '-fg', use: 'Icons and coloured text, on the page or inside the banner', isNew: true }
+  ];
+  var SECONDARY_OPTIONS = [
+    { hex: '#111827', label: 'Board today — near-black, no hue' },
+    { hex: '#442514', label: 'Espresso — same hue family as tangerine' },
+    { hex: '#6F2C52', label: 'Plum — warm, distinctive' },
+    { hex: '#00646D', label: 'Deep teal — the complement' },
+    { hex: '#41536E', label: 'Slate — the safe one' }
+  ];
+  function setSecondary(h) {
+    state.secondary = h.toUpperCase();
+    document.getElementById('pick-secondary').value = state.secondary;
+    document.getElementById('hex-secondary').value = state.secondary;
+    render();
+  }
+  function setPrimary(h) {
+    state.primary = h.toUpperCase();
+    document.getElementById('pick-primary').value = state.primary;
+    document.getElementById('hex-primary').value = state.primary;
+    render();
+  }
+  (function () {
+    var pb = document.getElementById('pri-presets');
+    PRIMARY_OPTIONS.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.style.background = o.hex;
+      b.title = o.label; b.setAttribute('aria-label', o.label);
+      b.dataset.hex = o.hex.toUpperCase();
+      b.addEventListener('click', function () { setPrimary(o.hex); });
+      pb.appendChild(b);
+    });
+  })();
+  (function () {
+    var box = document.getElementById('sec-presets');
+    SECONDARY_OPTIONS.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.style.background = o.hex;
+      b.title = o.label; b.setAttribute('aria-label', o.label);
+      b.dataset.hex = o.hex.toUpperCase();
+      b.addEventListener('click', function () { setSecondary(o.hex); });
+      box.appendChild(b);
+    });
+  })();
+  document.getElementById('mode').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-mode]'); if (!b) return;
+    state.mode = b.dataset.mode;
+    Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) {
+      x.setAttribute('aria-pressed', String(x.dataset.mode === state.mode));
+    });
+    render();
+  });
+
+  function pct(x) { return (x * 100).toFixed(1) + '%'; }
+
+  function row(container, o) {
+    var el = document.createElement('div');
+    el.className = 'step' + (o.anchor ? ' anchor' : '');
+    var chip = document.createElement('div');
+    chip.className = 'chip'; chip.style.background = o.hex;
+    chip.style.color = bestOn(o.hex); chip.textContent = o.hex;
+    var who = document.createElement('div'); who.className = 'who';
+    var n = document.createElement('span'); n.className = 'name'; n.textContent = o.name;
+    var us = document.createElement('span'); us.className = 'use'; us.textContent = o.use;
+    who.appendChild(n);
+    if (o.was) { var tk = document.createElement('span'); tk.className = 'tok'; tk.textContent = o.was; who.appendChild(tk); }
+    who.appendChild(us);
+    var c = lch(o.hex);
+    var vals = document.createElement('div'); vals.className = 'vals';
+    var l1 = document.createElement('span');
+    l1.innerHTML = 'L <b>' + pct(c.L) + '</b>  C <b>' + c.C.toFixed(3) + '</b>  H <b>' + c.H.toFixed(0) + '°</b>';
+    var l2 = document.createElement('span'); l2.textContent = o.meta;
+    vals.appendChild(l1); vals.appendChild(l2);
+    if (o.pin) { var p = document.createElement('span'); p.className = 'pin'; p.textContent = o.pin; vals.appendChild(p); }
+    el.appendChild(chip); el.appendChild(who); el.appendChild(vals);
+    container.appendChild(el);
+  }
+
+  function render() {
+    var live = tokens(state, state.mode === 'fix');
+    paintScheme(schemeLive, state, live);
+
+    // states strip
+    var st = document.getElementById('states');
+    st.style.background = live.N.background; st.style.borderColor = live.N.divider; st.style.color = live.N.text;
+    var h = document.getElementById('s-hover');
+    h.style.background = live.P.strong; h.style.color = bestOn(live.P.strong);
+    var d = document.getElementById('s-dis');
+    d.style.background = live.P.muted; d.style.color = bestOn(live.P.muted);
+    var h2 = document.getElementById('s-hover2');
+    h2.style.background = live.S.strong; h2.style.color = bestOn(live.S.strong);
+    var d2 = document.getElementById('s-dis2');
+    d2.style.background = live.S.muted; d2.style.color = bestOn(live.S.muted);
+    var inp = document.getElementById('s-inp');
+    inp.style.background = live.N.background; inp.style.borderColor = live.N.border; inp.style.color = live.N.textMuted;
+    var inpF = document.getElementById('s-inp-f');
+    inpF.style.background = live.N.background; inpF.style.borderColor = live.P.base;
+    inpF.style.color = live.N.text; inpF.style.boxShadow = '0 0 0 2px ' + live.P.base;
+    document.getElementById('s-link').style.color = live.P.strong;
+
+    // ramps
+    var cp = document.getElementById('ramp-primary'); cp.innerHTML = '';
+    BRAND.forEach(function (s) {
+      var fixed = state.mode === 'fix' && s.key !== 'base';
+      row(cp, {
+        hex: live.P[s.key], name: 'primary' + s.suffix,
+        was: s.was ? 'was primary' + s.was : '', use: s.use, anchor: s.key === 'base',
+        meta: s.key === 'base' ? 'the stored value'
+          : fixed ? 'hard-coded on the board'
+          : 'L → ' + pct(live.P._targets[s.key]) + ' · C × ' + s.k.toFixed(2),
+        pin: fixed ? 'not following Primary' : (s.key === 'base' ? 'fill only — never text' : null)
+      });
+    });
+
+    var cs = document.getElementById('ramp-secondary'); cs.innerHTML = '';
+    BRAND.forEach(function (s) {
+      row(cs, {
+        hex: live.S[s.key], name: 'secondary' + s.suffix, was: '',
+        use: s.use, anchor: s.key === 'base',
+        meta: s.key === 'base' ? 'the stored value'
+          : 'L → ' + pct(live.S._targets[s.key]) + ' · C × ' + s.k.toFixed(2),
+        pin: s.key === 'base' ? 'fill only — never text' : null
+      });
+    });
+
+    var cn = document.getElementById('ramp-neutral'); cn.innerHTML = '';
+    NEUTRAL.forEach(function (s) {
+      row(cn, {
+        hex: live.N[s.key], name: s.name, was: '', use: s.use,
+        anchor: s.t === 0 || s.t === 1,
+        meta: s.t === 0 ? 'Background, stored' : s.t === 1 ? 'Text, stored'
+          : (s.t * 100).toFixed(0) + '% Background → Text'
+      });
+    });
+
+    // contrast
+    var onP = bestOn(live.P.base), onPs = bestOn(live.P.strong), onS = bestOn(live.S.base);
+    var pairs = [
+      ['text on background', 'Body copy', live.N.text, live.N.background, 4.5],
+      ['text-muted on background', 'Meta, compare-at price', live.N.textMuted, live.N.background, 4.5],
+      ['text on surface', 'Card copy', live.N.text, live.N.surface, 4.5],
+      [(onP === '#000000' ? 'black' : 'white') + ' on primary', 'Add to cart label', onP, live.P.base, 4.5],
+      [(onPs === '#000000' ? 'black' : 'white') + ' on primary-strong', 'Hover label', onPs, live.P.strong, 4.5],
+      ['primary-deep on primary-subtle', 'New arrival badge', live.P.deep, live.P.subtle, 4.5],
+      [(onS === '#000000' ? 'black' : 'white') + ' on secondary', 'Save button label', onS, live.S.base, 4.5],
+      ['secondary-deep on secondary-subtle', 'Last pieces badge', live.S.deep, live.S.subtle, 4.5],
+      ['primary-strong on background', 'Text links', live.P.strong, live.N.background, 4.5],
+      ['border on background', 'Input and control outline', live.N.border, live.N.background, 3]
+    ];
+    var tb = document.getElementById('cr'); tb.innerHTML = '';
+    var fails = 0;
+    pairs.forEach(function (p) {
+      var r = contrast(p[2], p[3]), ok = r >= p[4];
+      if (!ok) fails++;
+      var tr = document.createElement('tr');
+      var a = document.createElement('td'); a.textContent = p[0];
+      var b = document.createElement('td'); b.style.color = 'var(--ink-2)'; b.textContent = p[1];
+      var c = document.createElement('td'); c.className = 'num'; c.textContent = r.toFixed(2) + ':1';
+      var e = document.createElement('td');
+      var v = document.createElement('span');
+      v.className = 'verdict ' + (ok ? 'v-pass' : 'v-fail');
+      v.textContent = ok ? 'pass' : 'needs ' + p[4] + ':1';
+      e.appendChild(v);
+      tr.appendChild(a); tr.appendChild(b); tr.appendChild(c); tr.appendChild(e);
+      tb.appendChild(tr);
+    });
+    document.getElementById('crNote').textContent = fails === 0
+      ? 'Every pairing clears its target. Label colour on each fill is chosen by contrast, not fixed — which is why it flips to black on lighter fills.'
+      : fails + ' pairing' + (fails > 1 ? 's' : '') + ' below target. In the builder this is where the Fix button appears, and publish stays blocked while a button label fails.';
+
+    // css
+    var L = [];
+    L.push('<span class="c">/* the four the merchant sets */</span>');
+    ROLES.forEach(function (r) { L.push('--' + r + ': ' + state[r].toLowerCase() + ';'); });
+    L.push('');
+    L.push('<span class="c">/* brand ramps — same formula, own hue */</span>');
+    BRAND.forEach(function (s) {
+      if (s.key === 'base') return;
+      L.push('--primary' + s.suffix + ': oklch(from var(--primary) ' +
+        (live.P._targets[s.key] * 100).toFixed(0) + '% calc(c * ' + s.k.toFixed(2) + ') h);');
+    });
+    BRAND.forEach(function (s) {
+      if (s.key === 'base') return;
+      L.push('--secondary' + s.suffix + ': oklch(from var(--secondary) ' +
+        (live.S._targets[s.key] * 100).toFixed(0) + '% calc(c * ' + s.k.toFixed(2) + ') h);');
+    });
+    L.push('');
+    L.push('<span class="c">/* neutral scale — mixed between the poles */</span>');
+    NEUTRAL.forEach(function (s) {
+      if (s.t === 0 || s.t === 1) return;
+      L.push('--' + s.name + ': color-mix(in oklab, var(--text) ' + (s.t * 100).toFixed(0) + '%, var(--background));');
+    });
+    document.getElementById('css').innerHTML = L.join('\n');
+
+    var cst = document.getElementById('ramp-status'); cst.innerHTML = '';
+    var stb = document.getElementById('statusTable'); stb.innerHTML = '';
+    var stFails = 0;
+    STATUS.forEach(function (o) {
+      STATUS_ROWS.forEach(function (r) {
+        row(cst, {
+          hex: o[r.key],
+          name: 'status-' + o.n.toLowerCase() + r.suffix,
+          was: r.isNew ? 'proposed — not on the board yet' : '',
+          use: r.use,
+          anchor: r.key === 'solid',
+          meta: r.isNew ? 'same hue · L pinned to 45%' : 'fixed · system-owned'
+        });
+      });
+
+      var checks = [
+        [contrast(live.N.text, o.bg), 4.5],
+        [contrast(bestOn(o.solid), o.solid), 4.5],
+        [contrast(o.fg, live.N.background), 4.5],
+        [contrast(o.fg, o.bg), 4.5]
+      ];
+      var tr = document.createElement('tr');
+      var nm = document.createElement('td'); nm.textContent = o.n; tr.appendChild(nm);
+      checks.forEach(function (c) {
+        var ok = c[0] >= c[1];
+        if (!ok) stFails++;
+        var td = document.createElement('td'); td.className = 'num';
+        td.appendChild(document.createTextNode(c[0].toFixed(2) + ':1'));
+        var v = document.createElement('span');
+        v.className = 'verdict ' + (ok ? 'v-pass' : 'v-fail');
+        v.textContent = ok ? 'pass' : 'needs ' + c[1];
+        td.appendChild(v);
+        tr.appendChild(td);
+      });
+      stb.appendChild(tr);
+    });
+    document.getElementById('statusNote').innerHTML = stFails === 0
+      ? 'Every pairing clears AA, and all but one clears AAA at 7:1. Each token is checked in the job it actually does: ' +
+        '<code style="font-family:var(--mono)">-bg</code> carries banner copy, the solid carries its own label, ' +
+        '<code style="font-family:var(--mono)">-fg</code> does icons and coloured text. ' +
+        'The solid is never an icon on a light surface — <code style="font-family:var(--mono)">#FFBF00</code> on white is 1.65:1, ' +
+        'so that one rule is what keeps the palette compliant.'
+      : stFails + ' pairing' + (stFails > 1 ? 's' : '') + ' below target.';
+
+    var priBox = document.getElementById('pri-presets'), pMatch = null;
+    Array.prototype.forEach.call(priBox.children, function (b) {
+      var on = b.dataset.hex === state.primary.toUpperCase();
+      b.setAttribute('aria-pressed', String(on));
+      if (on) PRIMARY_OPTIONS.forEach(function (o) { if (o.hex.toUpperCase() === b.dataset.hex) pMatch = o; });
+    });
+    document.getElementById('priName').textContent = pMatch ? pMatch.label : 'Custom · ' + state.primary;
+
+    var secBox = document.getElementById('sec-presets'), matched = null;
+    Array.prototype.forEach.call(secBox.children, function (b) {
+      var on = b.dataset.hex === state.secondary.toUpperCase();
+      b.setAttribute('aria-pressed', String(on));
+      if (on) {
+        SECONDARY_OPTIONS.forEach(function (o) { if (o.hex.toUpperCase() === b.dataset.hex) matched = o; });
+      }
+    });
+    document.getElementById('secName').textContent = matched ? matched.label : 'Custom · ' + state.secondary;
+
+    document.getElementById('modeNote').innerHTML = state.mode === 'gen'
+      ? 'Generated — the four other steps of each brand ramp follow their base. Change a colour and its ramp moves with it.'
+      : '<b style="color:var(--ink)">Primary pinned to the board’s hard-coded hex.</b> Change Primary and the other four stay orange. That is the failure mode the formula removes.';
+  }
+
+  setAll(state.primary, state.secondary, state.background, state.text);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JTL-Shop 6.0 — Design Timeline</title>
+<style>
+  :root{
+    --day-w: 44px;
+    --row-h: 44px;
+    --bar-h: 30px;
+    --ink:#1f2328;
+    --muted:#6b7280;
+    --line:#e9eaee;
+    --line-strong:#c9ccd1;
+    --head-dark:#232323;
+    --head-light:#dbdce0;
+    --bg:#ffffff;
+    --weekend:#f4f5f7;
+    --today:#e5372a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:#f6f7f8;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    padding:10px 14px; background:#fff; border-bottom:1px solid var(--line);
+    position:relative; z-index:30;
+  }
+  .toolbar h1{font-size:13px;font-weight:600;margin:0 10px 0 0;letter-spacing:.01em}
+  .sep{width:1px;height:20px;background:var(--line);margin:0 2px}
+  button,select,input[type=date]{
+    font:inherit; color:var(--ink); background:#fff;
+    border:1px solid var(--line-strong); border-radius:7px; padding:5px 10px; cursor:pointer;
+  }
+  button:hover:not(:disabled){background:#f2f3f5}
+  button:disabled{opacity:.4; cursor:default}
+  button.primary{background:var(--head-dark);color:#fff;border-color:var(--head-dark)}
+  button.primary:hover{background:#000}
+  .toolbar label{color:var(--muted);font-size:12px;display:inline-flex;align-items:center;gap:6px}
+  input[type=range]{width:100px;cursor:pointer;accent-color:#2f6fed}
+  .hint{color:var(--muted);font-size:12px}
+  .zoomer{display:inline-flex; align-items:stretch; border:1px solid var(--line-strong); border-radius:8px; overflow:hidden}
+  .zoomer button{border:0; border-right:1px solid var(--line); border-radius:0; padding:5px 10px; background:#fff}
+  .zoomer button:last-child{border-right:0}
+  .zoomer button:disabled{opacity:.35}
+  .zoomer #zoomOut, .zoomer #zoomIn{font-size:15px; line-height:1; width:30px; padding:0; font-weight:600}
+  .zoomer #zoomLevel{font-variant-numeric:tabular-nums; color:var(--muted); font-size:11.5px; min-width:72px}
+  .zoomer #zoomFit{font-size:11.5px}
+  .day.micro .dow{display:none}
+  .day.nano .dnum{display:none}
+  .today-out{
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap; margin-left:auto;
+    font-size:12px; font-weight:600; color:#b3261e;
+    background:#fff1ef; border:1px solid #f4cdc8; border-radius:999px; padding:4px 11px;
+  }
+  .today-out span{font-weight:500; color:#8a5b56}
+
+  /* ---------- board ---------- */
+  .scroll{flex:1; overflow:auto; background:var(--bg); position:relative}
+  .chart{position:relative; padding:0 0 120px 0; width:max-content; min-width:100%}
+
+  .head{position:sticky; top:0; z-index:20; width:max-content; min-width:100%}
+  .head-row{display:flex}
+  .month{
+    background:var(--head-dark); color:#fff; font-weight:600; font-size:12.5px;
+    height:30px; display:flex; align-items:center; padding:0 12px;
+    border-right:1px solid #3a3a3a; flex:none; overflow:hidden; white-space:nowrap;
+  }
+  .sprint{
+    background:#f0f1f4; color:#2b2f34; height:30px; flex:none; overflow:hidden;
+    display:flex; align-items:center; gap:8px; padding:0 10px; white-space:nowrap;
+    border-right:1px solid var(--line-strong); border-bottom:1px solid var(--line);
+    font-size:12px; font-weight:600;
+  }
+  .sprint.odd{background:#e6e8ec}
+  .sprint em{font-style:normal; font-weight:500; font-size:11px; color:var(--muted)}
+  .sprint.now{background:#ffe6e2; color:#b3261e}
+  .sprint.now em{color:#9c5a53}
+  .day{
+    background:var(--head-light); color:#3c424e; flex:none;
+    height:36px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    line-height:1.15; white-space:nowrap; overflow:hidden;
+    border-right:1px solid #c6c8cd; border-bottom:1px solid #b9bbbe;
+    font-variant-numeric:tabular-nums;
+  }
+  .day .dow{font-size:9.5px; color:#6b7280; letter-spacing:.03em}
+  .day .dnum{font-size:11px; font-weight:600}
+  .day.we{background:#cdced3; color:#5c616b}
+  .day.we .dow{color:#6d727c}
+  .day.now{background:var(--today); color:#fff}
+  .day.now .dow{color:#ffd9d5}
+
+  .body{position:relative}
+  .grid{position:absolute; inset:0; pointer-events:none}
+  .vline{position:absolute; top:0; bottom:0; width:1px; background:var(--line)}
+  .vline.sprint-start{background:var(--line-strong)}
+  .weband{position:absolute; top:0; bottom:0; background:var(--weekend)}
+  .nowband{position:absolute; top:0; bottom:0; background:#fdf1f0}
+  .today-line{position:absolute; top:0; bottom:0; width:2px; background:var(--today); z-index:9}
+  .today-line::after{
+    content:attr(data-label); position:absolute; top:2px; left:6px;
+    font-size:10px; font-weight:700; color:#fff; background:var(--today);
+    padding:1px 6px; border-radius:999px; white-space:nowrap;
+  }
+
+  .lane{position:absolute; left:0; right:0}
+  .lane:hover{background:rgba(47,111,237,.03)}
+  .lane + .lane{border-top:1px solid rgba(0,0,0,.05)}
+  .lane.drop-target{background:rgba(47,111,237,.10); box-shadow:inset 0 0 0 2px var(--accent-soft,#8fb2f7)}
+  .newlane{
+    position:absolute; left:0; right:0; height:var(--row-h);
+    display:none; align-items:center; justify-content:center;
+    font-size:11px; color:#2f6fed; letter-spacing:.02em;
+    border:1px dashed #a9c2f5; border-radius:8px; background:rgba(47,111,237,.05);
+  }
+  body.dragging-bar .newlane{display:flex}
+  .newlane.drop-target{background:rgba(47,111,237,.16); border-style:solid}
+
+  .bar{
+    position:absolute; height:var(--bar-h); top:calc((var(--row-h) - var(--bar-h))/2);
+    border-radius:7px; display:flex; align-items:center; padding:0 11px;
+    font-size:12px; font-weight:600; color:#1f2328; cursor:grab;
+    user-select:none; white-space:nowrap; overflow:hidden;
+    box-shadow:0 1px 2px rgba(16,24,40,.10);
+  }
+  .bar:hover{box-shadow:0 2px 8px rgba(16,24,40,.16)}
+  .bar.dragging{cursor:grabbing; z-index:15; box-shadow:0 8px 20px rgba(16,24,40,.22)}
+  .bar.selected{outline:2px solid #2f6fed; outline-offset:1px}
+  .bar .label{overflow:hidden; text-overflow:ellipsis; pointer-events:none}
+  .bar .label[contenteditable="true"]{pointer-events:auto; cursor:text; outline:none}
+  .bar .memo{
+    flex:none; margin-left:7px; font-size:9.5px; font-weight:700; letter-spacing:.04em;
+    padding:1px 5px; border-radius:4px; background:rgba(0,0,0,.14); pointer-events:none;
+  }
+  .handle{position:absolute; top:0; bottom:0; width:9px; cursor:ew-resize; z-index:2}
+  .handle.l{left:0} .handle.r{right:0}
+  .bar:hover .handle::before{
+    content:""; position:absolute; top:9px; bottom:9px; left:3px;
+    width:2px; border-radius:2px; background:rgba(0,0,0,.28);
+  }
+  .bar .kill, .bar .dupe{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+    width:18px; height:18px; padding:0; border:0; border-radius:50%;
+    display:none; align-items:center; justify-content:center;
+    font-size:12px; line-height:1; font-family:inherit;
+    background:rgba(0,0,0,.14); color:#1f2328; cursor:pointer;
+  }
+  .bar .kill{right:5px; font-size:14px}
+  .bar .dupe{right:27px}
+  .bar:hover .kill, .bar.selected .kill,
+  .bar:hover .dupe, .bar.selected .dupe{display:flex}
+  .bar .kill:hover{background:#b3261e; color:#fff}
+  .bar .dupe:hover{background:#2f6fed; color:#fff}
+  .note{
+    position:absolute; height:var(--bar-h); top:calc((var(--row-h) - var(--bar-h))/2);
+    display:flex; align-items:center; font-size:11.5px; color:var(--today);
+    white-space:nowrap; pointer-events:none;
+  }
+  .dropline{position:absolute; left:0; height:2px; background:#2f6fed; z-index:14; pointer-events:none; border-radius:2px}
+  .dragtip{
+    position:fixed; z-index:80; background:#232323; color:#fff;
+    font-size:11px; font-weight:600; padding:4px 9px; border-radius:6px;
+    pointer-events:none; white-space:nowrap; box-shadow:0 4px 12px rgba(0,0,0,.25);
+  }
+
+  /* ---------- right drawer ---------- */
+  .stage{flex:1; position:relative; overflow:hidden; display:flex}
+  .panel{
+    position:absolute; top:0; right:0; bottom:0; width:344px; max-width:92vw; z-index:50;
+    background:#fff; border-left:1px solid var(--line-strong);
+    box-shadow:-14px 0 34px rgba(16,24,40,.14);
+    display:flex; flex-direction:column;
+    transform:translateX(100%); transition:transform .22s cubic-bezier(.32,.72,0,1);
+  }
+  .panel.open{transform:translateX(0)}
+  .panel-head{display:flex; align-items:center; gap:10px; flex:none; padding:12px 14px; border-bottom:1px solid var(--line)}
+  .panel-head h2{flex:1; min-width:0; margin:0; font-size:11.5px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.06em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .swatch-dot{width:12px;height:12px;border-radius:4px;border:1px solid rgba(0,0,0,.14);flex:none}
+  .panel-close{border:0;background:transparent;font-size:20px;line-height:1;color:var(--muted);padding:2px 6px;border-radius:7px;cursor:pointer}
+  .panel-close:hover{background:#f2f3f5;color:var(--ink)}
+  .panel-body{flex:1; overflow:auto; padding:14px}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+  .field input, .field textarea{
+    width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:7px 9px;
+    font:inherit;font-size:13px;background:#fff;color:var(--ink);
+  }
+  .field textarea{min-height:150px;resize:vertical;line-height:1.55}
+  .field input:focus, .field textarea:focus{outline:2px solid #2f6fed;outline-offset:-1px;border-color:#2f6fed}
+  .field .help{display:block;margin-top:4px;font-size:10.5px;color:var(--muted)}
+  .saved{color:#22a06b;font-weight:600}
+  .swatches{display:flex;gap:7px;flex-wrap:wrap}
+  .sw{width:26px;height:26px;border-radius:7px;border:1px solid rgba(0,0,0,.12);cursor:pointer;padding:0}
+  .sw.on{outline:2px solid #2f6fed;outline-offset:1px}
+  .panel-actions{display:flex;gap:6px;flex:none;padding:11px 14px;border-top:1px solid var(--line)}
+  .panel-actions button{flex:1;padding:7px 8px;font-size:12px}
+  .danger{color:#b3261e;border-color:#f0c4c0}
+  .danger:hover{background:#fdeceb}
+  .row2{display:flex;gap:8px}
+  .row2 .field{flex:1;min-width:0}
+
+  @media (prefers-reduced-motion: reduce){ .panel{transition:none} }
+  @media print{
+    .toolbar,.panel,.hint{display:none!important}
+    body{overflow:visible;background:#fff}
+    .scroll{overflow:visible}
+    @page{size:A2 landscape;margin:8mm}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>JTL-Shop 6.0 — Design Timeline</h1>
+  <button class="primary" id="addBtn">+ Task</button>
+  <button id="undoBtn" title="Undo (⌘Z)" disabled>↶ Undo</button>
+  <button id="redoBtn" title="Redo (⇧⌘Z)" disabled>↷ Redo</button>
+  <div class="sep"></div>
+  <label>From <input type="date" id="rangeStart"></label>
+  <label>To <input type="date" id="rangeEnd"></label>
+  <input type="range" id="zoom" min="10" max="90" step="2" hidden>
+  <div class="zoomer">
+    <button id="zoomOut" title="Zoom out  (⌘−)" aria-label="Zoom out">−</button>
+    <button id="zoomLevel" title="Back to the default zoom  (⌘0)"><span id="zoomVal">44</span> px/day</button>
+    <button id="zoomIn" title="Zoom in  (⌘+)" aria-label="Zoom in">+</button>
+    <button id="zoomFit" title="Fit the whole date range on screen">Fit</button>
+  </div>
+  <div class="sep"></div>
+  <button id="todayBtn">Today</button>
+  <button id="exportBtn">Export JSON</button>
+  <button id="importBtn">Import</button>
+  <input type="file" id="importFile" accept="application/json" hidden>
+  <button id="printBtn">Print / PDF</button>
+  <button id="resetBtn">Reset</button>
+  <span class="today-out" id="todayOut"></span>
+</div>
+<div class="toolbar" style="padding-top:0;border:0">
+  <span class="hint">Drag to move • edges to resize • drag onto another row to share it • × to remove • double-click to rename • click a row for notes</span>
+</div>
+
+<div class="stage">
+<div class="scroll" id="scroll">
+  <div class="chart" id="chart">
+    <div class="head" id="head"></div>
+    <div class="body" id="bodyEl"></div>
+  </div>
+</div>
+
+<aside class="panel" id="panel" aria-label="Task details">
+  <div class="panel-head">
+    <span class="swatch-dot" id="fDot"></span>
+    <h2 id="fHead">Task</h2>
+    <button class="panel-close" id="closeBtn" aria-label="Close panel" title="Close (Esc)">&times;</button>
+  </div>
+  <div class="panel-body">
+    <div class="field">
+      <label for="fNotes">My notes</label>
+      <textarea id="fNotes" placeholder="Open questions, decisions, links, who's waiting on what."></textarea>
+      <span class="help" id="notesHelp">Saved automatically on this computer.</span>
+    </div>
+    <div class="field">
+      <label for="fName">Name</label>
+      <input type="text" id="fName">
+    </div>
+    <div class="field">
+      <label for="fNote">Flag — short red text beside the bar</label>
+      <input type="text" id="fNote" placeholder="e.g. blocked on FE estimate">
+    </div>
+    <div class="row2">
+      <div class="field"><label for="fStart">Starts</label><input type="date" id="fStart"></div>
+      <div class="field"><label for="fEnd">Ends</label><input type="date" id="fEnd"></div>
+    </div>
+    <div class="field">
+      <label>Colour</label>
+      <div class="swatches" id="fColors"></div>
+    </div>
+  </div>
+  <div class="panel-actions">
+    <button id="upBtn" title="Move to the row above">↑</button>
+    <button id="downBtn" title="Move to the row below">↓</button>
+    <button id="soloBtn" title="Give this task a row of its own">Own row</button>
+    <button id="dupBtn">Copy</button>
+    <button id="delBtn" class="danger">Delete</button>
+  </div>
+</aside>
+</div>
+
+<script>
+/* ========================= dates (UTC-safe) ========================= */
+const DAY = 86400000;
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+const parseISO = s => { const [y,m,d] = String(s).split('-').map(Number); return Date.UTC(y, m-1, d); };
+const toISO = t => new Date(t).toISOString().slice(0,10);
+const dowOf = t => (new Date(t).getUTCDay() + 6) % 7;          // 0 = Monday
+const isWeekend = t => dowOf(t) >= 5;
+const dayLabel = t => { const d = new Date(t); return `${DOW[dowOf(t)]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]}`; };
+const shortDay = t => { const d = new Date(t); return `${d.getUTCDate()} ${MON[d.getUTCMonth()]}`; };
+function todayUTC(){ const n = new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()); }
+
+/* ========================= sprints ========================= */
+/* Sprint 8 runs Wed 21 Oct 2026 → Tue 3 Nov 2026. Every sprint is 14 days,
+   so every other sprint number falls out of that one anchor. */
+const SPRINT_ANCHOR = Date.UTC(2026, 9, 21);
+const SPRINT_NO_AT_ANCHOR = 8;
+const SPRINT_DAYS = 14;
+const sprintNo   = t => SPRINT_NO_AT_ANCHOR + Math.floor((t - SPRINT_ANCHOR) / (SPRINT_DAYS * DAY));
+const sprintStart = n => SPRINT_ANCHOR + (n - SPRINT_NO_AT_ANCHOR) * SPRINT_DAYS * DAY;
+const sprintEnd   = n => sprintStart(n) + (SPRINT_DAYS - 1) * DAY;
+const sprintRange = n => `${shortDay(sprintStart(n))} – ${shortDay(sprintEnd(n))}`;
+
+/* ========================= palette ========================= */
+const COLORS = {
+  amber:"#FADFBB", green:"#7FDD93", blue:"#DDE3EC", stone:"#D5D0C9",
+  violet:"#E1D8F7", rose:"#F8D2DE", teal:"#C9EAE4", yellow:"#F2EBA6", slate:"#C6CEDA"
+};
+
+/* ========================= default board ========================= */
+const DEFAULTS = {
+  rev: 4,
+  rangeStart: "2026-08-17",
+  rangeEnd:   "2026-12-27",
+  dayW: 44,
+  tasks: [
+    { n:"PLP Page (SF)",                                        s:"2026-08-17", e:"2026-08-30", c:"amber" },
+    { n:"PLP Page (AD)",                                        s:"2026-08-17", e:"2026-08-30", c:"amber" },
+    { n:"Home Page (SF)",                                       s:"2026-09-07", e:"2026-09-20", c:"green" },
+    { n:"Home Page (AD)",                                       s:"2026-09-07", e:"2026-09-20", c:"green" },
+    { n:"Themes and customize themes (AD)",                     s:"2026-08-24", e:"2026-09-20", c:"stone" },
+    { n:"PDP Product Detail Page (SF) + (AD)",                  s:"2026-09-07", e:"2026-09-20", c:"blue"  },
+    { n:"Cart Page (SF) + (AD)",                                s:"2026-09-14", e:"2026-09-27", c:"blue"  },
+    { n:"Check-out, payment, post-purchase (thank you) (SF) + (AD)", s:"2026-09-14", e:"2026-10-11", c:"blue" },
+    { n:"Order , shipping status (SF) + (AD)",                  s:"2026-09-28", e:"2026-10-25", c:"blue"  },
+    { n:"Login (SF) + (AD)",                                    s:"2026-09-28", e:"2026-10-11", c:"blue"  },
+    { n:"User account (SF) + (AD)",                             s:"2026-09-28", e:"2026-10-11", c:"blue"  },
+    { n:"Login-process (AD)",                                   s:"2026-10-12", e:"2026-10-25", c:"stone" },
+    { n:"Admin Shell & Settings (AD)",                          s:"2026-09-28", e:"2026-11-08", c:"stone" },
+    { n:"Homepage (AD)",                                        s:"2026-10-26", e:"2026-11-15", c:"stone" },
+    { n:"Analytic & SEO (AD)",                                  s:"2026-11-02", e:"2026-11-22", c:"stone" },
+    { n:"Assets (AD)",                                          s:"2026-11-02", e:"2026-11-15", c:"stone" },
+    { n:"Notification Page (AD)",                               s:"2026-11-16", e:"2026-11-29", c:"stone" }
+  ].map((t,i) => ({ id:"t"+i, name:t.n, start:t.s, end:t.e, color:t.c, note:"", notes:"", lane:i }))
+};
+
+/* ========================= state ========================= */
+const STORE_KEY = "jtl-timeline-v1";
+let state = load() || structuredClone(DEFAULTS);
+let days = [], selectedId = null, drag = null;
+const ROW_H = 44;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY); if(!raw) return null;
+    const d = JSON.parse(raw);
+    if(!d || !Array.isArray(d.tasks)) return null;
+    const rev = d.rev || 0;
+    if(rev < 2) d.tasks.forEach(t => { if(t.note === "Is it too detail for MVP ?") t.note = ""; });
+    if(rev < 3){
+      // weeks → days: an end date used to mean "the Monday of the last week"
+      d.tasks.forEach(t => { t.end = toISO(parseISO(t.end) + 6*DAY); });
+      d.dayW = 44;
+      delete d.colW;
+    }
+    if(rev < 4) d.tasks.forEach((t,i) => { if(typeof t.lane !== 'number') t.lane = i; });
+    d.rev = 4;
+    return d;
+  }catch(e){ return null; }
+}
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+
+const W = () => state.dayW;
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const taskById = id => state.tasks.find(t => t.id === id);
+
+function buildDays(){
+  days = [];
+  let t = parseISO(state.rangeStart);
+  const end = parseISO(state.rangeEnd);
+  let guard = 0;
+  while(t <= end && guard++ < 1500){ days.push(t); t += DAY; }
+  if(!days.length) days = [todayUTC()];
+}
+const dIdx = iso => Math.round((parseISO(iso) - days[0]) / DAY);
+const dAt  = i => toISO(days[clamp(i, 0, days.length-1)]);
+
+/* ========================= lanes =========================
+   A lane is one row of the chart. Several tasks may share a lane — that is
+   the point of `lane`. Tasks in a lane that overlap in time are stacked into
+   sub-lanes, and the lane simply gets taller, so nothing is ever hidden. */
+function layout(){
+  const laneKeys = [...new Set(state.tasks.map(t => t.lane))].sort((a,b) => a-b);
+  const rows = laneKeys.map(key => {
+    const items = state.tasks.filter(t => t.lane === key)
+      .sort((a,b) => parseISO(a.start) - parseISO(b.start) || parseISO(a.end) - parseISO(b.end));
+    const lastEnd = [];
+    items.forEach(t => {
+      const s = parseISO(t.start);
+      let k = lastEnd.findIndex(e => e < s);
+      if(k === -1) k = lastEnd.length;
+      lastEnd[k] = parseISO(t.end);
+      t._sub = k;
+    });
+    return { key, items, subs: Math.max(1, lastEnd.length) };
+  });
+  let top = 0;
+  rows.forEach(r => { r.top = top; r.height = r.subs * ROW_H; top += r.height; });
+  return { rows, height: top };
+}
+const nextLane = () => (state.tasks.length ? Math.max(...state.tasks.map(t => t.lane)) + 1 : 0);
+
+/* A copy lands on its own row directly below the original, so it is visible
+   straight away instead of hiding under the bar it was copied from. */
+function laneBelow(key){
+  const keys = [...new Set(state.tasks.map(t => t.lane))].sort((a,b) => a-b);
+  const i = keys.indexOf(key);
+  const next = keys[i+1];
+  return next === undefined ? key + 1 : (key + next) / 2;
+}
+function duplicateTask(t){
+  snapshot();
+  const copy = { ...t, id:'t'+Date.now(), name:t.name + ' (copy)', lane:laneBelow(t.lane) };
+  delete copy._sub;
+  state.tasks.push(copy);
+  selectedId = copy.id;
+  render();
+}
+
+/* ========================= undo / redo ========================= */
+const undoStack = [], redoStack = [];
+function snapshot(){
+  undoStack.push(JSON.stringify(state.tasks));
+  if(undoStack.length > 80) undoStack.shift();
+  redoStack.length = 0; refreshUndo();
+}
+function refreshUndo(){
+  document.getElementById('undoBtn').disabled = !undoStack.length;
+  document.getElementById('redoBtn').disabled = !redoStack.length;
+}
+function undo(){
+  if(!undoStack.length) return;
+  redoStack.push(JSON.stringify(state.tasks));
+  state.tasks = JSON.parse(undoStack.pop());
+  if(!taskById(selectedId)) selectedId = null;
+  render(); refreshUndo();
+}
+function redo(){
+  if(!redoStack.length) return;
+  undoStack.push(JSON.stringify(state.tasks));
+  state.tasks = JSON.parse(redoStack.pop());
+  if(!taskById(selectedId)) selectedId = null;
+  render(); refreshUndo();
+}
+
+/* ========================= drag feedback ========================= */
+let tipEl = null, dropEl = null;
+function showTip(x, y, text){
+  if(!tipEl){ tipEl = document.createElement('div'); tipEl.className = 'dragtip'; document.body.appendChild(tipEl); }
+  tipEl.textContent = text;
+  tipEl.style.left = Math.min(x + 14, innerWidth - 280) + 'px';
+  tipEl.style.top  = (y + 20) + 'px';
+}
+function showDrop(row){
+  if(!dropEl){ dropEl = document.createElement('div'); dropEl.className = 'dropline'; bodyEl.appendChild(dropEl); }
+  dropEl.style.top = (row * ROW_H) + 'px';
+  dropEl.style.width = bodyEl.style.width;
+}
+function clearFeedback(){
+  if(tipEl){ tipEl.remove(); tipEl = null; }
+  if(dropEl){ dropEl.remove(); dropEl = null; }
+}
+
+/* ========================= render ========================= */
+const headEl = document.getElementById('head');
+const bodyEl = document.getElementById('bodyEl');
+const chart  = document.getElementById('chart');
+
+function render(){
+  buildDays();
+  document.documentElement.style.setProperty('--day-w', W() + 'px');
+  const w = W(), total = days.length * w, now = todayUTC();
+
+  /* month band */
+  const months = [];
+  days.forEach(t => {
+    const d = new Date(t), key = d.getUTCFullYear() + '-' + d.getUTCMonth(), last = months[months.length-1];
+    if(last && last.key === key) last.span++;
+    else months.push({ key, span:1, label: MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() });
+  });
+
+  /* sprint band */
+  const sprints = [];
+  days.forEach(t => {
+    const n = sprintNo(t), last = sprints[sprints.length-1];
+    if(last && last.n === n) last.span++;
+    else sprints.push({ n, span:1 });
+  });
+  const nowSprint = sprintNo(now);
+
+  headEl.innerHTML =
+    `<div class="head-row">${months.map(m =>
+      `<div class="month" style="width:${m.span*w}px">${m.label}</div>`).join('')}</div>` +
+    `<div class="head-row">${sprints.map(s => {
+      const wide = s.span * w;
+      return `<div class="sprint${s.n % 2 ? ' odd' : ''}${s.n === nowSprint ? ' now' : ''}" style="width:${wide}px"
+        title="Sprint ${s.n} · ${sprintRange(s.n)}">Sprint ${s.n}${
+        wide > 150 ? `<em>${sprintRange(s.n)}</em>` : ''}</div>`;
+    }).join('')}</div>` +
+    `<div class="head-row">${days.map(t => {
+      const d = new Date(t);
+      const cls = 'day' + (isWeekend(t) ? ' we' : '') + (t === now ? ' now' : '')
+        + (w < 26 ? ' micro' : '') + (w < 15 ? ' nano' : '');
+      const num = w >= 40 ? `${d.getUTCDate()} ${MON[d.getUTCMonth()]}` : `${d.getUTCDate()}`;
+      const dow = `<span class="dow">${DOW[dowOf(t)]}</span>`;
+      return `<div class="${cls}" style="width:${w}px" title="${dayLabel(t)} ${d.getUTCFullYear()}">
+        ${dow}<span class="dnum">${num}</span></div>`;
+    }).join('')}</div>`;
+
+  /* grid */
+  let grid = `<div class="grid" style="width:${total}px">`;
+  days.forEach((t,i) => {
+    if(isWeekend(t)) grid += `<div class="weband" style="left:${i*w}px;width:${w}px"></div>`;
+  });
+  days.forEach((t,i) => {
+    const boundary = sprintNo(t) !== sprintNo(t - DAY);
+    grid += `<div class="vline${boundary ? ' sprint-start' : ''}" style="left:${i*w}px"></div>`;
+  });
+  const ni = days.indexOf(now);
+  if(ni >= 0){
+    grid += `<div class="nowband" style="left:${ni*w}px;width:${w}px"></div>`;
+    grid += `<div class="today-line" data-label="Today · ${dayLabel(now)}" style="left:${ni*w}px"></div>`;
+  }
+  grid += `</div>`;
+
+  /* lanes */
+  const L = layout();
+  const lanes = L.rows.map(r => {
+    const bars = r.items.map(t => {
+      const a = clamp(dIdx(t.start), 0, days.length-1);
+      const b = clamp(dIdx(t.end),   a, days.length-1);
+      const left = a*w, width = (b-a+1)*w - 4;
+      const top = t._sub * ROW_H + (ROW_H - 30)/2;
+      return `<div class="bar${selectedId===t.id?' selected':''}" data-id="${t.id}"
+           style="left:${left+2}px;top:${top}px;width:${width}px;background:${COLORS[t.color]||COLORS.blue}">
+        <div class="handle l"></div>
+        <span class="label">${esc(t.name)}</span>
+        ${t.notes && t.notes.trim() ? `<span class="memo" title="Has notes">NOTE</span>` : ``}
+        <div class="handle r"></div>
+        <button class="dupe" title="Duplicate this task" aria-label="Duplicate ${esc(t.name)}">⧉</button>
+        <button class="kill" title="Remove this task" aria-label="Remove ${esc(t.name)}">&times;</button>
+      </div>
+      ${t.note ? `<div class="note" style="left:${left+width+12}px;top:${top}px">${esc(t.note)}</div>` : ``}`;
+    }).join('');
+    return `<div class="lane" data-lane="${r.key}" style="top:${r.top}px;height:${r.height}px">${bars}</div>`;
+  }).join('') +
+  `<div class="newlane" style="top:${L.height + 4}px">drop here for a row of its own</div>`;
+
+  bodyEl.style.width = total + 'px';
+  bodyEl.style.height = (L.height + ROW_H + 8) + 'px';
+  bodyEl.innerHTML = grid + lanes;
+  chart.style.width = total + 'px';
+
+  const n = new Date();
+  document.getElementById('todayOut').innerHTML =
+    `Today · <b>${dayLabel(now)} ${n.getFullYear()}</b> <span>· Sprint ${nowSprint}</span>`;
+
+  syncPanel();
+  refreshZoom();
+  save();
+}
+
+/* ========================= drag: move / resize / reorder ========================= */
+bodyEl.addEventListener('pointerdown', e => {
+  const bar = e.target.closest('.bar');
+  if(!bar){
+    // empty space in a lane: open it only when that lane holds one task
+    const lane = e.target.closest('.lane');
+    const inLane = lane ? state.tasks.filter(t => String(t.lane) === lane.dataset.lane) : [];
+    select(inLane.length === 1 ? inLane[0].id : null);
+    return;
+  }
+  if(e.target.classList.contains('label') && e.target.isContentEditable) return;
+  const t = taskById(bar.dataset.id);
+
+  if(e.target.closest('.kill')){
+    e.preventDefault(); snapshot();
+    state.tasks.splice(state.tasks.indexOf(t), 1);
+    if(selectedId === t.id) selectedId = null;
+    render(); return;
+  }
+  if(e.target.closest('.dupe')){ e.preventDefault(); duplicateTask(t); return; }
+
+  // select without re-rendering, so the node we drag stays in the document
+  selectedId = t.id;
+  bodyEl.querySelectorAll('.bar.selected').forEach(el => el.classList.remove('selected'));
+  bar.classList.add('selected');
+  syncPanel();
+
+  const mode = e.target.classList.contains('handle')
+    ? (e.target.classList.contains('l') ? 'l' : 'r') : 'move';
+  const L = layout();
+  const laneIdx = L.rows.findIndex(r => r.key === t.lane);
+  drag = {
+    bar, task:t, mode, x0:e.clientX, y0:e.clientY,
+    a0: clamp(dIdx(t.start), 0, days.length-1),
+    b0: clamp(dIdx(t.end),   0, days.length-1),
+    L, laneIdx, lane0: t.lane,
+    top0: L.rows[laneIdx].top + t._sub * ROW_H,
+    moved:false
+  };
+  try{ bar.setPointerCapture(e.pointerId); }catch(err){}
+  bar.classList.add('dragging');
+  document.body.classList.add('dragging-bar');
+  e.preventDefault();
+});
+
+function laneAt(clientY){
+  const rect = bodyEl.getBoundingClientRect();
+  const y = clientY - rect.top;
+  const rows = drag.L.rows;
+  for(let i=0;i<rows.length;i++) if(y >= rows[i].top && y < rows[i].top + rows[i].height) return i;
+  return y < 0 ? 0 : rows.length;      // rows.length == "a row of its own"
+}
+function markTarget(i){
+  bodyEl.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+  const el = i < drag.L.rows.length
+    ? bodyEl.querySelectorAll('.lane')[i]
+    : bodyEl.querySelector('.newlane');
+  if(el && i !== drag.laneIdx) el.classList.add('drop-target');
+}
+
+window.addEventListener('pointermove', e => {
+  if(!drag) return;
+  const w = W(), dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+  if(Math.abs(dx) > 3 || Math.abs(dy) > 3) drag.moved = true;
+  const d = Math.round(dx / w), span = drag.b0 - drag.a0;
+
+  if(drag.mode === 'move'){
+    const a = clamp(drag.a0 + d, 0, days.length-1-span);
+    const li = laneAt(e.clientY);
+    const targetTop = li < drag.L.rows.length ? drag.L.rows[li].top : drag.L.height + 4;
+    drag.bar.style.left = (a*w + 2) + 'px';
+    drag.bar.style.transform = `translateY(${targetTop - drag.top0}px)`;
+    drag.preview = { a, b:a+span, lane:li };
+    markTarget(li);
+  } else if(drag.mode === 'l'){
+    const a = clamp(drag.a0 + d, 0, drag.b0);
+    drag.bar.style.left = (a*w + 2) + 'px';
+    drag.bar.style.width = ((drag.b0 - a + 1)*w - 4) + 'px';
+    drag.preview = { a, b:drag.b0, lane:drag.laneIdx };
+  } else {
+    const b = clamp(drag.b0 + d, drag.a0, days.length-1);
+    drag.bar.style.width = ((b - drag.a0 + 1)*w - 4) + 'px';
+    drag.preview = { a:drag.a0, b, lane:drag.laneIdx };
+  }
+  const p = drag.preview, len = p.b - p.a + 1;
+  showTip(e.clientX, e.clientY,
+    `${dayLabel(days[p.a])} → ${dayLabel(days[p.b])} · ${len} day${len>1?'s':''}`);
+});
+
+function endDrag(){
+  if(!drag) return;
+  clearFeedback();
+  drag.bar.classList.remove('dragging');
+  drag.bar.style.transform = '';
+  document.body.classList.remove('dragging-bar');
+  if(drag.moved && drag.preview){
+    const p = drag.preview, t = drag.task;
+    snapshot();
+    t.start = dAt(p.a); t.end = dAt(p.b);
+    if(p.lane !== drag.laneIdx){
+      t.lane = p.lane < drag.L.rows.length ? drag.L.rows[p.lane].key : nextLane();
+    }
+  }
+  drag = null;
+  render();
+}
+window.addEventListener('pointerup', endDrag);
+window.addEventListener('pointercancel', endDrag);
+
+/* inline rename */
+bodyEl.addEventListener('dblclick', e => {
+  const bar = e.target.closest('.bar'); if(!bar) return;
+  const label = bar.querySelector('.label'), t = taskById(bar.dataset.id);
+  label.contentEditable = 'true'; label.focus();
+  const sel = window.getSelection(); sel.removeAllRanges();
+  const r = document.createRange(); r.selectNodeContents(label); sel.addRange(r);
+  const commit = () => {
+    label.contentEditable = 'false';
+    const v = label.textContent.trim() || 'Untitled';
+    if(v !== t.name){ snapshot(); t.name = v; }
+    render();
+  };
+  label.addEventListener('blur', commit, {once:true});
+  label.addEventListener('keydown', ev => {
+    if(ev.key === 'Enter'){ ev.preventDefault(); label.blur(); }
+    if(ev.key === 'Escape'){ label.textContent = t.name; label.blur(); }
+  });
+});
+
+/* ========================= drawer ========================= */
+const panel  = document.getElementById('panel');
+const fName  = document.getElementById('fName'),  fNote = document.getElementById('fNote');
+const fStart = document.getElementById('fStart'), fEnd  = document.getElementById('fEnd');
+const fNotes = document.getElementById('fNotes'), fHead = document.getElementById('fHead');
+const fDot   = document.getElementById('fDot'),   notesHelp = document.getElementById('notesHelp');
+const fColors = document.getElementById('fColors');
+
+Object.entries(COLORS).forEach(([k,v]) => {
+  const b = document.createElement('button');
+  b.className = 'sw'; b.dataset.k = k; b.style.background = v; b.title = k;
+  b.onclick = () => { const t = taskById(selectedId); if(t && t.color !== k){ snapshot(); t.color = k; render(); } };
+  fColors.appendChild(b);
+});
+
+function select(id){ selectedId = id; render(); }
+let lastShown = null;
+
+function syncPanel(){
+  const t = taskById(selectedId);
+  if(!t){ panel.classList.remove('open'); lastShown = null; return; }
+  panel.classList.add('open');
+  // When the selection changes, the fields are rewritten even if one of them
+  // still holds focus — otherwise clicking a second bar while the cursor sits
+  // in Notes would leave the previous task's text on screen.
+  const switched = lastShown !== t.id;
+  if(switched && panel.contains(document.activeElement)) document.activeElement.blur();
+  lastShown = t.id;
+  const s = parseISO(t.start), e = parseISO(t.end);
+  const sa = sprintNo(s), sb = sprintNo(e);
+  const mates = state.tasks.filter(x => x.lane === t.lane).length - 1;
+  fHead.textContent = (sa === sb ? `Sprint ${sa}` : `Sprint ${sa}–${sb}`) +
+    ` · ${dayLabel(s)} → ${dayLabel(e)}` +
+    (mates > 0 ? ` · shares row with ${mates}` : '');
+  fDot.style.background = COLORS[t.color] || COLORS.blue;
+  if(switched || document.activeElement !== fNotes) fNotes.value = t.notes || '';
+  if(switched || document.activeElement !== fName)  fName.value  = t.name;
+  if(switched || document.activeElement !== fNote)  fNote.value  = t.note || '';
+  fStart.value = t.start; fEnd.value = t.end;
+  [...fColors.children].forEach(c => c.classList.toggle('on', c.dataset.k === t.color));
+}
+
+fName.onfocus = fNote.onfocus = fNotes.onfocus = () => snapshot();
+fName.oninput = () => { const t = taskById(selectedId); if(t){ t.name = fName.value; render(); } };
+fNote.oninput = () => { const t = taskById(selectedId); if(t){ t.note = fNote.value; render(); } };
+
+let notesTimer;
+fNotes.oninput = () => {
+  const t = taskById(selectedId); if(!t) return;
+  t.notes = fNotes.value; save();
+  notesHelp.innerHTML = '<span class="saved">Saved</span> — kept on this computer.';
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => { notesHelp.textContent = 'Saved automatically on this computer.'; }, 1600);
+};
+fNotes.onblur = () => render();
+
+fStart.onchange = () => {
+  const t = taskById(selectedId); if(!t || !fStart.value) return;
+  snapshot(); t.start = fStart.value;
+  if(parseISO(t.end) < parseISO(t.start)) t.end = t.start;
+  render();
+};
+fEnd.onchange = () => {
+  const t = taskById(selectedId); if(!t || !fEnd.value) return;
+  snapshot(); t.end = fEnd.value;
+  if(parseISO(t.end) < parseISO(t.start)) t.start = t.end;
+  render();
+};
+
+document.getElementById('closeBtn').onclick = () => select(null);
+document.getElementById('delBtn').onclick = () => {
+  const i = state.tasks.findIndex(t => t.id === selectedId);
+  if(i > -1){ snapshot(); state.tasks.splice(i,1); selectedId = null; render(); }
+};
+document.getElementById('dupBtn').onclick = () => {
+  const t = taskById(selectedId); if(t) duplicateTask(t);
+};
+document.getElementById('upBtn').onclick = () => moveRow(-1);
+document.getElementById('downBtn').onclick = () => moveRow(1);
+function moveRow(d){
+  const t = taskById(selectedId); if(!t) return;
+  const rows = layout().rows;
+  const i = rows.findIndex(r => r.key === t.lane), j = i + d;
+  snapshot();
+  if(j < 0)                   t.lane = rows[0].key - 1;        // a new row at the top
+  else if(j >= rows.length)   t.lane = nextLane();             // a new row at the bottom
+  else                        t.lane = rows[j].key;            // join that row
+  render();
+}
+document.getElementById('soloBtn').onclick = () => {
+  const t = taskById(selectedId); if(!t) return;
+  snapshot(); t.lane = nextLane(); render();
+};
+document.getElementById('undoBtn').onclick = undo;
+document.getElementById('redoBtn').onclick = redo;
+
+/* ========================= toolbar ========================= */
+document.getElementById('addBtn').onclick = () => {
+  const i = Math.max(0, days.indexOf(todayUTC()));
+  snapshot();
+  const t = { id:'t'+Date.now(), name:'New task', start:dAt(i), end:dAt(i+13), color:'blue', note:'', notes:'', lane:nextLane() };
+  state.tasks.push(t); selectedId = t.id; render();
+  setTimeout(() => { fName.focus(); fName.select(); }, 60);
+};
+const rs = document.getElementById('rangeStart'), re = document.getElementById('rangeEnd');
+function syncControls(){ rs.value = state.rangeStart; re.value = state.rangeEnd; zoom.value = state.dayW; }
+rs.onchange = () => { if(rs.value){ state.rangeStart = rs.value; render(); } };
+re.onchange = () => { if(re.value){ state.rangeEnd = re.value; render(); } };
+const zoom = document.getElementById('zoom');
+zoom.oninput = () => setZoom(+zoom.value);
+
+/* ---------- zoom ----------
+   Zooming keeps whatever is under the pointer (or the middle of the view)
+   pinned in place, so you don't lose your spot in a 130-day board. */
+const ZOOM_MIN = 10, ZOOM_MAX = 90, ZOOM_DEFAULT = 44;
+function setZoom(next, anchorClientX){
+  const sc = document.getElementById('scroll');
+  const rect = sc.getBoundingClientRect();
+  const ax = (anchorClientX == null ? rect.left + sc.clientWidth/2 : anchorClientX) - rect.left;
+  const dayUnderAnchor = (sc.scrollLeft + ax) / W();
+  state.dayW = clamp(Math.round(next), ZOOM_MIN, ZOOM_MAX);
+  render();
+  sc.scrollLeft = Math.max(0, dayUnderAnchor * W() - ax);
+}
+function refreshZoom(){
+  document.getElementById('zoomVal').textContent = state.dayW;
+  document.getElementById('zoomIn').disabled  = state.dayW >= ZOOM_MAX;
+  document.getElementById('zoomOut').disabled = state.dayW <= ZOOM_MIN;
+  zoom.value = state.dayW;
+}
+document.getElementById('zoomIn').onclick    = () => setZoom(state.dayW * 1.25);
+document.getElementById('zoomOut').onclick   = () => setZoom(state.dayW / 1.25);
+document.getElementById('zoomLevel').onclick = () => setZoom(ZOOM_DEFAULT);
+document.getElementById('zoomFit').onclick   = () => {
+  const sc = document.getElementById('scroll');
+  setZoom((sc.clientWidth - 4) / days.length);
+  sc.scrollLeft = 0;
+};
+document.getElementById('scroll').addEventListener('wheel', e => {
+  if(!(e.ctrlKey || e.metaKey)) return;      // ⌘/ctrl + wheel, like a map
+  e.preventDefault();
+  setZoom(state.dayW * (e.deltaY > 0 ? 0.88 : 1.14), e.clientX);
+}, {passive:false});
+
+document.getElementById('todayBtn').onclick = () => scrollToToday(true);
+function scrollToToday(centre){
+  const i = days.indexOf(todayUTC());
+  if(i < 0) return;
+  const sc = document.getElementById('scroll');
+  sc.scrollLeft = Math.max(0, i*W() - (centre ? sc.clientWidth/2 : 3*W()));
+}
+
+document.getElementById('exportBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'jtl-shop6-timeline.json';
+  a.click(); URL.revokeObjectURL(a.href);
+};
+const importFile = document.getElementById('importFile');
+document.getElementById('importBtn').onclick = () => importFile.click();
+importFile.onchange = () => {
+  const f = importFile.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => { try{
+      const d = JSON.parse(r.result);
+      if(d && Array.isArray(d.tasks)){ state = d; selectedId = null; render(); syncControls(); }
+    }catch(e){ alert('That file could not be read as timeline JSON.'); } };
+  r.readAsText(f);
+};
+document.getElementById('printBtn').onclick = () => window.print();
+document.getElementById('resetBtn').onclick = () => {
+  if(confirm('Reset the timeline back to the original plan? Your notes on each row will be lost.')){
+    state = structuredClone(DEFAULTS); selectedId = null; render(); syncControls();
+  }
+};
+
+/* ========================= keyboard ========================= */
+document.addEventListener('keydown', e => {
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z'){
+    e.preventDefault(); e.shiftKey ? redo() : undo(); return;
+  }
+  if(e.metaKey || e.ctrlKey){
+    if(e.key === '=' || e.key === '+'){ e.preventDefault(); setZoom(state.dayW * 1.25); return; }
+    if(e.key === '-' || e.key === '_'){ e.preventDefault(); setZoom(state.dayW / 1.25); return; }
+    if(e.key === '0'){ e.preventDefault(); setZoom(ZOOM_DEFAULT); return; }
+  }
+  if(e.key === 'Escape' && panel.contains(e.target)){ e.target.blur(); select(null); return; }
+  if(/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+  const t = taskById(selectedId); if(!t) return;
+  const step = e.shiftKey ? 7 : 1;
+  const a = dIdx(t.start), b = dIdx(t.end);
+  if(e.key === 'ArrowRight' && b + step <= days.length-1){
+    snapshot(); t.start = dAt(a+step); t.end = dAt(b+step); render(); e.preventDefault();
+  }
+  if(e.key === 'ArrowLeft' && a - step >= 0){
+    snapshot(); t.start = dAt(a-step); t.end = dAt(b-step); render(); e.preventDefault();
+  }
+  if(e.key === 'Backspace' || e.key === 'Delete'){ document.getElementById('delBtn').click(); e.preventDefault(); }
+  if(e.key === 'Escape') select(null);
+});
+
+/* ========================= go ========================= */
+syncControls();
+render();
+requestAnimationFrame(() => scrollToToday(false));
+</script>
+</body>
+</html>

@@ -7,13 +7,13 @@ The front page of the project. Fill in the **Project card** first, then pick you
 | | |
 |---|---|
 | Project name | JTL Shop 6.0 |
-| Business question (one sentence) | |
-| Current stage | Setup / Discover / Define / Develop / Deliver |
-| Owner | |
-| Stakeholders (product, business, engineering) | |
-| Started | |
-| Last updated | |
-| AI tools allowed for this project | |
+| Business question (one sentence) | How can a non-technical merchant set up, theme and publish a JTL-Shop 6.0 storefront without a service partner, and know it is ready? *(AI draft)* |
+| Current stage | Develop |
+| Owner | UX/product designer |
+| Stakeholders (product, business, engineering) | JTL product owner, Coduct engineering team, design team |
+| Started | 31.03.2026 (Pflichtenheft) |
+| Last updated | 24 Oct 2026 |
+| AI tools allowed for this project | Claude |
 | Agreement status | pending *(agreed / pending / not available)* |
 | Data rules | See `context/data-rules.md` |
 

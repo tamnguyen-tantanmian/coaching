@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop 6 Font Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ink: #16181F;
+    --ink-2: #545C70;
+    --paper: #EDF0F6;
+    --surface: #FFFFFF;
+    --surface-2: #F6F8FC;
+    --line: #D6DCE7;
+    --line-soft: #E5EAF2;
+    --violet: #4B3BD4;
+    --violet-soft: #EBE9FB;
+    --amber: #9A6206;
+    --amber-soft: #FAEFDC;
+    --green: #16674A;
+    --green-soft: #DFEFE8;
+    --red: #9F332C;
+    --red-soft: #FAE5E3;
+    --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+    --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #E7EAF3;
+      --ink-2: #99A2B7;
+      --paper: #0E1016;
+      --surface: #171A22;
+      --surface-2: #1D212B;
+      --line: #2E3441;
+      --line-soft: #252A35;
+      --violet: #9E92F7;
+      --violet-soft: #241F49;
+      --amber: #D6A054;
+      --amber-soft: #33280F;
+      --green: #5DC79A;
+      --green-soft: #12301F;
+      --red: #E88C82;
+      --red-soft: #341916;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #E7EAF3;
+    --ink-2: #99A2B7;
+    --paper: #0E1016;
+    --surface: #171A22;
+    --surface-2: #1D212B;
+    --line: #2E3441;
+    --line-soft: #252A35;
+    --violet: #9E92F7;
+    --violet-soft: #241F49;
+    --amber: #D6A054;
+    --amber-soft: #33280F;
+    --green: #5DC79A;
+    --green-soft: #12301F;
+    --red: #E88C82;
+    --red-soft: #341916;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 40px 20px 72px;
+  }
+
+  .wrap {
+    max-width: 1020px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 10px 0 0;
+  }
+
+  .lede {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 14px 0 0;
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 12px 0 0;
+    padding-left: 12px;
+    border-left: 2px solid var(--line);
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  p { margin: 0; max-width: 68ch; }
+
+  section { display: flex; flex-direction: column; gap: 18px; }
+
+  .head-rule {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .head-rule .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--violet);
+    letter-spacing: 0.08em;
+  }
+
+  .callout {
+    background: var(--red-soft);
+    border-left: 3px solid var(--red);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .callout .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .callout p { color: var(--ink); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .opt-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--violet-soft);
+    color: var(--violet);
+    padding: 4px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .card-head .sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  figure { margin: 0; }
+  figure svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+  }
+  figcaption {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-top: 10px;
+    max-width: 68ch;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 640px) { .pros-cons { grid-template-columns: 1fr; } }
+
+  .pc {
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+  .pc h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+  .pc.good { border-left: 3px solid var(--green); }
+  .pc.good h4 { color: var(--green); }
+  .pc.bad { border-left: 3px solid var(--amber); }
+  .pc.bad h4 { color: var(--amber); }
+  .pc ul { margin: 0; padding-left: 17px; display: flex; flex-direction: column; gap: 6px; }
+  .pc li { font-size: 14px; line-height: 1.45; }
+
+  .scenario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 720px) { .scenario { grid-template-columns: 1fr; } }
+
+  .scen-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .scen-goal {
+    font-size: 14px;
+    color: var(--ink-2);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .scen-row {
+    display: grid;
+    grid-template-columns: 92px 1fr auto;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 14px;
+  }
+  .scen-row .who { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+  .scen-row .steps { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .scen-row.win .steps { color: var(--green); }
+  .scen-row.lose .steps { color: var(--red); }
+
+  .rec {
+    background: var(--surface);
+    border: 1px solid var(--violet);
+    border-radius: 6px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .rec-reasons { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .rec-reasons li { display: grid; grid-template-columns: 24px 1fr; gap: 12px; font-size: 14px; line-height: 1.5; }
+  .rec-reasons .n { font-family: var(--mono); font-size: 12px; color: var(--violet); padding-top: 2px; }
+
+  .decisions { display: flex; flex-direction: column; gap: 12px; }
+  .decision {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+  .decision strong { display: block; font-size: 15px; margin-bottom: 3px; }
+  .decision span { font-size: 14px; color: var(--ink-2); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    font-size: 13px;
+    color: var(--ink-2);
+    font-family: var(--mono);
+  }
+</style>
+<style>
+  html { color-scheme: light dark; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">JTL-Shop 6.0 · Theme Builder · Decision Paper</p>
+    <h1>How merchants pick fonts</h1>
+    <p class="lede">Three ways to wire typography into the theme builder. All three give merchants exactly the same freedom &mdash; they differ in what happens afterwards, when the shop grows, rebrands, or asks the AI setup to propose a look.</p>
+    <p class="note">A note on wording: Shopify calls these controls <em>text presets</em>. This paper calls them <strong>text styles</strong>, because in ARC-17 a <em>preset</em> already means a theme's named token variation &mdash; a different thing, one level up.</p>
+  </header>
+
+  <div class="callout">
+    <span class="tag">The problem we are fixing</span>
+    <p>The theme panel as designed today has four font dropdowns and <strong>no font control on individual heading levels</strong>. Choosing a display face for the hero forces that same face onto product card titles, where it is too heavy. The merchant's only remaining lever is size &mdash; so they shrink H3 to hide it, and the heading scale stops being a scale. Every option below fixes this. The question is which one.</p>
+  </div>
+
+  <!-- OPTION 1 -->
+  <section>
+    <div class="head-rule">
+      <span class="num">OPTION 1</span>
+      <h2>Font slots, text styles point at them</h2>
+    </div>
+    <p>What Shopify ships today. Four named slots hold the actual typefaces. Each text style has a dropdown that <em>points</em> at a slot rather than picking a family directly.</p>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="opt-badge">Option 1</span>
+        <span class="sub">4 slots &nbsp;·&nbsp; 5 text styles &nbsp;·&nbsp; pointer per style</span>
+      </div>
+      <figure>
+        <svg viewBox="0 0 540 252" role="img" aria-label="Four font slots at the top; five text styles below, each with an arrow pointing up at a slot; arrows cross, and two slots are unused and therefore not downloaded. A derived layer sits at the bottom.">
+          <defs>
+            <marker id="a1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+              <polygon points="0,1 8,4 0,7" fill="var(--violet)"></polygon>
+            </marker>
+            <marker id="a1g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+              <polygon points="0,1 8,4 0,7" fill="currentColor" fill-opacity="0.5"></polygon>
+            </marker>
+          </defs>
+
+          <text x="10" y="14" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">LAYER 1 — FONT SLOTS (4)</text>
+
+          <rect x="10" y="24" width="124" height="38" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.5"></rect>
+          <text x="72" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Body</text>
+          <text x="72" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--violet)">Inter</text>
+
+          <rect x="142" y="24" width="124" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="3 3"></rect>
+          <text x="204" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" fill-opacity="0.4">Subheading</text>
+          <text x="204" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.4">not referenced</text>
+
+          <rect x="274" y="24" width="124" height="38" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.5"></rect>
+          <text x="336" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Heading</text>
+          <text x="336" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--violet)">Playfair</text>
+
+          <rect x="406" y="24" width="124" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="3 3"></rect>
+          <text x="468" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" fill-opacity="0.4">Accent</text>
+          <text x="468" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.4">not referenced</text>
+
+          <text x="530" y="78" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.5">unreferenced slots are never downloaded</text>
+
+          <line x1="58" y1="108" x2="70" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a1)"></line>
+          <line x1="163" y1="108" x2="326" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a1)"></line>
+          <line x1="268" y1="108" x2="330" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a1)"></line>
+          <line x1="373" y1="108" x2="80" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a1)"></line>
+          <line x1="478" y1="108" x2="88" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a1)"></line>
+          <text x="240" y="96" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--violet)">points to</text>
+
+          <text x="10" y="122" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">LAYER 2 — TEXT STYLES (5)</text>
+          <rect x="10" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="58" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">Paragraph</text>
+          <rect x="115" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="163" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H1</text>
+          <rect x="220" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="268" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H2</text>
+          <rect x="325" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="373" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H3</text>
+          <rect x="430" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="478" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H4</text>
+
+          <line x1="270" y1="162" x2="270" y2="196" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#a1g)"></line>
+          <text x="278" y="181" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">derives</text>
+
+          <rect x="10" y="200" width="520" height="40" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="4 3"></rect>
+          <text x="270" y="218" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">buttons · labels · badges · prices · captions</text>
+          <text x="270" y="232" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">LAYER 3 — derived, no merchant control</text>
+        </svg>
+        <figcaption>The crossing arrows are the mechanism: H3 and H4 point back at Body while H1 and H2 point at Heading. Two slots stay unreferenced, so their fonts are never downloaded.</figcaption>
+      </figure>
+
+      <div class="pros-cons">
+        <div class="pc good">
+          <h4>Strengths</h4>
+          <ul>
+            <li>A shop can never load more than 4 families &mdash; the cap is structural, not a rule we police.</li>
+            <li>"Playfair + Inter" exists as one object, which is what AI setup and the Aurora / Meridian / Editorial theme presets need to reason about.</li>
+            <li>Rebrand is one edit, no matter how many levels use the face.</li>
+            <li>Same shape as the colour panel, which already works in slots.</li>
+          </ul>
+        </div>
+        <div class="pc bad">
+          <h4>Costs</h4>
+          <ul>
+            <li>Merchants must learn what a "slot" is before the panel makes sense.</li>
+            <li>Slot names are abstract &mdash; "Accent" means nothing until something points at it.</li>
+            <li>Debugging a wrong font means checking two places, not one.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 2 -->
+  <section>
+    <div class="head-rule">
+      <span class="num">OPTION 2</span>
+      <h2>A font picker on every text style</h2>
+    </div>
+    <p>Drop the slot layer. Each text style carries its own font picker and chooses a family directly. What you see is what you set.</p>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="opt-badge">Option 2</span>
+        <span class="sub">no slots &nbsp;·&nbsp; 5 text styles &nbsp;·&nbsp; family chosen per style</span>
+      </div>
+      <figure>
+        <svg viewBox="0 0 540 252" role="img" aria-label="Five font choices sit directly above five text styles with straight one-to-one connectors and no shared layer. Two of the choices repeat the same family, and there is no cap on how many families a shop can load.">
+          <defs>
+            <marker id="a2g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+              <polygon points="0,1 8,4 0,7" fill="currentColor" fill-opacity="0.5"></polygon>
+            </marker>
+          </defs>
+
+          <text x="10" y="14" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">NO SHARED LAYER — FAMILY CHOSEN ON EACH TEXT STYLE</text>
+
+          <rect x="10" y="24" width="97" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="58" y="48" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Inter</text>
+
+          <rect x="115" y="24" width="97" height="38" rx="3" fill="none" stroke="var(--amber)" stroke-width="1.5"></rect>
+          <text x="163" y="48" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--amber)">Playfair</text>
+
+          <rect x="220" y="24" width="97" height="38" rx="3" fill="none" stroke="var(--amber)" stroke-width="1.5"></rect>
+          <text x="268" y="48" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--amber)">Playfair</text>
+
+          <rect x="325" y="24" width="97" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="373" y="48" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Inter</text>
+
+          <rect x="430" y="24" width="97" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="478" y="48" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Inter</text>
+
+          <text x="216" y="78" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--amber)">same decision, stored twice</text>
+          <line x1="163" y1="70" x2="268" y2="70" stroke="var(--amber)" stroke-width="1" stroke-dasharray="2 2"></line>
+
+          <line x1="58" y1="90" x2="58" y2="128" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"></line>
+          <line x1="163" y1="90" x2="163" y2="128" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"></line>
+          <line x1="268" y1="90" x2="268" y2="128" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"></line>
+          <line x1="373" y1="90" x2="373" y2="128" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"></line>
+          <line x1="478" y1="90" x2="478" y2="128" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2"></line>
+          <text x="530" y="108" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--amber)">no cap — a shop can load 5 families</text>
+
+          <text x="10" y="122" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">TEXT STYLES (5)</text>
+          <rect x="10" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="58" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">Paragraph</text>
+          <rect x="115" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="163" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H1</text>
+          <rect x="220" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="268" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H2</text>
+          <rect x="325" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="373" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H3</text>
+          <rect x="430" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="478" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H4</text>
+
+          <line x1="270" y1="162" x2="270" y2="196" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#a2g)"></line>
+          <text x="278" y="181" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">derives</text>
+
+          <rect x="10" y="200" width="520" height="40" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="4 3"></rect>
+          <text x="270" y="218" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">buttons · labels · badges · prices · captions</text>
+          <text x="270" y="232" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">derived, no merchant control</text>
+        </svg>
+        <figcaption>No crossings, because there is nothing to cross &mdash; every text style owns its font. The amber pair is the cost: one brand decision now lives in two places, and nothing caps how many families a shop can pull in.</figcaption>
+      </figure>
+
+      <div class="pros-cons">
+        <div class="pc good">
+          <h4>Strengths</h4>
+          <ul>
+            <li>Nothing to learn. The control does what it looks like it does.</li>
+            <li>Fewest clicks for a first-time setup.</li>
+            <li>Simplest to build and to support.</li>
+          </ul>
+        </div>
+        <div class="pc bad">
+          <h4>Costs</h4>
+          <ul>
+            <li>No structural cap: five families is roughly 500&nbsp;KB of font before any content paints.</li>
+            <li>No object represents a font pairing, so AI setup has to emit five unrelated choices instead of one considered pair.</li>
+            <li>A rebrand is one edit per level &mdash; and grows if sections get their own type settings later.</li>
+            <li>Different mental model from the colour half of the same panel.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 3 -->
+  <section>
+    <div class="head-rule">
+      <span class="num">OPTION 3</span>
+      <h2>Slots, with a Custom escape hatch</h2>
+    </div>
+    <p>The text-style dropdown lists the four slots <em>and</em> a <span style="font-family:var(--mono);font-size:13px">Custom&hellip;</span> item. Picking Custom opens a family picker and quietly files that family into a free slot. Merchants who never think about slots behave exactly as in Option 2; the structure is there for the ones who need it.</p>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="opt-badge">Option 3</span>
+        <span class="sub">4 slots &nbsp;·&nbsp; 5 text styles &nbsp;·&nbsp; pointer or Custom&hellip;</span>
+      </div>
+      <figure>
+        <svg viewBox="0 0 540 252" role="img" aria-label="Same four slots and five text styles as option one, but one style uses a Custom choice whose dashed arrow fills a previously free slot, keeping the four-family cap intact.">
+          <defs>
+            <marker id="a3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+              <polygon points="0,1 8,4 0,7" fill="var(--violet)"></polygon>
+            </marker>
+            <marker id="a3g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+              <polygon points="0,1 8,4 0,7" fill="currentColor" fill-opacity="0.5"></polygon>
+            </marker>
+          </defs>
+
+          <text x="10" y="14" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">LAYER 1 — FONT SLOTS (4, filled on demand)</text>
+
+          <rect x="10" y="24" width="124" height="38" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.5"></rect>
+          <text x="72" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Body</text>
+          <text x="72" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--violet)">Inter</text>
+
+          <rect x="142" y="24" width="124" height="38" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-dasharray="4 3"></rect>
+          <text x="204" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Subheading</text>
+          <text x="204" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--violet)">← Canela</text>
+
+          <rect x="274" y="24" width="124" height="38" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.5"></rect>
+          <text x="336" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="currentColor">Heading</text>
+          <text x="336" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--violet)">Playfair</text>
+
+          <rect x="406" y="24" width="124" height="38" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-dasharray="3 3"></rect>
+          <text x="468" y="41" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" fill-opacity="0.4">Accent</text>
+          <text x="468" y="54" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.4">free</text>
+
+          <text x="530" y="78" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.5">cap of 4 holds — panel says so when the last slot fills</text>
+
+          <line x1="58" y1="108" x2="70" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a3)"></line>
+          <line x1="163" y1="108" x2="326" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a3)"></line>
+          <line x1="268" y1="108" x2="330" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a3)"></line>
+          <line x1="373" y1="108" x2="80" y2="64" stroke="var(--violet)" stroke-width="1.3" marker-end="url(#a3)"></line>
+          <line x1="478" y1="108" x2="216" y2="64" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#a3)"></line>
+          <text x="356" y="100" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--violet)">Custom… fills a free slot</text>
+
+          <text x="10" y="122" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="currentColor" fill-opacity="0.55">LAYER 2 — TEXT STYLES (5)</text>
+          <rect x="10" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="58" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">Paragraph</text>
+          <rect x="115" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="163" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H1</text>
+          <rect x="220" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="268" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H2</text>
+          <rect x="325" y="130" width="97" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text x="373" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H3</text>
+          <rect x="430" y="130" width="97" height="32" rx="3" fill="none" stroke="var(--violet)" stroke-opacity="0.7" stroke-dasharray="4 3"></rect>
+          <text x="478" y="150" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">H4 · Custom…</text>
+
+          <line x1="270" y1="162" x2="270" y2="196" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#a3g)"></line>
+          <text x="278" y="181" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">derives</text>
+
+          <rect x="10" y="200" width="520" height="40" rx="3" fill="none" stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="4 3"></rect>
+          <text x="270" y="218" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor">buttons · labels · badges · prices · captions</text>
+          <text x="270" y="232" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" fill-opacity="0.55">LAYER 3 — derived, no merchant control</text>
+        </svg>
+        <figcaption>The dashed arrow is the only new mechanism: H4 picks a family directly, and that family lands in the free Subheading slot where any other text style can now reuse it. The merchant never had to know the slot existed.</figcaption>
+      </figure>
+
+      <div class="pros-cons">
+        <div class="pc good">
+          <h4>Strengths</h4>
+          <ul>
+            <li>Keeps every structural benefit of Option 1 &mdash; cap, pairing object, one-edit rebrand.</li>
+            <li>Costs a first-time merchant nothing: Custom&hellip; behaves like Option 2.</li>
+            <li>The slot concept is introduced at the moment it becomes relevant &mdash; when the cap is reached &mdash; not on the first screen.</li>
+          </ul>
+        </div>
+        <div class="pc bad">
+          <h4>Costs</h4>
+          <ul>
+            <li>Most design work: two paths through one dropdown, plus the "all four slots are in use" state.</li>
+            <li>Auto-filling a slot is invisible magic unless the panel shows what happened.</li>
+            <li>Needs a clear way to rename, reassign, and free a slot.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section>
+    <div class="head-rule">
+      <span class="num">IN PRACTICE</span>
+      <h2>Two moments in a merchant's life</h2>
+    </div>
+    <div class="scenario">
+      <div class="scen-card">
+        <h3>Day one &mdash; setting up</h3>
+        <p class="scen-goal">L'alouette wants Playfair on the hero and page title, Inter everywhere else.</p>
+        <div class="scen-row lose"><span class="who">Mockup</span><span>No control exists on H3 or H4</span><span class="steps">blocked</span></div>
+        <div class="scen-row"><span class="who">Option 1</span><span>Set Heading = Playfair, then point H3 and H4 at Body</span><span class="steps">3 steps</span></div>
+        <div class="scen-row win"><span class="who">Option 2</span><span>Set the font on H1 and H2</span><span class="steps">2 steps</span></div>
+        <div class="scen-row win"><span class="who">Option 3</span><span>Custom&hellip; on H1, then reuse it on H2</span><span class="steps">2 steps</span></div>
+      </div>
+      <div class="scen-card">
+        <h3>Two years later &mdash; rebrand</h3>
+        <p class="scen-goal">Playfair is retired. Everything that used it becomes Canela.</p>
+        <div class="scen-row"><span class="who">Mockup</span><span>Change the Heading slot</span><span class="steps">1 step</span></div>
+        <div class="scen-row win"><span class="who">Option 1</span><span>Change the Heading slot</span><span class="steps">1 step</span></div>
+        <div class="scen-row lose"><span class="who">Option 2</span><span>Change H1, then H2 &mdash; and every section that gained its own type settings since</span><span class="steps">2+ steps</span></div>
+        <div class="scen-row win"><span class="who">Option 3</span><span>Change the slot the family was filed into</span><span class="steps">1 step</span></div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--ink-2)">Option 2 wins the first moment and loses the second. That is the whole trade, stated plainly: simplicity now against cost later.</p>
+  </section>
+
+  <!-- RECOMMENDATION -->
+  <section>
+    <div class="head-rule">
+      <span class="num">RECOMMENDATION</span>
+      <h2>Build Option 3</h2>
+    </div>
+    <div class="rec">
+      <p>Option 3 gives the day-one experience of Option 2 and the long-run properties of Option 1. It costs more design time, and that is the only thing it costs.</p>
+      <ul class="rec-reasons">
+        <li><span class="n">01</span><span><strong>The font budget has to be structural.</strong> We own the performance story for every shop on the platform. A cap we enforce by asking merchants nicely is not a cap.</span></li>
+        <li><span class="n">02</span><span><strong>AI theme setup needs pairings, not five choices.</strong> The Pflichtenheft puts AI-assisted setup in MVP. "Playfair with Inter" is a piece of typographic knowledge; five independent font fields have nowhere to store it.</span></li>
+        <li><span class="n">03</span><span><strong>One panel should teach one idea.</strong> The colour half already works in slots. Two models on one screen is a support cost we would pay forever.</span></li>
+      </ul>
+      <p style="font-size:14px;color:var(--ink-2);border-top:1px solid var(--line-soft);padding-top:14px">If the group does not find those three arguments decisive, <strong>Option 2 is a reasonable and cheaper answer</strong> &mdash; it is not a mistake, just a different bet. What is not defensible is shipping today's mockup, because it fails a requirement rather than a preference.</p>
+    </div>
+  </section>
+
+  <!-- DECISIONS -->
+  <section>
+    <div class="head-rule">
+      <span class="num">TO DECIDE</span>
+      <h2>What we need from this meeting</h2>
+    </div>
+    <div class="decisions">
+      <div class="decision">
+        <strong>Which option do we build?</strong>
+        <span>Blocks the Figma variable structure and the theme data model. Everything downstream waits on this.</span>
+      </div>
+      <div class="decision">
+        <strong>Is AI theme setup in the MVP?</strong>
+        <span>If it is out, argument 02 disappears and Option 2 becomes materially more attractive.</span>
+      </div>
+      <div class="decision">
+        <strong>Do we accept a hard cap of four font families per shop?</strong>
+        <span>A yes makes the choice between Options 1 and 3 purely a UX question. A no rules both of them out.</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    JTL-Shop 6.0 · [UI/UX] Create Themes Setting UI Page (AD) · Workstream B — Typography
+  </footer>
+
+</div>
+</body>
+</html>

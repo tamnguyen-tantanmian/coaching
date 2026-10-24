@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theme Settings — Global Setup</title>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --surface-2:#fafbfc;
+  --text:#14161c; --muted:#5d6376; --faint:#868da3;
+  --line:#e2e5ec; --line-soft:#eef0f5;
+  --accent:#2f43e8; --accent-soft:#eef0fe;
+  --ok:#0b7a53; --ok-bg:#ecfdf4; --ok-line:#a7e8cb;
+  --warn:#9a5b06; --warn-bg:#fff8ec; --warn-line:#f2d9a8;
+  --danger:#a8271c; --danger-bg:#fef3f2; --danger-line:#f4c4bf;
+  --new:#6b3fb8; --new-bg:#f5f0ff; --new-line:#dcccf6;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0f14; --surface:#151821; --surface-2:#1a1e28;
+    --text:#e8eaf0; --muted:#a2a9bd; --faint:#7b839a;
+    --line:#272c38; --line-soft:#1f2430;
+    --accent:#8b9bff; --accent-soft:#1c2140;
+    --ok:#5fd6a5; --ok-bg:#0e2b21; --ok-line:#1f5040;
+    --warn:#e6b667; --warn-bg:#2b2213; --warn-line:#544326;
+    --danger:#f28b80; --danger-bg:#2c1715; --danger-line:#57282a;
+    --new:#c0a6f5; --new-bg:#221a33; --new-line:#3e3155;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{display:grid;grid-template-columns:250px minmax(0,1fr);gap:40px;max-width:1240px;margin:0 auto;padding:40px 24px 120px}
+nav{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow-y:auto;font-size:13px}
+nav .navtitle{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700;margin:0 0 12px;padding-left:10px}
+nav a{display:block;padding:5px 10px;border-radius:6px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+nav a:hover{background:var(--surface);color:var(--text)}
+nav a.sub{padding-left:24px;font-size:12.5px;color:var(--faint)}
+main{min-width:0}
+
+header.doc{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:8px}
+header.doc .eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+header.doc h1{font-size:34px;line-height:1.2;margin:0 0 14px;letter-spacing:-.02em}
+header.doc p.lede{font-size:16.5px;color:var(--muted);margin:0 0 22px;max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--text);font-weight:600}
+
+section{padding-top:44px}
+h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px}
+h2 + .h2sub{font-size:25px;line-height:1.3;font-weight:650;letter-spacing:-.015em;margin:0 0 18px}
+h3{font-size:17px;font-weight:650;margin:32px 0 10px;letter-spacing:-.01em}
+h4{font-size:14px;font-weight:650;margin:22px 0 8px;color:var(--text)}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{margin:0 0 14px;padding-left:22px;max-width:72ch}
+li{margin:4px 0}
+code{font-family:var(--mono);font-size:.87em;background:var(--surface-2);border:1px solid var(--line-soft);padding:1px 5px;border-radius:4px}
+a{color:var(--accent)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:0 0 18px}
+.card > :last-child{margin-bottom:0}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td code{background:transparent;border:none;padding:0;color:var(--muted)}
+.tbl-scroll{overflow-x:auto}
+
+.chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:999px;border:1px solid;white-space:nowrap;vertical-align:1px}
+.c-new{color:var(--new);background:var(--new-bg);border-color:var(--new-line)}
+.c-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+.c-warn{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
+.c-out{color:var(--faint);background:var(--surface-2);border-color:var(--line)}
+
+.note{border-left:3px solid var(--line);background:var(--surface);border:1px solid var(--line);border-left-width:3px;border-radius:0 10px 10px 0;padding:14px 18px;margin:0 0 18px}
+.note .lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:5px}
+.note p:last-child{margin-bottom:0}
+.n-decision{border-left-color:var(--new)} .n-decision .lbl{color:var(--new)}
+.n-open{border-left-color:var(--warn);background:var(--warn-bg)} .n-open .lbl{color:var(--warn)}
+.n-eng{border-left-color:var(--accent)} .n-eng .lbl{color:var(--accent)}
+.n-out{border-left-color:var(--faint);background:var(--surface-2)} .n-out .lbl{color:var(--faint)}
+
+.ac{list-style:none;padding:0;max-width:72ch}
+.ac li{position:relative;padding-left:28px;margin:7px 0;font-size:14px}
+.ac li::before{content:"";position:absolute;left:0;top:4px;width:15px;height:15px;border:1.5px solid var(--line);border-radius:4px;background:var(--surface)}
+
+.flowfig{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;margin:0 0 18px}
+.flowfig svg{width:100%;height:auto;display:block}
+figcaption{font-size:12.5px;color:var(--faint);margin-top:12px}
+
+.kv{display:grid;grid-template-columns:150px minmax(0,1fr);gap:2px 18px;font-size:14px;margin:0 0 16px}
+.kv dt{color:var(--muted);font-weight:600;font-size:13px;padding:5px 0}
+.kv dd{margin:0;padding:5px 0;border-bottom:1px solid var(--line-soft)}
+.kv dt{border-bottom:1px solid var(--line-soft)}
+
+hr{border:none;border-top:1px solid var(--line);margin:44px 0 0}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:0;padding:28px 16px 80px}
+  nav{position:static;max-height:none;margin-bottom:32px;border-bottom:1px solid var(--line);padding-bottom:16px}
+  nav a{display:inline-block;border-left:none}
+  .kv{grid-template-columns:1fr}
+  .kv dt{border-bottom:none;padding-bottom:0}
+  header.doc h1{font-size:27px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <p class="navtitle">Contents</p>
+  <a href="#scope">1 · Scope</a>
+  <a href="#ia">2 · IA &amp; entry points</a>
+  <a href="#anatomy">3 · Layout anatomy</a>
+  <a href="#toolbar">4 · Toolbar</a>
+  <a href="#rail">5 · Themes rail</a>
+  <a href="#preview">6 · Preview canvas</a>
+  <a href="#panel">7 · Configuration panel</a>
+  <a href="#reset" class="sub">7.1 Reset to default</a>
+  <a href="#colors" class="sub">7.2 Colours</a>
+  <a href="#slots" class="sub">7.3 Font slots</a>
+  <a href="#styles" class="sub">7.4 Text styles</a>
+  <a href="#versioning">8 · Versioning model</a>
+  <a href="#flows">9 · Flows</a>
+  <a href="#dialogs">10 · Dialogs &amp; toasts</a>
+  <a href="#permissions">11 · Permissions</a>
+  <a href="#states">12 · System states</a>
+  <a href="#eng">13 · Engineering notes</a>
+  <a href="#ac">14 · Acceptance criteria</a>
+  <a href="#open">15 · Open questions</a>
+  <a href="#outofscope">16 · Out of scope</a>
+</nav>
+
+<main>
+
+<header class="doc">
+  <p class="eyebrow">JTL-Shop 6.0 · Merchant admin</p>
+  <h1>Theme Settings — Global Setup</h1>
+  <p class="lede">Functional documentation for the theme configuration surface: layout, controls, the draft/version/applied model, and every save, apply and reset path a merchant can take.</p>
+  <div class="meta">
+    <span><b>Status</b> Draft for review</span>
+    <span><b>Revision</b> v1.0 · 21 Sep 2026</span>
+    <span><b>Owner</b> Design — Tam</span>
+    <span><b>Source</b> Figma board “Theme Settings | Global setup”</span>
+  </div>
+</header>
+
+<!-- ───────────────────────── 1 ───────────────────────── -->
+<section id="scope">
+<h2>1 · Scope</h2>
+<p class="h2sub">What this document covers</p>
+
+<p><strong>Theme Settings (Global setup)</strong> is the theme-level configuration surface inside a shop's admin. Settings defined here — colours, font slots, text styles — apply to every storefront page of the theme. Individual pages are previewed, not configured separately.</p>
+
+<h3>In scope</h3>
+<ul>
+  <li>Layout anatomy, toolbar, themes rail, preview canvas, configuration panel</li>
+  <li>The Default → Draft → Version → Applied model, including the 5-version ceiling</li>
+  <li>Save as draft, save as version, apply, restore a version, remove a version</li>
+  <li><strong>Reset to default</strong> <span class="chip c-new">NEW</span> — replaces rollback-after-apply</li>
+  <li>Dialogs, toasts, error, empty and loading states; role-based availability</li>
+</ul>
+
+<h3>Deliberately excluded</h3>
+<div class="note n-out">
+  <span class="lbl">Out of scope — decided</span>
+  <p><strong>Unsaved-changes guard.</strong> No interception when the merchant navigates away with an unsaved draft. See §16 for the consequence this accepts.</p>
+  <p><strong>Theme lifecycle.</strong> Adding, duplicating, renaming and deleting themes are not specified here. The themes rail is read-and-select only.</p>
+  <p><strong>Rollback after apply.</strong> Replaced by <a href="#reset">Reset to default</a> at the merchant's direction. Returning to a specific earlier version is still covered by <a href="#f5">Restore a version</a> (F5).</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 2 ───────────────────────── -->
+<section id="ia">
+<h2>2 · IA &amp; entry points</h2>
+<p class="h2sub">Where the surface sits</p>
+
+<p>Path: <code>Shop admin → [shop] → Theme Setup → Theme settings</code>. The Theme Setup tab sits alongside Analytics &amp; SEO, Shop Data, Settings and Domains in the shop header.</p>
+
+<table>
+<thead><tr><th style="width:34%">Entry point</th><th>Behaviour on arrival</th></tr></thead>
+<tbody>
+<tr><td>Setup checklist — <em>Customize your theme</em></td><td>Opens the applied theme, Draft selected in the version picker, Home page previewed. First-run variant applies (see F8).</td></tr>
+<tr><td>Theme Setup tab</td><td>Opens the applied theme at the last previewed page for this user, or Home page if none.</td></tr>
+<tr><td>Deep link with theme id</td><td>Opens that theme. If the id is unknown or the theme was removed, fall back to the applied theme and surface a non-blocking toast.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ───────────────────────── 3 ───────────────────────── -->
+<section id="anatomy">
+<h2>3 · Layout anatomy</h2>
+<p class="h2sub">Three columns under a fixed toolbar</p>
+
+<table>
+<thead><tr><th style="width:22%">Region</th><th style="width:20%">Width</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Shop header + tabs</td><td>Full</td><td>Shop name, status badges, shop switcher, <em>View store</em>, last-published timestamp. Persistent across all Theme Setup views.</td></tr>
+<tr><td>Toolbar</td><td>Full</td><td>Sticky below the tabs. Never scrolls with the canvas. §4.</td></tr>
+<tr><td>Themes rail (left)</td><td>200px fixed <span class="chip c-warn">confirm</span></td><td>Theme list. Does not collapse in MVP.</td></tr>
+<tr><td>Preview canvas (centre)</td><td>Fluid</td><td>Absorbs all remaining width. Minimum 640px before the layout degrades — see below.</td></tr>
+<tr><td>Configuration panel (right)</td><td>248–320px fluid <span class="chip c-warn">confirm</span></td><td>Scrolls independently. Panel header stays pinned while sections scroll.</td></tr>
+</tbody>
+</table>
+
+<div class="note n-open">
+  <span class="lbl">Confirm</span>
+  <p>The width annotations were transcribed from a low-resolution export of the board. Verify the two <span class="chip c-warn">confirm</span> values against the Figma frames before handoff.</p>
+</div>
+
+<h3>Responsive behaviour</h3>
+<ul>
+  <li><strong>≥ 1440px</strong> — canonical layout, configuration panel at its 320px maximum.</li>
+  <li><strong>1280–1439px</strong> — configuration panel shrinks toward 248px; canvas absorbs the difference.</li>
+  <li><strong>&lt; 1280px</strong> — canvas falls below its comfortable minimum. Themes rail collapses to an icon strip with the theme name in a tooltip. <span class="chip c-warn">needs design</span></li>
+  <li><strong>&lt; 1024px</strong> — the editor is not supported. Show a full-page message pointing the merchant to a larger screen. <span class="chip c-warn">needs design</span></li>
+</ul>
+</section>
+
+<!-- ───────────────────────── 4 ───────────────────────── -->
+<section id="toolbar">
+<h2>4 · Toolbar</h2>
+<p class="h2sub">Six controls, left to right</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:16%">Control</th><th style="width:14%">Type</th><th>Content &amp; behaviour</th><th style="width:22%">Disabled when</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Theme settings</strong></td><td>Dropdown</td>
+  <td>Scope selector for the right-hand panel. MVP has one entry, <em>Theme settings</em>. The control ships visible so later scopes (sections, navigation) have a home.</td>
+  <td>Never. Single-option state renders as a static label with the caret suppressed.</td>
+</tr>
+<tr>
+  <td><strong>Page</strong></td><td>Dropdown</td>
+  <td>Home page · Category page · Product page · Cart · Check out · Login&nbsp;/&nbsp;Register · Account settings. Changes what the canvas renders. Does <em>not</em> scope the settings — see the open question in §15.</td>
+  <td>While the preview is loading its first frame.</td>
+</tr>
+<tr>
+  <td><strong>Device</strong></td><td>Segmented</td>
+  <td>Desktop · Mobile. Rescales the canvas container. Mobile is a width-constrained container, not an iframe — see §13.</td>
+  <td>Never.</td>
+</tr>
+<tr>
+  <td><strong>Version</strong></td><td>Dropdown</td>
+  <td>Draft (top) then Version&nbsp;5 → Version&nbsp;1, newest first. Each saved row carries number, author and saved-at. Row action: <em>Restore</em>. Footer note: “Only the latest version can be applied. 5 of 5 versions — saving a new one will remove Version&nbsp;1.”</td>
+  <td>Never. Rows other than the latest render their Apply affordance disabled, not hidden.</td>
+</tr>
+<tr>
+  <td><strong>Save as Draft</strong></td><td>Split button</td>
+  <td>Primary action saves the draft. Menu: <em>Save as version</em>, <em>Remove version</em>. <em>Remove version</em> acts on the row currently selected in the version picker.</td>
+  <td>No changes since the last save; user lacks edit rights; a save is in flight.</td>
+</tr>
+<tr>
+  <td><strong>Apply this Theme</strong></td><td>Primary button</td>
+  <td>Publishes the editor's current state to the live storefront. See F4.</td>
+  <td>This exact state is already live; a non-latest version is selected; user lacks publish rights; first-run setup incomplete.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h4>Control states</h4>
+<p>Every toolbar control carries the standard set: <code>default</code>, <code>hover</code>, <code>focus-visible</code>, <code>active</code>, <code>disabled</code>. Disabled states must expose their reason as a tooltip — a disabled Apply with no explanation is the single most common support question on editors of this kind.</p>
+</section>
+
+<!-- ───────────────────────── 5 ───────────────────────── -->
+<section id="rail">
+<h2>5 · Themes rail</h2>
+<p class="h2sub">Read and select</p>
+
+<p>A vertical list of themes available to the shop. Each row carries a colour swatch pair, the theme name, a secondary label (<em>Default</em> for shipped themes), and a radio control. The live theme carries an <strong>Applied</strong> chip.</p>
+
+<table>
+<thead><tr><th style="width:26%">State</th><th>Presentation</th></tr></thead>
+<tbody>
+<tr><td>Selected + applied</td><td>Radio filled, <em>Applied</em> chip, row background tinted.</td></tr>
+<tr><td>Selected, not applied</td><td>Radio filled, no chip. The toolbar's Apply button is the call to action.</td></tr>
+<tr><td>Not selected</td><td>Radio empty, name and swatches at full contrast.</td></tr>
+<tr><td>Has an unsaved draft</td><td>A small dot after the theme name. Because there is no unsaved-changes guard, this marker is the only signal that work is pending in a theme the merchant is leaving.</td></tr>
+</tbody>
+</table>
+
+<div class="note n-out">
+  <span class="lbl">Out of scope</span>
+  <p>No add, duplicate, rename or delete affordance in this revision. The rail has no overflow menu and no “＋ New theme” row.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 6 ───────────────────────── -->
+<section id="preview">
+<h2>6 · Preview canvas</h2>
+<p class="h2sub">What the merchant is looking at</p>
+
+<ul>
+  <li>Renders the <strong>selected page</strong> at the <strong>selected device</strong>, using the editor's current token values — including unsaved changes.</li>
+  <li>Token changes repaint the canvas on a <strong>200&nbsp;ms debounce</strong>. Dragging a size slider updates continuously; committing the value triggers the repaint.</li>
+  <li>The canvas always shows the <strong>draft</strong>. <em>View store</em> in the shop header always opens the <strong>applied</strong> version in a new tab. Label the two clearly; merchants conflate them.</li>
+  <li>Selecting a saved version in the picker switches the canvas to that version, read-only, with an inline banner: “Viewing Version&nbsp;3 — editing is disabled. Restore this version to continue editing.”</li>
+</ul>
+
+<h4>Canvas states</h4>
+<table>
+<thead><tr><th style="width:24%">State</th><th>Presentation</th></tr></thead>
+<tbody>
+<tr><td>Loading</td><td>Skeleton of the page structure, not a spinner, so the merchant can see which page is arriving.</td></tr>
+<tr><td>Render error</td><td>Inline message with <em>Reload preview</em>. Configuration panel stays interactive — a broken preview must not block editing.</td></tr>
+<tr><td>Page has no content</td><td>Placeholder page with representative sample content so type and colour remain judgeable.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ───────────────────────── 7 ───────────────────────── -->
+<section id="panel">
+<h2>7 · Configuration panel</h2>
+<p class="h2sub">Theme name, colours, font slots, text styles</p>
+
+<h3 id="reset">7.1 Panel header &amp; Reset to default <span class="chip c-new">NEW</span></h3>
+
+<p>The panel header holds the theme name, a status badge and the reset control.</p>
+
+<dl class="kv">
+  <dt>Theme name</dt><dd>Read-only in this revision. Renaming belongs to the theme lifecycle, which is out of scope.</dd>
+  <dt>Status badge</dt><dd><strong>Default</strong> when every token matches the theme's shipped values. <strong>Customized</strong> when one or more differ.</dd>
+  <dt>Reset control</dt><dd>Sits immediately right of the theme name. Visible at all times; <strong>enabled only while the badge reads Customized</strong>.</dd>
+</dl>
+
+<div class="note n-decision">
+  <span class="lbl">Decision</span>
+  <p>Reset-to-default replaces rollback-after-apply. A merchant who dislikes what they published gets back to a known-good state by resetting the theme, not by un-publishing the previous version.</p>
+</div>
+
+<h4>Behaviour</h4>
+<table>
+<thead><tr><th style="width:26%">Aspect</th><th>Specification</th></tr></thead>
+<tbody>
+<tr><td>Trigger</td><td>Single click. <strong>No confirmation dialog</strong> — the action is immediate, and reversible through Undo.</td></tr>
+<tr><td>Scope</td><td>The <strong>whole theme</strong>: every colour, every font slot, every text style, across every page. Not the currently previewed page only.</td></tr>
+<tr><td>Result</td><td>The working draft is replaced with the theme's shipped default token set. Badge flips to <em>Default</em>. Reset control becomes disabled. Canvas repaints.</td></tr>
+<tr><td>Does not touch</td><td>Saved versions 1–5, and the version currently live on the storefront.</td></tr>
+<tr><td>Storefront effect</td><td><strong>None until Apply.</strong> Reset changes the draft only. The live shop is unaffected.</td></tr>
+<tr><td>Undo</td><td>Toast “Theme reset to default” with an <strong>Undo</strong> action, 10&nbsp;s. Undo restores the exact pre-reset draft.</td></tr>
+<tr><td>Per-token reset</td><td>Each customised control also carries its own small reset affordance, resetting that token alone. Same rules, no toast.</td></tr>
+</tbody>
+</table>
+
+<div class="note n-open">
+  <span class="lbl">Open — needs a call</span>
+  <p>Reset returns the theme to <em>default</em>, not to <em>what was live before the last apply</em>. A merchant who applied a good version, then edited and applied again, cannot get the good version back with Reset — they must use Restore (F5) on that version. Confirm this is the intended trade-off, and consider labelling Restore more prominently in the version picker to compensate.</p>
+</div>
+
+<h3 id="colors">7.2 Colours</h3>
+<p>Section with a collapse toggle. Tokens, in order: <strong>Primary</strong>, <strong>Secondary</strong>, <strong>Background</strong>, <strong>Text</strong>, then an <strong>Others</strong> group for additional named colours.</p>
+<ul>
+  <li>Each row: swatch button, hex input, customised marker, per-token reset.</li>
+  <li>Hex input accepts 3-, 6- and 8-digit values; invalid input reverts on blur with an inline message.</li>
+  <li>The swatch button opens the colour picker; the picker is a shared design-system component, not specified here.</li>
+  <li><strong>Contrast check:</strong> Text-on-Background and Text-on-Primary are evaluated live. Below 4.5:1 the pair shows a warning marker with the measured ratio. Warning only — it does not block saving.</li>
+</ul>
+
+<div class="note n-open">
+  <span class="lbl">Open — architecture</span>
+  <p><strong>There is no light/dark axis in the data model.</strong> Store customisation is a single flat override map, so a merchant's brand colour applies to both schemes unchanged. If light/dark ships as a preset pair, this panel needs a scheme switch and the overrides need a second dimension. Owner: whoever owns ARC-17.</p>
+</div>
+
+<h3 id="slots">7.3 Font slots</h3>
+<p>Four slots, plus a <code>Custom…</code> escape hatch on each. A slot holds a <strong>family, not a weight</strong> — Regular/Semibold/Bold are pulled from the family and resolve upward when a weight is missing.</p>
+
+<table>
+<thead><tr><th style="width:22%">Slot</th><th style="width:34%">Default consumers</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Heading</td><td>H1, H2</td><td>—</td></tr>
+<tr><td>Subheading</td><td>H3, H4</td><td>—</td></tr>
+<tr><td>Body</td><td>Paragraph, S1 Price</td><td>Also drives every derived style.</td></tr>
+<tr><td>Accent</td><td>S2 Label</td><td><span class="chip c-warn">missing on the board</span> — the board shows three slots. Every slot must ship with a consumer so none arrives as a dead control.</td></tr>
+</tbody>
+</table>
+
+<h3 id="styles">7.4 Text styles</h3>
+<p>Seven editable styles. Each one <strong>points at a slot</strong> through a dropdown — it does not carry its own free font picker. This is what keeps the panel symmetrical with the colour section and gives the AI setup a pairing object to work with.</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Style</th><th>Size</th><th>Weight</th><th>Slot</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>H1</td><td>56</td><td>700</td><td>Heading</td><td>—</td></tr>
+<tr><td>H2</td><td>40</td><td>700</td><td>Heading</td><td>—</td></tr>
+<tr><td>H3</td><td>32</td><td>600</td><td>Subheading</td><td>—</td></tr>
+<tr><td>H4</td><td>24</td><td>600</td><td>Subheading</td><td>—</td></tr>
+<tr><td>Paragraph</td><td>16</td><td>400</td><td>Body</td><td>16, not 14 — iOS Safari auto-zooms inputs below 16px and input values use this style.</td></tr>
+<tr><td>S1 Price</td><td>24</td><td>700</td><td>Body</td><td>Editable in its own right. <code>tabular-nums</code> is system-locked.</td></tr>
+<tr><td>S2 Label</td><td>12</td><td>600</td><td>Accent</td><td>Uppercase.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Controls per style</h4>
+<table>
+<thead><tr><th style="width:24%">Control</th><th style="width:16%">Tier</th><th>Specification</th></tr></thead>
+<tbody>
+<tr><td>Slot pointer</td><td>Default</td><td>Dropdown listing the four slots plus <code>Custom…</code>.</td></tr>
+<tr><td>Font size</td><td>Default</td><td>Number input + slider. Stores the <strong>plain base number</strong>; the fluid <code>clamp()</code> is composed downstream. No mobile size control exists — sizes are fluid by construction.</td></tr>
+<tr><td>Line height</td><td>Expert</td><td>Three named steps per style. <strong>Normal always reproduces the v2 ramp.</strong> No fixed px leading — merchants swap fonts, and px leading tuned to one face breaks on every other.</td></tr>
+<tr><td>Letter spacing</td><td>Expert</td><td>One scale for all styles: −0.02 / 0 / +0.06em.</td></tr>
+<tr><td>Weight</td><td>Expert</td><td>Pulled from the slot's family; options limited to the weights that family provides.</td></tr>
+</tbody>
+</table>
+
+<p><strong>Default / Expert toggle.</strong> <em>Default</em> shows slot + size. <em>Expert</em> adds line height, letter spacing and weight. The toggle is per style and its state is not persisted across sessions. <span class="chip c-warn">confirm split</span></p>
+
+<h4>Derived styles — no controls</h4>
+<p><code>h5</code>, <code>body-sm</code>, <code>caption</code>, <code>cta</code>, <code>price-sm</code>, <code>input</code>. These are computed from the editable set and do not appear in the panel. The override API must reject writes to them, or “derived” is unenforced.</p>
+</section>
+
+<!-- ───────────────────────── 8 ───────────────────────── -->
+<section id="versioning">
+<h2>8 · Versioning model</h2>
+<p class="h2sub">Default, draft, versions, applied</p>
+
+<figure class="flowfig">
+<svg viewBox="0 0 880 218" role="img" aria-label="State diagram: Default tokens to Draft to Version 1 to 5 to Applied, with reset and restore return paths">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="currentColor" color="var(--faint)" stroke-width="1.3">
+    <path d="M160,113 H236" marker-end="url(#ah)"/>
+    <path d="M395,113 H471" marker-end="url(#ah)"/>
+    <path d="M630,113 H706" marker-end="url(#ah)"/>
+    <path d="M300,85 C300,40 118,40 118,80" marker-end="url(#ah)" stroke-dasharray="4 3" color="var(--new)"/>
+    <path d="M520,141 C520,188 345,188 345,146" marker-end="url(#ah)" stroke-dasharray="4 3"/>
+  </g>
+  <g font-family="-apple-system,Segoe UI,Roboto,sans-serif">
+    <g>
+      <rect x="10" y="85" width="150" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+      <text x="85" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Default tokens</text>
+      <text x="85" y="127" text-anchor="middle" font-size="10.5" fill="var(--faint)">shipped with the theme</text>
+    </g>
+    <g>
+      <rect x="245" y="85" width="150" height="56" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+      <text x="320" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Draft</text>
+      <text x="320" y="127" text-anchor="middle" font-size="10.5" fill="var(--faint)">one per theme</text>
+    </g>
+    <g>
+      <rect x="480" y="85" width="150" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+      <text x="555" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Version 1 – 5</text>
+      <text x="555" y="127" text-anchor="middle" font-size="10.5" fill="var(--faint)">numbered, max 5</text>
+    </g>
+    <g>
+      <rect x="715" y="85" width="150" height="56" rx="10" fill="var(--ok-bg)" stroke="var(--ok-line)"/>
+      <text x="790" y="110" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Applied</text>
+      <text x="790" y="127" text-anchor="middle" font-size="10.5" fill="var(--faint)">live on the storefront</text>
+    </g>
+    <g font-size="10.5" fill="var(--faint)" text-anchor="middle">
+      <text x="198" y="105">edit</text>
+      <text x="433" y="105">save version</text>
+      <text x="668" y="105">apply</text>
+      <text x="205" y="31" fill="var(--new)" font-weight="650">reset to default</text>
+      <text x="432" y="202">restore</text>
+    </g>
+  </g>
+</svg>
+<figcaption>Four states. Reset returns the draft to the shipped defaults; Restore pulls a saved version back into the draft. Neither touches what is live until Apply runs.</figcaption>
+</figure>
+
+<h3>Rules</h3>
+<ol>
+  <li>On first setup, the theme's default configuration <strong>counts as Version 1</strong>. The editor is never in a zero-version state.</li>
+  <li>There is <strong>one draft per theme</strong>. Saving as draft overwrites it; there is no draft history.</li>
+  <li>A maximum of <strong>5 saved versions</strong> per theme. Saving a sixth requires deleting the oldest (F3).</li>
+  <li><strong>Only the latest version can be applied.</strong> Older versions must be restored into the draft first, which promotes them to the newest state.</li>
+  <li>Applying never deletes a version. The applied version keeps its number and gains an <em>Applied</em> marker in the picker.</li>
+</ol>
+
+<h3>Version metadata</h3>
+<p>Each saved version stores: number, author (account id and display name), saved-at timestamp, and an optional 80-character note the merchant can type in the save dialog. Author and timestamp are not cosmetic — configuration changes must be auditable per §8.17 of the Pflichtenheft, and this list is the only audit surface currently designed anywhere in the merchant flow.</p>
+</section>
+
+<!-- ───────────────────────── 9 ───────────────────────── -->
+<section id="flows">
+<h2>9 · Flows</h2>
+<p class="h2sub">Eight paths, each with its failure case</p>
+
+<h3 id="f1">F1 · Save as draft</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td>Primary action of the split button, or <code>⌘/Ctrl + S</code>.</td></tr>
+<tr><th>Precondition</th><td>At least one token differs from the last saved draft.</td></tr>
+<tr><th>System</th><td>Persists the working state to the theme's single draft slot, <strong>overwriting the previous draft without a confirmation</strong>. Button enters a loading state.</td></tr>
+<tr><th>Success</th><td>Toast <em>T1</em>. Toolbar save button returns to disabled (nothing left to save). Timestamp in the shop header updates.</td></tr>
+<tr><th>Failure</th><td>Toast <em>T6</em> with <em>Retry</em>. Editor state is preserved; nothing is lost.</td></tr>
+<tr><th>Edge</th><td>Saving a draft identical to the applied version still writes a draft. The badge does not change.</td></tr>
+</tbody>
+</table>
+
+<h3 id="f2">F2 · Save as version</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td>Split-button menu → <em>Save as version</em>.</td></tr>
+<tr><th>Precondition</th><td>Fewer than 5 saved versions. At 5, F3 runs instead.</td></tr>
+<tr><th>System</th><td>Promotes the current state to the next version number. Optional note field in the dialog. The draft is cleared — its content now lives in the new version.</td></tr>
+<tr><th>Success</th><td>Version picker switches to the new version and the header shows <em>Saved as Version&nbsp;n</em>. Toast <em>T2</em>.</td></tr>
+<tr><th>Failure</th><td>Toast <em>T6</em>. The draft is <strong>not</strong> cleared.</td></tr>
+</tbody>
+</table>
+
+<h3 id="f3">F3 · Save as version at the 5-version limit</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td><em>Save as version</em> while 5 versions exist.</td></tr>
+<tr><th>System</th><td>Dialog <em>D1</em> before anything is written. Naming the version to be deleted in the body text is mandatory — “the oldest” is not specific enough to act on.</td></tr>
+<tr><th>Confirm</th><td>Deletes the oldest version, then proceeds exactly as F2. Toast <em>T3</em>, which names both the created and the deleted version.</td></tr>
+<tr><th>Cancel</th><td>Nothing is written, nothing is deleted. The merchant returns to the editor with the draft intact.</td></tr>
+<tr><th>Edge</th><td>If the oldest version is the one currently applied, block the deletion: keep the dialog open and offer the next-oldest instead. A live storefront must never lose its source version.</td></tr>
+</tbody>
+</table>
+
+<h3 id="f4">F4 · Apply this theme</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td><em>Apply this Theme</em>.</td></tr>
+<tr><th>Precondition</th><td>User has publish rights. The latest version, or the draft, is selected.</td></tr>
+<tr><th>System</th><td>If the draft holds unsaved changes, it is saved as a new version first, so that whatever goes live is always an identifiable numbered version. Then that version is published to the storefront. <span class="chip c-warn">confirm</span></td></tr>
+<tr><th>Success</th><td>Toast <em>T4</em>: “Theme applied successfully — {theme} Version&nbsp;n is now live on your store,” with <em>Open in editor</em> / <em>View store</em>. The <em>Applied</em> chip moves to this theme in the rail.</td></tr>
+<tr><th>Failure</th><td>Toast <em>T7</em>. The previously applied version stays live; nothing partially publishes.</td></tr>
+<tr><th>Edge</th><td>If applying would exceed the 5-version limit through the implicit save, run D1 first.</td></tr>
+</tbody>
+</table>
+
+<h3 id="f5">F5 · Restore a version</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td><em>Restore</em> on a row in the version picker.</td></tr>
+<tr><th>System</th><td>Dialog <em>D2</em> if a draft with unsaved work exists, because restoring overwrites it. Straight through otherwise.</td></tr>
+<tr><th>Result</th><td>The version's tokens are loaded into the draft. The version itself is unchanged and stays in the list. The merchant can now edit and apply normally.</td></tr>
+<tr><th>Success</th><td>Toast <em>T5</em>. Badge recalculates — a restored version may be <em>Customized</em> or <em>Default</em>.</td></tr>
+</tbody>
+</table>
+<h3 id="f6">F6 · Remove a version</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td>Split-button menu → <em>Remove version</em>, acting on the version selected in the picker.</td></tr>
+<tr><th>System</th><td>Dialog <em>D3</em>. Destructive confirm, named version, no “don't ask again”.</td></tr>
+<tr><th>Result</th><td>Version deleted. <strong>Remaining versions keep their original numbers</strong> — they are identifiers, not positions. The list may read 1, 2, 4, 5.</td></tr>
+<tr><th>Blocked</th><td>The applied version cannot be removed. Its menu entry is disabled with the tooltip “Applied version — can't be removed.”</td></tr>
+</tbody>
+</table>
+
+<h3 id="f7">F7 · Reset to default <span class="chip c-new">NEW</span></h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Trigger</th><td>Reset control in the panel header, enabled only while the badge reads <em>Customized</em>.</td></tr>
+<tr><th>System</th><td>Immediate. No dialog. The working draft is replaced with the theme's shipped defaults.</td></tr>
+<tr><th>Result</th><td>Badge → <em>Default</em>. Reset control → disabled. Canvas repaints. Saved versions and the live storefront are untouched.</td></tr>
+<tr><th>Success</th><td>Toast <em>T8</em> with <em>Undo</em>, 10&nbsp;s. Undo restores the exact pre-reset draft.</td></tr>
+<tr><th>Failure</th><td>Toast <em>T6</em>. Draft unchanged.</td></tr>
+<tr><th>Edge</th><td>Reset while a saved version is selected (read-only view) is disabled — the merchant must restore first. Reset acts on drafts only.</td></tr>
+</tbody>
+</table>
+
+<h3 id="f8">F8 · First run</h3>
+<table>
+<tbody>
+<tr><th style="width:22%">Entry</th><td>Arriving from the setup checklist before the shop's theme step is complete.</td></tr>
+<tr><th>Presentation</th><td>The default theme is loaded and treated as Version&nbsp;1. Save and Apply are <strong>disabled until the merchant makes a first change</strong>, with the tooltip “Make a change to save a version.”</td></tr>
+<tr><th>Exit</th><td>The first successful Apply marks <em>Customize your theme</em> complete on the checklist and returns the merchant there, or keeps them in the editor — <span class="chip c-warn">confirm</span>.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ───────────────────────── 10 ───────────────────────── -->
+<section id="dialogs">
+<h2>10 · Dialogs &amp; toasts</h2>
+<p class="h2sub">Full inventory with copy</p>
+
+<h3>Dialogs</h3>
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:8%">ID</th><th style="width:22%">Title</th><th>Body</th><th style="width:24%">Actions</th></tr></thead>
+<tbody>
+<tr><td>D1</td><td>Save as Version {n}</td><td>You've reached the limit of 5 versions. <strong>Version&nbsp;{oldest}</strong> will be deleted if you continue.</td><td>Cancel · <strong>Save anyway</strong></td></tr>
+<tr><td>D2</td><td>Restore Version {n}?</td><td>Your unsaved draft will be replaced with the contents of Version&nbsp;{n}. This can't be undone.</td><td>Cancel · <strong>Restore</strong></td></tr>
+<tr><td>D3</td><td>Remove Version {n}?</td><td>Version&nbsp;{n}, saved by {author} on {date}, will be permanently deleted.</td><td>Cancel · <strong>Remove</strong> (destructive)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Toasts</h3>
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:8%">ID</th><th style="width:12%">Type</th><th>Message</th><th style="width:22%">Action</th></tr></thead>
+<tbody>
+<tr><td>T1</td><td>Success</td><td>Draft saved.</td><td>—</td></tr>
+<tr><td>T2</td><td>Success</td><td>Saved as Version&nbsp;{n}.</td><td>—</td></tr>
+<tr><td>T3</td><td>Success</td><td>Saved as Version&nbsp;{n}. Version&nbsp;{oldest} was removed.</td><td>—</td></tr>
+<tr><td>T4</td><td>Success</td><td>Theme applied successfully. {theme} Version&nbsp;{n} is now live on your store.</td><td>Open in editor · View store</td></tr>
+<tr><td>T5</td><td>Success</td><td>Version&nbsp;{n} restored to your draft.</td><td>—</td></tr>
+<tr><td>T6</td><td>Error</td><td>Couldn't save your changes. Your work is still here — try again.</td><td>Retry</td></tr>
+<tr><td>T7</td><td>Error</td><td>Couldn't apply the theme. Version&nbsp;{previous} is still live on your store.</td><td>Retry</td></tr>
+<tr><td>T8</td><td>Success</td><td>Theme reset to default.</td><td><strong>Undo</strong> (10&nbsp;s)</td></tr>
+<tr><td>T9</td><td>Warning</td><td>Someone else saved a new version of this theme while you were editing.</td><td>Reload</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Toast placement, duration and stacking follow the design-system defaults. Exception: T8 stays for its full 10&nbsp;s because it carries the only route back from a reset.</p>
+</section>
+
+<!-- ───────────────────────── 11 ───────────────────────── -->
+<section id="permissions">
+<h2>11 · Permissions</h2>
+<p class="h2sub">Who can publish</p>
+
+<table>
+<thead><tr><th style="width:18%">Role</th><th style="width:14%">Edit</th><th style="width:16%">Save draft / version</th><th style="width:14%">Apply</th><th>Reset</th></tr></thead>
+<tbody>
+<tr><td>Owner</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Staff</td><td>Yes</td><td>Yes</td><td><strong>No</strong> — button disabled, tooltip “Only an Owner can publish a theme.”</td><td>Yes (drafts only)</td></tr>
+<tr><td>Read-only</td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
+</tbody>
+</table>
+
+<div class="note n-open">
+  <span class="lbl">Open — spec conflict</span>
+  <p>Roles are defined as <strong>tenant-scoped</strong> in §8.12; per-shop role scoping is an extension, not MVP. This table assumes a role that resolves per shop. Confirm which scope publishes a theme before build.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 12 ───────────────────────── -->
+<section id="states">
+<h2>12 · System states</h2>
+<p class="h2sub">Loading, empty, error, concurrency</p>
+
+<table>
+<thead><tr><th style="width:24%">State</th><th>Presentation</th></tr></thead>
+<tbody>
+<tr><td>Initial load</td><td>Toolbar and both side panels render as skeletons; canvas shows the page skeleton. No blocking spinner.</td></tr>
+<tr><td>Saving</td><td>Save button in loading state. The rest of the editor stays interactive; further edits queue into the same save.</td></tr>
+<tr><td>Applying</td><td>Apply button in loading state and the toolbar's destructive actions disable until it resolves.</td></tr>
+<tr><td>Offline / request failed</td><td>T6 or T7. Editor state persists in memory. Never clear the merchant's work on a failed write.</td></tr>
+<tr><td>Concurrent edit</td><td>Another user saves a version while this editor is open → T9. Non-blocking; the merchant chooses when to reload. On save, the server rejects a write against a stale version and the client surfaces T6.</td></tr>
+<tr><td>Theme deleted elsewhere</td><td>Full-panel message with a route back to the applied theme.</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ───────────────────────── 13 ───────────────────────── -->
+<section id="eng">
+<h2>13 · Engineering notes</h2>
+<p class="h2sub">Constraints that change the implementation</p>
+
+<div class="note n-eng">
+  <span class="lbl">Preview cannot be an iframe</span>
+  <p>Tokens reach the DOM as <code>--t-*</code> CSS variables, and CSS variables do not cross an iframe boundary. The admin canvas must run with iframing disabled, which means the <strong>mobile preview is a width-constrained container, not an iframe</strong> — unless tokens are re-injected inside it.</p>
+</div>
+
+<div class="note n-eng">
+  <span class="lbl">Font pointers stay as references</span>
+  <p>A style's slot pointer must be stored as a <code>var()</code> reference string, e.g. <code>--font-h3: var(--t-font-slot-body)</code>, and <strong>never resolved to a literal at merge time</strong>. Resolving it silently breaks store-level rebranding down the merge chain.</p>
+</div>
+
+<div class="note n-eng">
+  <span class="lbl">Fluid sizing</span>
+  <p>The token stores the plain base number; <code>clamp()</code> is composed in the stylesheet — <code>min = base × 0.75</code> for base ≥ 24, interpolated 360→1024px. Storing the clamp string as the token value breaks the merchant's number input. Figma's two modes are the <strong>endpoints of that curve</strong>, not a separate spec; say so in handoff or it comes back as a bug.</p>
+</div>
+
+<div class="note n-eng">
+  <span class="lbl">Derived tokens need enforcement</span>
+  <p>The override type currently permits a partial write to <em>any</em> token, including ones designed as derived. Without an editable-subset type or write validation, “derived” is a convention rather than a rule.</p>
+</div>
+
+<div class="note n-eng">
+  <span class="lbl">Token cost</span>
+  <p>This model adds roughly 29 token keys. Each one costs an edit in the token type, the stylesheet, and every theme's base token set. A nested typography object would need a deep merge instead of the current shallow spread — engineering's call, worth making before the keys land.</p>
+</div>
+</section>
+
+<!-- ───────────────────────── 14 ───────────────────────── -->
+<section id="ac">
+<h2>14 · Acceptance criteria</h2>
+<p class="h2sub">Per area, testable</p>
+
+<h4>Reset to default</h4>
+<ul class="ac">
+  <li>The reset control is enabled only while the theme's status badge reads <em>Customized</em>.</li>
+  <li>Clicking it resets every colour, slot and text style across all pages, with no confirmation dialog.</li>
+  <li>The status badge flips to <em>Default</em> and the control becomes disabled.</li>
+  <li>Saved versions and the live storefront are unchanged by a reset.</li>
+  <li>A toast with an Undo action appears for 10 seconds and Undo restores the pre-reset draft exactly.</li>
+  <li>The control is disabled while a saved version is selected in the version picker.</li>
+</ul>
+
+<h4>Versioning</h4>
+<ul class="ac">
+  <li>A theme holds at most 5 saved versions and exactly one draft.</li>
+  <li>Saving a 6th version shows a dialog naming the version that will be deleted.</li>
+  <li>The applied version can never be deleted, by any path.</li>
+  <li>Remaining versions keep their original numbers after a deletion.</li>
+  <li>Every saved version records number, author and timestamp.</li>
+  <li>Selecting a non-latest version renders the canvas read-only with a banner and a Restore route.</li>
+</ul>
+
+<h4>Apply</h4>
+<ul class="ac">
+  <li>Apply is disabled, with a stated reason, when the state is already live or the user lacks publish rights.</li>
+  <li>What goes live is always an identifiable numbered version.</li>
+  <li>A failed apply leaves the previous version live and nothing partially published.</li>
+  <li>The success toast names the theme and version number and offers a route to the live store.</li>
+</ul>
+</section>
+
+<!-- ───────────────────────── 15 ───────────────────────── -->
+<section id="open">
+<h2>15 · Open questions</h2>
+<p class="h2sub">Blocking build</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:6%">#</th><th>Question</th><th style="width:18%">Owner</th></tr></thead>
+<tbody>
+<tr><td>Q1</td><td><strong>Does Apply implicitly save a version?</strong> §9 F4 assumes yes, so that the live storefront always maps to a numbered version. Confirm — it changes the version count behaviour at the 5-version ceiling.</td><td>Design + FE</td></tr>
+<tr><td>Q2</td><td><strong>Is there a light/dark axis?</strong> The override model is one flat map. If light/dark ships as presets, the colour panel and the data model both change.</td><td>ARC-17 owner</td></tr>
+<tr><td>Q3</td><td><strong>Does the page selector scope settings or only the preview?</strong> This document says preview only. If per-page overrides are ever intended, the panel needs a scope indicator now.</td><td>Design</td></tr>
+<tr><td>Q4</td><td><strong>Which role publishes?</strong> Roles are tenant-scoped in the spec; this surface assumes a shop-resolved role.</td><td>PM + BE</td></tr>
+<tr><td>Q5</td><td><strong>What splits Default from Expert?</strong> §7.4 proposes size in Default, line height / tracking / weight in Expert.</td><td>Design</td></tr>
+<tr><td>Q6</td><td><strong>“Apply this Theme” or “Publish”?</strong> The prototype and the roles matrix both say <em>Publish</em>. One term, everywhere.</td><td>Design + Content</td></tr>
+<tr><td>Q7</td><td><strong>Global vs per-shop.</strong> The board is titled <em>Global setup</em> but no screen shows a shop-level override or the <em>Inherits global</em> badge used elsewhere in shop settings. Is per-shop theme override in scope at all?</td><td>PM</td></tr>
+<tr><td>Q8</td><td><strong>Token naming.</strong> Layout docs use long names, the code uses short ones. Settle before the Figma variables are built.</td><td>Design + FE</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ───────────────────────── 16 ───────────────────────── -->
+<section id="outofscope">
+<h2>16 · Out of scope</h2>
+<p class="h2sub">And what each exclusion costs</p>
+
+<table>
+<thead><tr><th style="width:26%">Excluded</th><th>Consequence accepted</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Unsaved-changes guard</strong></td>
+  <td>A merchant who edits and navigates away — another page, another theme, another tab, or closing the browser — loses the unsaved work with no warning. The draft dot in the themes rail (§5) is the only mitigation. Worth revisiting if support volume shows it.</td>
+</tr>
+<tr>
+  <td><strong>Theme lifecycle</strong></td>
+  <td>No add, duplicate, rename or delete. Merchants work only with the themes shipped to the shop, and the theme name in the panel header is read-only.</td>
+</tr>
+<tr>
+  <td><strong>Rollback after apply</strong></td>
+  <td>Replaced by Reset to default. Returning to a specific earlier state requires Restore on that version (F5), which is one level less discoverable than a dedicated rollback.</td>
+</tr>
+<tr>
+  <td><strong>AI theme setup</strong></td>
+  <td>Present in the prototype and named as the MVP AI surface in the spec, but not documented here. Needs its own flow before build.</td>
+</tr>
+<tr>
+  <td><strong>Semantic colour tokens</strong></td>
+  <td>Success, warning, error, border and surface colours stay system-locked. Merchants cannot break their own error states — a deliberate constraint, not an omission.</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<hr>
+</main>
+</div>
+</body>
+</html>

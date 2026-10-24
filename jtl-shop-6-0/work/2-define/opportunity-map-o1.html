@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opportunity Map — O1 Readiness</title>
+<style>
+  :root{
+    --bg:#ffffff; --surface:#ffffff; --surface-2:#f7f9fa;
+    --ink:#10262e; --ink-2:#3d5a63; --ink-3:#6b858d;
+    --rule:#dde5e8; --rule-strong:#b9c9ce;
+    --outcome:#1f4a58; --outcome-ink:#ffffff;
+    --opp:#dceeff; --opp-bd:#a8daff;
+    --opp-sub:#f2f9ff; --opp-sub-bd:#c9e6fb;
+    --target:#fff4d6; --target-bd:#e0b43c;
+    --sol:#dff3e3; --sol-bd:#a8dcb4;
+    --test:#fff4d6; --test-bd:#f0d98a;
+    --warn:#ffe2e0; --warn-bd:#ffb3ac;
+    --wire:#9db6bd;
+    --shadow:0 1px 2px rgba(16,38,46,.06), 0 4px 14px rgba(16,38,46,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0e1618; --surface:#162124; --surface-2:#131d20;
+      --ink:#e8f1f3; --ink-2:#adc3c8; --ink-3:#7e979d;
+      --rule:#24363a; --rule-strong:#3a5258;
+      --outcome:#2b6275; --outcome-ink:#f2fafc;
+      --opp:#1b3346; --opp-bd:#3c6a92;
+      --opp-sub:#16262f; --opp-sub-bd:#2c4c5e;
+      --target:#3a3115; --target-bd:#9a7f2e;
+      --sol:#1d3524; --sol-bd:#42734f;
+      --test:#3a3115; --test-bd:#8a7333;
+      --warn:#3d2020; --warn-bd:#8a4b47;
+      --wire:#456068;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+      --bg:#0e1618; --surface:#162124; --surface-2:#131d20;
+      --ink:#e8f1f3; --ink-2:#adc3c8; --ink-3:#7e979d;
+      --rule:#24363a; --rule-strong:#3a5258;
+      --outcome:#2b6275; --outcome-ink:#f2fafc;
+      --opp:#1b3346; --opp-bd:#3c6a92;
+      --opp-sub:#16262f; --opp-sub-bd:#2c4c5e;
+      --target:#3a3115; --target-bd:#9a7f2e;
+      --sol:#1d3524; --sol-bd:#42734f;
+      --test:#3a3115; --test-bd:#8a7333;
+      --warn:#3d2020; --warn-bd:#8a4b47;
+      --wire:#456068;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1480px;margin:0 auto;padding:40px 16px 80px}
+
+  h1{font-size:clamp(23px,3vw,36px);font-weight:800;letter-spacing:-.02em;margin:0 0 4px;text-transform:uppercase}
+  h1 em{font-style:italic;font-weight:500;text-transform:none;letter-spacing:-.01em;color:var(--ink-2)}
+  .sub{color:var(--ink-3);font-size:13px;margin:0 0 26px}
+
+  h2.sec{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+    margin:54px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+
+  .caveat{padding:13px 16px;border-left:3px solid var(--warn-bd);background:var(--warn);
+    border-radius:0 8px 8px 0;font-size:13px;color:var(--ink-2);margin:0 0 8px}
+  .caveat strong{color:var(--ink)}
+
+  /* ---- tags ---- */
+  .tag{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+    padding:2px 7px;border-radius:999px;border:1px solid var(--rule-strong);color:var(--ink-3);
+    background:var(--surface);vertical-align:1px}
+  .tag.need{background:var(--test);border-color:var(--test-bd);color:var(--ink-2)}
+  .id{font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--ink-3);display:block;margin-bottom:5px}
+
+  /* ---- tree ---- */
+  .branch{position:relative}
+  .wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  @media (max-width:900px){.wires{display:none}}
+
+  .outcome{background:var(--outcome);color:var(--outcome-ink);border-radius:12px;padding:20px 24px;
+    max-width:760px;margin:0 auto 72px;box-shadow:var(--shadow);position:relative;z-index:1}
+  @media (max-width:900px){.outcome{margin-bottom:28px}}
+  .outcome .id{color:rgba(255,255,255,.62)}
+  .outcome p{margin:0;font-size:17px;font-weight:700;line-height:1.35}
+  .outcome .metric{margin-top:10px;font-size:12.5px;font-weight:400;opacity:.85;line-height:1.5}
+
+  .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:1}
+  @media (max-width:900px){.cols{grid-template-columns:1fr;gap:22px}}
+
+  .opp{background:var(--opp);border:1px solid var(--opp-bd);border-radius:11px;padding:13px 15px;
+    box-shadow:var(--shadow);margin-bottom:10px}
+  .opp.is-target{background:var(--target);border:2px solid var(--target-bd)}
+  .opp p{margin:0;font-size:15px;line-height:1.35;font-weight:800;letter-spacing:-.01em}
+  .sub-opp .voice{display:block;color:var(--ink);font-weight:700;font-size:12.8px;margin:3px 0 5px}
+  .opp .star{float:right;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--ink-2)}
+
+  .sub-opp{background:var(--opp-sub);border:1px solid var(--opp-sub-bd);border-radius:9px;
+    padding:10px 12px;margin-bottom:7px;font-size:12.2px;line-height:1.42;color:var(--ink-2)}
+  .sub-opp b{color:var(--ink)}
+  .ev{display:block;margin-top:6px;font-size:11px;color:var(--ink-3)}
+
+  /* ---- solutions ---- */
+  .solgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:1}
+  @media (max-width:1100px){.solgrid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.solgrid{grid-template-columns:1fr}}
+  .sol{background:var(--sol);border:1px solid var(--sol-bd);border-radius:11px;padding:14px 16px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .sol h3{margin:0 0 8px;font-size:13.5px;font-weight:800;line-height:1.3}
+  .sol p{margin:0 0 9px;font-size:12.3px;line-height:1.45;color:var(--ink-2)}
+  .sol dl{margin:0;font-size:11.8px;line-height:1.45;color:var(--ink-2)}
+  .sol dt{font-weight:800;color:var(--ink);font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-top:8px}
+  .sol dd{margin:2px 0 0}
+  .test{margin-top:auto;padding-top:11px}
+  .testbox{background:var(--test);border:1px solid var(--test-bd);border-radius:8px;padding:9px 11px;
+    font-size:11.6px;line-height:1.42;color:var(--ink-2)}
+  .testbox b{color:var(--ink)}
+  .sol.flagged{border-color:var(--warn-bd);border-width:2px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:20px 0 0}
+  th{text-align:left;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-3);padding:0 10px 7px 0;border-bottom:1px solid var(--rule-strong)}
+  td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+  td:first-child{color:var(--ink);font-weight:700;white-space:nowrap}
+
+  .decide{background:var(--surface-2);border:1px solid var(--rule);border-radius:12px;padding:22px 24px;margin-top:20px}
+  .decide h3{margin:0 0 12px;font-size:15px;font-weight:800}
+  .q{background:var(--outcome);color:var(--outcome-ink);border-radius:9px;padding:14px 18px;
+    font-size:15px;font-weight:700;line-height:1.4;margin:0 0 16px}
+  .fork{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:760px){.fork{grid-template-columns:1fr}}
+  .fork div{border-radius:9px;padding:12px 14px;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+  .fork .a{background:var(--warn);border:1px solid var(--warn-bd)}
+  .fork .b{background:var(--sol);border:1px solid var(--sol-bd)}
+  .fork b{color:var(--ink);display:block;margin-bottom:5px}
+
+  .notlist{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:4px}
+  .notlist.three{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:760px){.notlist,.notlist.three{grid-template-columns:1fr}}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tablewrap table{min-width:620px}
+  code{overflow-wrap:anywhere;font-size:.92em}
+  .not{background:var(--surface);border:1px dashed var(--rule-strong);border-radius:10px;padding:12px 15px;
+    font-size:12.4px;line-height:1.45;color:var(--ink-2)}
+  .not b{color:var(--ink)}
+
+  .srcs{margin-top:44px;padding-top:18px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--ink-3);line-height:1.7}
+  .srcs b{color:var(--ink-2)}
+  .brand{margin-top:28px;text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Opportunity Map <em>O1 · Nothing reaches customers unchecked</em></h1>
+  <p class="sub">Opportunity solution tree · outcome → opportunities → solutions → assumption tests · 19 Sep 2026</p>
+
+  <p class="caveat"><strong>Hypothesised, not researched.</strong> An opportunity solution tree is normally built from interview snapshots. This one is not — discovery has had zero merchant contact, so every opportunity below is derived from the build, the Pflichtenheft and the heuristic audit. <span class="tag">gap</span> means the spec requires something the build does not do — confirmable by reading, no merchant needed. <span class="tag need">need?</span> means it assumes merchants <em>experience</em> that gap as a need, which nothing yet confirms. <strong>Every item here is a gap; none is yet a confirmed need.</strong> Treat this as a map of where to look.</p>
+
+  <p class="caveat" style="border-left-color:var(--opp-bd);background:var(--opp-sub)"><strong>Opportunities are short need phrases in the merchant's terms</strong> — verb first, four to ten words, with a <em>without…</em> qualifier where the condition matters. Reference shape: <em>make local groceries affordable</em> · <em>buy local food without changing their existing shopping routine</em> · <em>help consumers live more sustainably</em>. Two rules keep them honest: <strong>no barrier in the statement</strong> (it goes in the evidence line underneath — that is what separates these from <code>problem-statements.md</code>, which uses <em>[user] needs a way to [goal] because [barrier]</em>), and <strong>no solution in the statement</strong> — <em>“know what's still missing”</em> is an opportunity; <em>“see a readiness checklist”</em> is SOL-2 wearing an opportunity's clothes.</p>
+
+  <h2 class="sec">The tree</h2>
+
+  <div class="branch" id="branch1">
+    <svg class="wires" id="wires1" aria-hidden="true"></svg>
+
+    <div class="outcome" id="n-outcome">
+      <span class="id">Outcome</span>
+      <p>Merchants publish only what they have been shown is ready.</p>
+      <p class="metric"><b>Metric:</b> shops published with a mandatory element unset — target zero · share of publishes preceded by a cleared readiness check.<br>
+      <b>Today:</b> a merchant can complete 5 of 5 checklist items, publish, take real orders, and be non-compliant from the first hour — having been shown nothing.</p>
+    </div>
+
+    <div class="cols">
+      <div class="col">
+        <div class="opp is-target" data-node="A"><span class="star">★ TARGET</span><span class="id">OPP-A</span>
+          <p>Know what's still missing, without working it out myself</p>
+        </div>
+        <div class="sub-opp"><b>A1</b> <span class="tag">gap</span>
+          <span class="voice">Know which legal rules apply to my shop</span>
+          No screen names consent management, legal notice, right of withdrawal or unit pricing.
+          <span class="ev">S1-01 · S1-07 · W3.1 / W3.5 / W3.6 <i>Needs fixing</i> · §9.1 mandates all four for DE</span></div>
+        <div class="sub-opp"><b>A2</b> <span class="tag">gap</span>
+          <span class="voice">Tell required steps from optional ones</span>
+          The checklist styles required and optional identically.
+          <span class="ev">S1-02 · W3.2 <i>Needs fixing</i></span></div>
+        <div class="sub-opp"><b>A3</b> <span class="tag">gap</span>
+          <span class="voice">Get the rules for the market I sell in</span>
+          No country or market is ever collected.
+          <span class="ev">S2-01 · W3.3 / W3.4 · prototype defaults <code>language:"German", taxIncluded:true</code> unasked · §8.12 region group has no control (C1)</span></div>
+      </div>
+
+      <div class="col">
+        <div class="opp" data-node="B"><span class="id">OPP-B</span>
+          <p>See what customers will see, before they see it</p>
+        </div>
+        <div class="sub-opp"><b>B1</b> <span class="tag">gap</span>
+          <span class="voice">Trust the preview is my shop</span>
+          The top bar reads <i>Lili</i> while the preview header renders <i>L'alouette</i>.
+          <span class="ev">S3-08 — five-minute check: prototype data bug, or a real binding error?</span></div>
+        <div class="sub-opp"><b>B2</b> <span class="tag">gap</span>
+          <span class="voice">Check every screen size customers use</span>
+          Two device widths against the four tiers the layout system defines — 360 / 768 / 1024 / 1440, with a nav pattern change at 768.
+          <span class="ev">S3-10 · <code>storefront-layout-system.md</code></span></div>
+        <div class="sub-opp"><b>B3</b> <span class="tag">gap</span>
+          <span class="voice">Tell a draft from the live shop</span>
+          <span class="ev">W2.6 <i>Needs improvement</i></span></div>
+        <div class="sub-opp"><b>B4</b> <span class="tag">gap</span>
+          <span class="voice">See my real products, not stand-ins</span>
+          A merchant cannot judge readiness against flat coloured tiles. This is the P4 dependency.
+          <span class="ev">S3-05</span></div>
+      </div>
+
+      <div class="col">
+        <div class="opp" data-node="C"><span class="id">OPP-C</span>
+          <p>Know what publishing changes, before committing</p>
+        </div>
+        <div class="sub-opp"><b>C1</b> <span class="tag">gap</span>
+          <span class="voice">Tell the public action from the routine ones</span>
+          <i>Apply to storefront</i> shares a toolbar strip with the page selector, device toggles and version picker — differentiated only by fill colour.
+          <span class="ev">S3-11</span></div>
+        <div class="sub-opp"><b>C2</b> <span class="tag">gap</span>
+          <span class="voice">Be told what's about to change</span>
+          No confirmation step.
+          <span class="ev">S3-03</span></div>
+        <div class="sub-opp"><b>C3</b> <span class="tag">gap</span>
+          <span class="voice">Take a publish back</span>
+          A version picker is not undo at the moment of the mistake. <b>Belongs to outcome O2</b> — listed because it shapes this branch, not solved here.
+          <span class="ev">S3-03 · H3.2 / H3.5 <i>Needs fixing</i></span></div>
+        <div class="sub-opp"><b>C4</b> <span class="tag">gap</span>
+          <span class="voice">Know how many storefronts it reaches</span>
+          No "affects 4 storefronts" before a publish lands.
+          <span class="ev">S3-02 · W2.4 <i>Needs fixing</i></span></div>
+      </div>
+
+      <div class="col">
+        <div class="opp" data-node="D"><span class="id">OPP-D</span>
+          <p>Know the change landed, without going to look</p>
+        </div>
+        <div class="sub-opp"><b>D1</b> <span class="tag">gap</span>
+          <span class="voice">See what the publish changed</span>
+          No result summary appears.
+          <span class="ev">H1.4 <i>Needs fixing</i> on the theme editor</span></div>
+        <div class="sub-opp"><b>D2</b> <span class="tag">gap</span>
+          <span class="voice">Know something's happening while I wait</span>
+          No action shows it is working.
+          <span class="ev">H1.2 <i>Needs fixing</i></span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec">Why OPP-A is the target</h2>
+  <div class="notlist three">
+    <div class="not"><b>1 · It is the only branch that fails silently.</b> A merchant notices a wrong preview, an accidental publish, a publish that seems not to land. A's failure surfaces weeks later via a customer complaint or a regulator — by which point the exposure has happened.</div>
+    <div class="not"><b>2 · It carries the only legal consequence.</b> P1 scored 20/20 and is the heuristic audit's own #1 of 32 findings — two methods reaching the same answer independently.</div>
+    <div class="not"><b>3 · It is what the outcome is named after.</b> B, C and D make publishing <i>trustworthy</i>. A makes it <i>correct</i>. Without A, solving B–D produces a merchant who is confidently non-compliant.</div>
+  </div>
+
+  <h2 class="sec">Four competing solutions for OPP-A</h2>
+
+  <div class="branch" id="branch2">
+    <svg class="wires" id="wires2" aria-hidden="true"></svg>
+
+    <div class="outcome" id="n-target" style="background:var(--target);color:var(--ink);border:2px solid var(--target-bd)">
+      <span class="id" style="color:var(--ink-3)">OPP-A ★ target</span>
+      <p>Know what's still missing, without working it out myself</p>
+      <p class="metric" style="opacity:1;color:var(--ink-2)">These compete — different moments, different mechanisms. SOL-1 and SOL-2 can combine; SOL-3 is the only one that addresses the root; SOL-4 is the weakest alone.</p>
+    </div>
+
+    <div class="solgrid">
+      <div class="sol flagged" data-node="S1">
+        <h3>SOL-1 · Pre-flight gate at publish</h3>
+        <p><i>Apply to storefront</i> runs a check, lists what is unmet, and refuses to publish while a mandatory element is unset.</p>
+        <dl>
+          <dt>Also solves</dt><dd>C1 and C2 come free — a gate turns publish into a decision with a confirmation</dd>
+          <dt>Doesn't solve</dt><dd>A merchant reaching the gate with six things unset has still wasted the setup; says nothing about which market's rules apply</dd>
+          <dt>Blocking question</dt><dd>A gate implies the platform vouches for legal readiness. <b>Who carries that liability?</b> W3.6 is rated <i>Needs fixing</i> precisely here. Needs a legal answer before a design one.</dd>
+        </dl>
+        <div class="test"><div class="testbox"><b>AT-1 —</b> assumes merchants accept being blocked rather than working around it. Add the gate to a prototype, run 6 moderated go-live tasks, watch for workaround-seeking. <i>Medium cost.</i></div></div>
+      </div>
+
+      <div class="sol" data-node="S2">
+        <h3>SOL-2 · Non-deferrable checklist items</h3>
+        <p>Extend the five-item checklist with the legal and market steps, marked required, so the gap never opens.</p>
+        <dl>
+          <dt>Also solves</dt><dd>A2 directly — required vs optional becomes a visible property of the list</dd>
+          <dt>Doesn't solve</dt><dd>Completion pressure. The audit's caveat on A6: deferring a domain is sound, deferring a legal requirement is not — but a longer mandatory list is what A1's completion bet is exposed to</dd>
+          <dt>Note</dt><dd>Cheapest of the four, and the one that could ship first</dd>
+        </dl>
+        <div class="test"><div class="testbox"><b>AT-2 —</b> assumes a longer mandatory list doesn't depress completion. Split completion rates by list length in the prototype; compare against A1's ≥60% placeholder. <i>Low cost.</i></div></div>
+      </div>
+
+      <div class="sol" data-node="S3">
+        <h3>SOL-3 · Market-derived requirement set</h3>
+        <p>Collect country/market at shop creation, and derive the required element list — plus currency, tax treatment and locale — from it, per shop.</p>
+        <dl>
+          <dt>Also solves</dt><dd>A3 at the root, C1's currency/region-group divergence (§8.12), part of C2's locale problem, and S2-01's silent German default</dd>
+          <dt>Doesn't solve</dt><dd>Anything alone — it produces a correct list that still needs SOL-1 or SOL-2 to be <i>shown</i></dd>
+          <dt>The real argument</dt><dd>SOL-1 and SOL-2 both assume someone hand-maintains a list of what DE, AT, CH and GB require. <b>SOL-3 is the only version that survives the second market.</b></dd>
+        </dl>
+        <div class="test"><div class="testbox"><b>AT-3 —</b> assumes market can be collected without breaking the three-field moment. Add the field and re-time against A4's 15-minute placeholder. Separately, ask engineering C1's question: <i>what happens when a merchant picks</i> <code>USD</code> <i>on a EUR-priced catalogue?</i> If the answer is "labels change, numbers don't", SOL-3 is mandatory, not optional. <i>Low cost.</i></div></div>
+      </div>
+
+      <div class="sol" data-node="S4">
+        <h3>SOL-4 · Persistent readiness panel</h3>
+        <p>A "what this shop still needs" surface on the Shop Admin shell, updating as configuration lands.</p>
+        <dl>
+          <dt>Also solves</dt><dd>S1-08 — the dashboard being laid out for the returning operator rather than the merchant still in setup</dd>
+          <dt>Doesn't solve</dt><dd>Anything, if merchants don't read it. The solution most dependent on B4 being wrong.</dd>
+        </dl>
+        <div class="test"><div class="testbox"><b>AT-4 —</b> assumes merchants read an ambient panel they were not sent to. Instrument it — or cheaper, infer from B4: merchants who believe compliance is handled have no reason to look. <i>Low cost.</i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th>Acts at</th><th>Blocks the merchant?</th><th>Fixes the root?</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td>SOL-1 Pre-flight gate</td><td>Publish</td><td>Yes, for mandatory items</td><td>No — catches, doesn't prevent</td><td>Medium</td></tr>
+      <tr><td>SOL-2 Checklist items</td><td>Setup</td><td>Yes, by sequence</td><td>No — still a hand-kept list</td><td>Low</td></tr>
+      <tr><td>SOL-3 Market-derived</td><td>Create → everywhere</td><td>No</td><td><b>Yes</b></td><td>High</td></tr>
+      <tr><td>SOL-4 Readiness panel</td><td>Always</td><td>No</td><td>No</td><td>Low</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 class="sec">The one question that decides the shape</h2>
+  <div class="decide">
+    <p class="q">B4, verbatim, to eight merchants: “What makes this shop legally ready to sell in Germany?”</p>
+    <div class="fork">
+      <div class="a"><b>They point at the tax toggle, or say “the platform does it”</b>
+        They will not seek this information out. <b>SOL-4 is dead and SOL-1's gate is required</b> — only an interruption reaches someone who isn't looking.</div>
+      <div class="b"><b>They name consent, legal notice, withdrawal and unit pricing</b>
+        They are already looking. <b>SOL-2 plus SOL-4</b> may be enough, without blocking anyone.</div>
+    </div>
+    <p style="margin:16px 0 0;font-size:13px;color:var(--ink-2)">One question, eight merchants, and it selects between a blocking gate and an ambient panel. Run it before designing either.</p>
+  </div>
+
+  <h2 class="sec">Deliberately not on this tree</h2>
+  <div class="notlist">
+    <div class="not"><b>Undo (C3)</b> — belongs to outcome O2, where undo is the whole point. Listed as an opportunity because it shapes the branch; solving it here would duplicate that work.</div>
+    <div class="not"><b>The AI “Shop Lead”</b> — a readiness check is one of the two shapes A7's assistant could take. Until A7 has an owner and a date, designing the check as an AI surface would pre-decide it.</div>
+    <div class="not"><b>Onboarding and Create</b> — except A3, which has to be here because the market must be collected at creation to be derivable later.</div>
+    <div class="not"><b>Numbers</b> — A1's 60%, A4's 15 minutes: placeholders, both. Real 5.0 baselines are still one of the four things blocking discovery. Present the indicators; leave the targets blank.</div>
+  </div>
+
+  <p class="srcs"><b>Sources.</b>
+    <code>2 define/customer-journey-map.md</code> ·
+    <code>2 define/problem-statements.md</code> (P1, P2, P9) ·
+    <code>5 test/audit-findings-log.md</code> (S1-01, S1-02, S1-07, S1-08, S2-01, S3-02, S3-03, S3-05, S3-08, S3-10, S3-11; W2.4, W2.6, W3.1–W3.6; H1.2, H1.4, H3.2, H3.5) ·
+    <code>2 define/assumptions/</code> (A1, A4, A6, A7, B4, C1, C2) ·
+    <code>2 define/breakpoint grid spacing/storefront-layout-system.md</code> ·
+    <code>1 discovery/JTL_Shop_6.0_Pflichtenheft_EN.md</code> §8.12, §9.1 ·
+    <code>4 design prototype/*.html</code> ·
+    FigJam <code>Z8PycuHpuIAHW2GxOwC5Az</code> → <b>JTBDs</b> (<code>53:436</code>)
+  </p>
+  <p class="brand">JTL-Shop 6.0 · Define stage · opportunity solution tree</p>
+</div>
+
+<script>
+(function(){
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function wire(branchId, svgId, fromId, toSel){
+    var branch = document.getElementById(branchId);
+    var svg    = document.getElementById(svgId);
+    var from   = document.getElementById(fromId);
+    if (!branch || !svg || !from) return function(){};
+
+    return function draw(){
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      if (window.innerWidth <= 900) return;          // stacked layout: no wires
+
+      var b  = branch.getBoundingClientRect();
+      var f  = from.getBoundingClientRect();
+      svg.setAttribute('viewBox', '0 0 ' + Math.round(b.width) + ' ' + Math.round(b.height));
+
+      var x1 = f.left - b.left + f.width / 2;
+      var y1 = f.bottom - b.top;
+
+      branch.querySelectorAll(toSel).forEach(function(el){
+        var t  = el.getBoundingClientRect();
+        var x2 = t.left - b.left + t.width / 2;
+        var y2 = t.top - b.top;
+        if (y2 <= y1) return;
+        // Control-point offset grows with the horizontal span too, so wide
+        // branches still read as curves rather than near-flat diagonals.
+        var d  = Math.max(22, Math.min(64, (y2 - y1) * 0.6 + Math.abs(x2 - x1) * 0.06));
+        var p  = document.createElementNS(NS, 'path');
+        p.setAttribute('d', 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) +
+                       ' C ' + x1.toFixed(1) + ' ' + (y1 + d).toFixed(1) +
+                       ', ' + x2.toFixed(1) + ' ' + (y2 - d).toFixed(1) +
+                       ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1));
+        p.setAttribute('fill', 'none');
+        p.setAttribute('stroke', 'var(--wire)');
+        p.setAttribute('stroke-width', el.classList.contains('is-target') ? '2.6' : '1.6');
+        p.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(p);
+
+        var dot = document.createElementNS(NS, 'circle');
+        dot.setAttribute('cx', x2.toFixed(1));
+        dot.setAttribute('cy', y2.toFixed(1));
+        dot.setAttribute('r', '3.2');
+        dot.setAttribute('fill', 'var(--wire)');
+        svg.appendChild(dot);
+      });
+    };
+  }
+
+  var draws = [
+    wire('branch1', 'wires1', 'n-outcome', '.opp'),
+    wire('branch2', 'wires2', 'n-target',  '.sol')
+  ];
+  function drawAll(){ draws.forEach(function(d){ d(); }); }
+
+  drawAll();
+  window.addEventListener('load', drawAll);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(drawAll);
+    ['branch1','branch2'].forEach(function(id){
+      var el = document.getElementById(id); if (el) ro.observe(el);
+    });
+  } else {
+    window.addEventListener('resize', drawAll);
+  }
+})();
+</script>
+</body>
+</html>

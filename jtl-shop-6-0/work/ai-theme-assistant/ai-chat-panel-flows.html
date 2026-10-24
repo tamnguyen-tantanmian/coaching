@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Chat Panel – Final Flows</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2722F8;--p-600:#1C18C9;--p-50:#EEEDFF;--p-100:#DCDBFE;--s:#E5E7EB;--h:#FB581F;--h-50:#FFF1EB;--h-100:#FFDCCB;
+--ink:#111827;--ink-2:#374151;--muted:#6B7280;--faint:#9CA3AF;--line:#E5E7EB;--bg:#F9FAFB;--page:#EEF0F3;
+--ok:#059669;--ok-50:#ECFDF5;--err:#DC2626;--err-50:#FEF2F2;--warn:#B45309;--warn-50:#FFFBEB}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--page);font-size:14px;line-height:1.5}
+button{font:inherit}
+/* page */
+.top{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+.top h1{font-size:15px;margin:0;font-weight:600}
+.top small{color:var(--muted);font-size:12.5px}
+.nav-k{margin-left:auto;font-size:12px;color:var(--muted)}
+.kbd{font-family:ui-monospace,Menlo,monospace;font-size:11px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:#fff}
+.app{display:grid;grid-template-columns:280px 420px minmax(260px,1fr);gap:24px;padding:20px;max-width:1400px;margin:0 auto;align-items:start}
+@media(max-width:1100px){.app{grid-template-columns:1fr;}.side{order:0}.stage{order:1}.rcol{order:2}}
+/* flow selector */
+.side{display:flex;flex-direction:column;gap:14px}
+.blk{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
+.blk h3{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:6px 8px 6px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.opt:hover{background:var(--bg)}
+.opt input{margin:3px 0 0;accent-color:var(--p)}
+.opt.on{background:var(--p-50)}
+.opt .n{color:var(--muted);font-size:12px;margin-left:auto;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px}
+.d-built{background:var(--ok)}.d-gap{background:var(--h)}.d-concept{background:var(--err)}.d-confirm{background:#9CA3AF}.d-ai{background:var(--p)}
+/* stage */
+.stage{display:flex;flex-direction:column;align-items:center;gap:10px}
+.slot{width:384px;max-width:100%;height:760px;background:linear-gradient(180deg,#FFF1EB 0%,#CDD9FF 100%);border-radius:0;padding:12px}
+.nav{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.nav button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;cursor:pointer}
+/* info */
+.rcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+.info{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.info .fl{font-size:12px;color:var(--muted)}
+.info h2{margin:2px 0 8px;font-size:19px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 10px}
+.c-built{background:var(--ok-50);color:var(--ok)}.c-gap{background:var(--h-50);color:#B13A0C}.c-concept{background:var(--err-50);color:var(--err)}.c-confirm{background:var(--bg);color:var(--muted);border:1px solid var(--line)}.c-ai{background:var(--p-50);color:var(--p)}
+.info dl{margin:14px 0 0}
+.info dt{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:12px}
+.info dd{margin:3px 0 0;font-size:13.5px;color:var(--ink-2)}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);padding:6px 10px 8px}
+.legend span{display:flex;gap:8px;align-items:center}
+.legend .dot{margin:0}
+
+/* ================= CHAT PANEL (replaces config panel) ================= */
+.pn{height:100%;background:#fff;border-radius:6px;box-shadow:0 0 0 1px rgba(17,24,39,.06);display:flex;flex-direction:column;overflow:hidden;position:relative;font-size:13.5px}
+.pn::after{display:none;content:"";position:absolute;left:0;right:0;bottom:0;height:160px;pointer-events:none;background:radial-gradient(120% 90% at 50% 120%,rgba(39,34,248,.07),rgba(251,88,31,.04) 45%,transparent 70%)}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:14px 12px 10px 16px;gap:8px}
+.hd-l>.av{display:none}
+.hd-l{display:flex;align-items:center;gap:9px;min-width:0}
+.hd-l b{display:block;font-size:16px;font-weight:600;color:#0F172A}
+.hd-l>div{min-width:0}.hd-l small{display:block;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:28px;height:28px;border-radius:9px;background:var(--p);color:#fff;display:grid;place-items:center;flex:none}
+.av.sm{width:22px;height:22px;border-radius:7px}
+.hd-r{display:flex;gap:6px}
+.ib{width:30px;height:30px;border-radius:6px;border:0;background:none;display:grid;place-items:center;color:var(--ink-2);cursor:pointer;box-shadow:none}
+.pill-b{white-space:nowrap;flex:none;height:34px;border-radius:99px;border:1px solid var(--line);background:#fff;padding:0 12px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--ink-2);box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.banner{margin:0 12px 8px;border-radius:12px;padding:9px 11px;font-size:12.5px;display:flex;gap:8px;align-items:flex-start}
+.banner.err{background:var(--err-50);color:#7F1D1D;border:1px solid #FECACA}
+.banner .b{margin-left:auto;flex:none}
+.bd{flex:1;overflow:hidden;padding:6px 16px 14px;display:flex;flex-direction:column;gap:14px;justify-content:flex-end;position:relative;z-index:1}
+.bd.center{justify-content:center}
+.empty{text-align:center;padding:0 6px}
+.empty .ico{width:56px;height:56px;border-radius:50%;background:#F3F4F6;color:#0F172A;display:grid;place-items:center;margin:0 auto 14px}
+.empty h4{margin:0 0 6px;font-size:18px;font-weight:700;color:#0F172A;letter-spacing:-.01em}
+.empty p{margin:0 0 16px;color:var(--muted);font-size:13px}
+.ex{display:flex;flex-direction:column;gap:6px;align-items:center}
+.ex{gap:8px!important}
+.ex button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;color:#0F172A}
+.ex.dis button{color:var(--faint);background:var(--bg);cursor:not-allowed}
+.load{display:flex;gap:6px;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--p);animation:sp 0.9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* messages */
+.u{align-self:flex-end;max-width:85%;background:#F1F2F4;border-radius:16px 16px 4px 16px;padding:8px 12px}
+.u .ths{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap;justify-content:flex-end}
+.a{display:flex;gap:9px;align-items:flex-start}
+.a .c{flex:1;min-width:0;color:var(--ink-2)}
+.dots{display:inline-flex;gap:4px;padding:8px 0}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--faint);animation:dt 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dt{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.prog{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted);padding-top:3px}
+.prog span{display:flex;gap:7px;align-items:center}
+.prog .ok{color:var(--ok)}
+.raw{display:inline-flex;gap:6px;align-items:center;background:#F1F2F4;border-radius:12px;padding:7px 10px;font-size:12.5px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.card{border:1px solid var(--line);border-radius:14px;margin-top:8px;overflow:hidden;background:#fff}
+.card .ch{padding:9px 12px;font-size:12px;font-weight:600;display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #F3F4F6;font-size:12.5px}
+.row:last-of-type{border-bottom:0}
+.row .lb{flex:1}
+.sw{width:16px;height:16px;border-radius:5px;border:1px solid rgba(0,0,0,.1);flex:none}
+.val{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--muted);display:inline-flex;gap:5px;align-items:center}
+.arr{color:var(--faint)}
+.cf{padding:9px 12px;background:var(--bg);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cf .note{font-size:11.5px;color:var(--muted);margin-right:auto}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--ink);display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.btn.pr{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.dis{background:var(--s);border-color:var(--s);color:var(--faint);cursor:not-allowed}
+.btn.gh{border-color:transparent;background:none;color:var(--muted)}
+.badges{display:flex;gap:5px;flex-wrap:wrap;padding:8px 12px 0}
+.bdg{font-size:10.5px;font-weight:600;border-radius:99px;padding:1px 8px;background:var(--bg);border:1px solid var(--line);color:var(--ink-2)}
+.qtx{padding:8px 12px 4px;font-size:13px;color:var(--ink-2)}
+.pills{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px 12px}
+.pills button{border:1px solid var(--p-100);background:var(--p-50);color:var(--p);border-radius:99px;padding:5px 11px;font-size:12.5px;font-weight:500}
+.pills.dis button{opacity:.45}
+.ans{padding:0 12px 12px;font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.errb{background:var(--err-50);border:1px solid #FECACA;border-radius:14px;padding:10px 12px;color:#7F1D1D;font-size:12.5px}
+.errb b{display:block;color:#991B1B;margin-bottom:2px;font-size:13px}
+.errb .acts{display:flex;gap:6px;margin-top:8px}
+.info-c{border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:10px 12px;font-size:12.5px;color:var(--ink-2)}
+.info-c b{display:block;color:var(--ink);font-size:13px;margin-bottom:2px}
+.ok-c{border:1px solid #A7F3D0;background:var(--ok-50);border-radius:12px;padding:8px 11px;font-size:12px;color:#065F46;margin-top:8px;display:flex;gap:7px;align-items:flex-start}
+.prop-tag{font-size:10px;font-weight:700;letter-spacing:.04em;color:#B13A0C;background:var(--h-50);border:1px dashed var(--h);border-radius:6px;padding:1px 6px;margin-left:auto}
+/* composer (Shopify-like pill) */
+.cw{padding:0 12px 12px;position:relative;z-index:1}
+.notice{margin:0 0 8px;background:var(--warn-50);border:1px solid #FDE68A;border-radius:12px;padding:8px 10px;font-size:12px;color:#78350F}
+.notice ul{margin:3px 0 0;padding-left:16px}
+.cmp{border:1px solid var(--line);border-radius:6px;background:#fff;padding:6px}
+.cmp.f{border-color:var(--p);box-shadow:none}
+.cmp.dis{background:var(--bg)}
+.ths{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.th{width:48px;height:48px;border-radius:10px;position:relative;overflow:hidden;border:1px solid var(--line);flex:none}
+.th .lbl{position:absolute;left:0;right:0;bottom:0;font-size:8.5px;font-weight:600;color:#fff;background:rgba(17,24,39,.55);text-align:center;padding:1px 0}
+.th.sm{width:40px;height:40px}
+.th.skel{background:linear-gradient(90deg,#F3F4F6,#E5E7EB,#F3F4F6);background-size:200% 100%;animation:sk 1.2s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.th.err{background:var(--err-50);border-color:#FECACA;display:grid;place-items:center;color:var(--err)}
+.th .x{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(17,24,39,.75);color:#fff;display:grid;place-items:center;font-size:10px}
+.th.ph{background:var(--bg);display:grid;place-items:center;color:var(--faint)}
+.in{display:flex;align-items:center;gap:6px}
+.tx{flex:1;min-height:34px;padding:7px 0;font-size:13.5px;color:var(--ink)}
+.tx.ph{color:var(--faint)}
+.cur::after{content:"";display:inline-block;width:1.5px;height:15px;background:var(--ink);margin-left:1px;vertical-align:-3px;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.ci{width:34px;height:34px;border-radius:50%;border:0;background:none;display:grid;place-items:center;color:var(--ink-2)}
+.send{width:36px;height:36px;border-radius:6px;border:0;display:grid;place-items:center;background:var(--p);color:#fff}
+.cmp.dis .send:not(.stop){background:var(--s);color:var(--faint)}
+.send.on{background:var(--p);color:#fff}
+.send.stop{background:var(--p);color:#fff}
+.hint{font-size:11.5px;color:var(--muted);margin:7px 4px 0;display:flex;gap:6px;align-items:center}
+.hint.warn{color:var(--warn)}
+.tag-new{font-size:9.5px;font-weight:700;color:#B13A0C;background:var(--h-50);border:1px dashed var(--h);border-radius:5px;padding:0 5px}
+/* scope badges = design-system Badge: Theme settings → Info, Theme builder → Warning */
+.sc{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;border-radius:99px;padding:0 8px;line-height:16px;border:1px solid transparent;white-space:nowrap}
+.sc.theme{background:#EFF6FF;border-color:#D6E4FD;color:#1D4ED8}
+.sc.page{background:#FFFBEB;border-color:#F6E3C1;color:#B45309}
+.sc a{color:inherit!important}
+.grp{display:flex;align-items:center;gap:8px;padding:7px 12px 5px;font-size:11px;color:var(--muted);background:#FCFCFD;border-bottom:1px solid #F3F4F6}
+.scope-intro{display:flex;flex-direction:column;gap:6px;align-items:center;margin:0 0 16px}
+.scope-intro .r{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.tgl{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:4px 6px 4px 12px;margin-left:16px}
+.tgl button{border:0;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;background:none;color:var(--muted)}
+.tgl button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.qstep{margin-left:auto;font-size:11px;font-weight:600;color:var(--p);background:var(--p-50);border-radius:99px;padding:1px 8px}
+.qprog{display:flex;gap:4px;padding:8px 12px 0}
+.qprog i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.qprog i.d{background:var(--p)}.qprog i.c{background:var(--p-100)}
+.qdone{padding:6px 12px 0;display:flex;flex-direction:column;gap:4px}
+.qdone div{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.qdone b{color:var(--ink-2);font-weight:600;margin-left:auto}
+.qdone .ok{color:var(--ok);display:inline-flex}
+.qdone a{color:var(--p);font-size:11.5px;text-decoration:none}
+.pills .cp{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--ink);border-color:var(--line)}
+.pills .cp i{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.pills .sel{border-color:var(--p);box-shadow:0 0 0 2px var(--p-50)}
+.or{display:flex;align-items:center;gap:8px;padding:0 12px;font-size:11px;color:var(--faint)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.hex{display:flex;align-items:center;gap:8px;margin:8px 12px 4px;border:1px solid var(--line);border-radius:10px;padding:5px 5px 5px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+.hex.f{border-color:var(--p);box-shadow:0 0 0 3px var(--p-50)}
+.hex.bad{border-color:var(--err);box-shadow:0 0 0 3px var(--err-50)}
+.hex .hs{width:20px;height:20px;border-radius:6px;border:1px solid rgba(0,0,0,.1);background:repeating-conic-gradient(#F3F4F6 0 25%,#fff 0 50%) 50%/8px 8px;flex:none}
+.hex .hv{flex:1;color:var(--ink)}
+.hex .hv.ph{color:var(--faint)}
+.hex .btn{font-family:Inter,sans-serif;padding:5px 10px}
+.hexmsg{padding:0 12px 10px;font-size:11.5px;color:var(--muted)}
+.hexmsg.bad{color:var(--err)}
+.qsum{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:8px 11px;font-size:12px;color:var(--ink-2)}
+.qsum b{display:block;font-size:12.5px;margin-bottom:4px;color:var(--ink)}
+.qsum ol{margin:0;padding-left:16px}
+.d-prop{background:#7C3AED}.c-prop{background:#F3E8FF;color:#6D28D9}
+.model{padding:4px 10px 8px;font-size:12px;color:var(--ink-2)}
+.model ol{margin:4px 0 0;padding-left:16px;display:flex;flex-direction:column;gap:4px}
+.model b{color:var(--ink)}
+.links{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.links a{color:var(--p);text-decoration:none;border:1px solid var(--p-100);background:var(--p-50);border-radius:99px;padding:1px 9px;font-weight:500}
+.handoff{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff;margin-top:8px}
+.handoff b{display:flex;gap:6px;align-items:center;font-size:13px;margin-bottom:3px}
+.handoff p{margin:0 0 8px;font-size:12.5px;color:var(--ink-2)}
+.handoff small{display:block;margin-top:6px;font-size:11.5px;color:var(--muted)}
+.divider{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--faint)}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.btn.out{border-color:var(--ink);color:var(--ink)}
+
+.vseg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px;margin-left:8px}
+.vseg button{border:0;background:none;border-radius:99px;padding:4px 12px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.vseg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+body.uf .app{display:none} body:not(.uf) .ufv{display:none}
+body.uf .tgl,body.uf .nav-k{display:none}
+.ufv{display:grid;grid-template-columns:300px 1fr;gap:24px;padding:20px;max-width:1500px;margin:0 auto;align-items:start}
+@media(max-width:1000px){.ufv{grid-template-columns:1fr}}
+.ufl{position:sticky;top:68px;display:flex;flex-direction:column;gap:14px}
+.ufl .opt small{display:block;color:var(--muted);font-size:11.5px}
+.ufmain{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;min-width:0;overflow-x:auto}
+.ufmain h2{margin:0 0 4px;font-size:20px}
+.ufmain .lead{margin:0 0 6px;color:var(--ink-2);font-size:13.5px;max-width:900px}
+.ufmain .rule{margin:10px 0 18px;padding:9px 12px;border-radius:10px;background:#F3E8FF;color:#4C1D95;font-size:12.5px;max-width:900px}
+.ufl .lg{display:flex;flex-direction:column;gap:6px;padding:6px 10px 10px;font-size:12px;color:var(--ink-2)}
+.ufl .lg span{display:flex;gap:8px;align-items:center}
+.ufl .lg i{width:22px;height:12px;border-radius:4px;flex:none}
+/* flowchart */
+.fc{display:flex;flex-direction:column;align-items:center;min-width:max-content;padding-bottom:6px}
+.nd{position:relative;border-radius:10px;padding:8px 12px;font-size:12.5px;line-height:1.4;max-width:215px;min-width:140px;text-align:center;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+.nd .k{display:block;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.65;margin-bottom:1px}
+.nd.start{background:var(--ink);color:#fff;border-color:var(--ink);border-radius:99px}
+.nd.user{background:#fff;border-color:#CBD5E1}
+.nd.ai{background:var(--p-50);border-color:var(--p-100);color:#1E1B7A}
+.nd.sys{background:var(--bg);border-style:dashed;color:var(--ink-2)}
+.nd.ui{background:#fff;border-color:var(--p);color:var(--p)}
+.nd.end{background:var(--ok-50);border-color:#6EE7B7;color:#065F46;border-radius:99px}
+.nd.stop{background:var(--err-50);border-color:#FECACA;color:#991B1B;border-radius:99px}
+.nd.q{background:var(--warn-50);border-color:#F59E0B;color:#78350F;transform:none;border-radius:4px;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%);padding:10px 26px;font-weight:600}
+.nd .ref{display:inline-block;margin-top:5px;font-size:10.5px;font-weight:600;color:var(--p);background:#fff;border:1px solid var(--p-100);border-radius:99px;padding:0 7px;cursor:pointer;text-decoration:none}
+.nd .open{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;color:var(--err);border:1px dashed var(--err);border-radius:5px;padding:0 5px;background:#fff}
+.nd .pr{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;color:#6D28D9;border:1px dashed #7C3AED;border-radius:5px;padding:0 5px;background:#fff}
+.ln{width:2px;height:16px;background:#CBD5E1;position:relative}
+.ln.arrow::after{content:"";position:absolute;left:-4px;bottom:-1px;border:5px solid transparent;border-top:6px solid #CBD5E1;border-bottom:0}
+.brs{display:flex;gap:12px;align-items:flex-start;position:relative;padding-top:16px}
+.brs::before{content:"";position:absolute;top:0;height:2px;background:#CBD5E1;left:var(--l,0);right:var(--r,0)}
+.path{display:flex;flex-direction:column;align-items:center;position:relative}
+.path::before{content:"";width:2px;height:16px;background:#CBD5E1;position:absolute;top:-16px;left:50%}
+.pl{font-size:11px;font-weight:700;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:99px;padding:1px 9px;margin-bottom:0;white-space:nowrap}
+.brs.join{align-items:stretch;padding-bottom:2px}
+.brs.join::after{content:"";position:absolute;bottom:0;height:2px;background:#CBD5E1;left:var(--l,0);right:var(--r,0)}
+.fill{flex:1;width:2px;min-height:12px;background:#CBD5E1}
+.loop{font-size:11px;color:var(--muted);margin-top:6px;font-style:italic;max-width:200px;text-align:center}
+.d-final{background:#7C3AED}.c-final{background:#F3E8FF;color:#6D28D9}
+.d-ui{background:#0EA5E9}.c-ui{background:#E0F2FE;color:#0369A1}
+.imem{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.03em;color:#6D28D9;background:#F3E8FF;border-radius:99px;padding:1px 8px;white-space:nowrap}
+.grp a,.lk{color:var(--p);text-decoration:none;font-weight:600}
+.grp a:hover,.lk:hover{text-decoration:underline}
+.prev{display:flex;gap:6px;align-items:center;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.prev .ok{color:var(--ok);display:inline-flex}
+.rq{border:1.5px solid var(--p);border-radius:14px;margin-top:10px;background:#fff;overflow:hidden;box-shadow:0 0 0 3px var(--p-50)}
+.rq.done{border-color:var(--line);box-shadow:none}
+.rq-h{display:flex;align-items:center;gap:7px;padding:9px 12px 0;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--p)}
+.rq.done .rq-h{color:var(--muted)}
+.rq-t{padding:4px 12px 0;font-size:13.5px;font-weight:600;color:var(--ink)}
+.rq-d{padding:2px 12px 0;font-size:12px;color:var(--muted)}
+.rq-b{display:flex;gap:6px;flex-wrap:nowrap;padding:10px 12px 12px}
+.rq-b .btn{white-space:nowrap}
+.rq-s{display:flex;gap:7px;align-items:flex-start;padding:8px 12px 12px;font-size:12.5px;color:var(--ink-2)}
+.rq-s .ok{color:var(--ok);display:inline-flex;margin-top:2px}
+.rq-s .no{color:var(--muted);display:inline-flex;margin-top:2px}
+.chain{list-style:none;margin:0;padding:8px 12px 12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink-2)}
+.chain li{display:flex;gap:8px;align-items:center}
+.chain .n{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:10px;color:var(--faint);flex:none}
+.chain li.ok .n{border-color:var(--ok);background:var(--ok-50);color:var(--ok)}
+.chain li.run .n{border:2px solid var(--line);border-top-color:var(--p);animation:sp .9s linear infinite}
+.chain li.bad{color:var(--err)}.chain li.bad .n{border-color:var(--err);background:var(--err-50);color:var(--err)}
+.chain li.wait{color:var(--faint)}
+.todo{font-size:9.5px;font-weight:700;color:#0369A1;background:#E0F2FE;border:1px dashed #0EA5E9;border-radius:5px;padding:0 5px;white-space:nowrap}
+.nd .ui-q{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;color:#0369A1;border:1px dashed #0EA5E9;border-radius:5px;padding:0 5px;background:#fff}
+.fs{padding:4px 10px 8px;font-size:12px;color:var(--ink-2)}
+.fs div{display:flex;gap:8px;padding:3px 0}
+.fs b{color:#6D28D9;flex:none;width:22px}
+.pills.sel1 button{cursor:pointer}
+.pills.sel1 button.sel{background:var(--p);border-color:var(--p);color:#fff;box-shadow:0 0 0 2px var(--p-50)}
+.pills.sel1 button.cp.sel i{border-color:#fff}
+.q1x{margin:2px 12px 4px}
+.q1in{flex:1;border:0;outline:0;background:none;font:inherit;font-size:12.5px;color:var(--ink);min-width:0;padding:2px 0}
+.q1in.mono{font-family:ui-monospace,Menlo,monospace}
+.q1sel{width:100%;border:1px solid var(--p);box-shadow:0 0 0 3px var(--p-50);border-radius:10px;padding:7px 8px;font:inherit;font-size:12.5px;background:#fff;color:var(--ink)}
+.q1f{display:flex;justify-content:flex-end;padding:4px 12px 12px}
+.atag{margin-left:auto;display:inline-flex;gap:4px;align-items:center;font-size:11px;font-weight:600;color:var(--ok);background:var(--ok-50);border-radius:99px;padding:1px 8px}
+.cshd{display:flex;align-items:center;justify-content:space-between;position:relative}
+.lgpop{position:relative;margin-right:6px}
+.lgpop summary{list-style:none;cursor:pointer;display:inline-flex;gap:5px;align-items:center;font-size:11.5px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 9px;background:#fff}
+.lgpop summary::-webkit-details-marker{display:none}
+.lgpop[open] summary{color:var(--ink);border-color:#CBD5E1}
+.lgpop .legend{position:absolute;right:0;top:calc(100% + 6px);z-index:10;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(17,24,39,.12);padding:10px 12px;white-space:nowrap}
+.cctrl{margin:2px 8px 8px 34px;padding:8px 10px 10px;border-left:2px solid var(--p-100)}
+.cctrl .cl,.cctrl>div[style]{font-size:11px!important;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.cctrl .vseg{margin-left:0!important}
+body.e2e .app,body.e2e .ufv{display:none} body:not(.e2e) .e2ev{display:none}
+body.e2e .tgl,body.e2e .nav-k{display:none}
+.e2ev{padding:20px;max-width:1560px;margin:0 auto}
+.e2emain{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.e2top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.e2top h2{margin:0 0 4px;font-size:20px}.e2top .lead{margin:0;color:var(--ink-2);font-size:13.5px;max-width:820px}
+.e2row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:18px 6px;margin-top:18px}
+.e2s{width:236px;display:flex;flex-direction:column;gap:6px}
+.e2ph{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.e2h{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.35;min-height:36px}
+.e2n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--p);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+.e2s.end .e2n{background:var(--ok)}.e2s.br .e2n{background:var(--muted)}
+.mini{width:236px;height:467px;overflow:hidden;border-radius:6px;box-shadow:0 0 0 1px var(--line);pointer-events:none}
+.mslot{width:384px;height:760px;transform:scale(.6146);transform-origin:0 0;background:linear-gradient(180deg,#FFF1EB 0%,#CDD9FF 100%);padding:12px}
+.e2s p{margin:0;font-size:12px;color:var(--ink-2)}
+.e2loop{font-size:11.5px;color:#6D28D9;font-weight:600}
+.e2a{align-self:center;color:#94A3B8;font-size:22px;padding:0 2px}
+.e2s .ref{align-self:flex-start}
+.e2sub{margin:28px 0 0;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.e2s .ref{display:inline-block;font-size:11px;font-weight:600;color:var(--p);background:var(--p-50);border:1px solid var(--p-100);border-radius:99px;padding:1px 9px;cursor:pointer;text-decoration:none}
+.e2acts{display:flex;gap:8px;align-items:center}
+.e2l{display:grid;grid-template-columns:384px minmax(280px,440px);gap:28px;margin-top:20px;align-items:start;justify-content:center}
+@media(max-width:900px){.e2l{grid-template-columns:1fr}}
+.e2in{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:13.5px;color:var(--ink);min-height:34px}
+.cmp:focus-within{border-color:var(--p)}
+.e2t ol{list-style:none;margin:0 0 6px;padding:2px 6px 4px;display:flex;flex-direction:column;gap:2px}
+.e2t li{display:flex;gap:10px;align-items:flex-start;padding:7px 8px;border-radius:10px;font-size:13px;color:var(--muted)}
+.e2t li b{font-weight:500}
+.e2t li .e2n{background:#fff;border:1.5px solid var(--line);color:var(--faint)}
+.e2t li.done{color:var(--ink-2)}.e2t li.done .e2n{background:var(--ok-50);border-color:var(--ok);color:var(--ok)}
+.e2t li.cur{background:var(--p-50);color:var(--ink)}.e2t li.cur b{font-weight:600}.e2t li.cur .e2n{background:var(--p);border-color:var(--p);color:#fff}
+.e2t li.cur.last .e2n{background:var(--ok);border-color:var(--ok)}
+.e2t li p{margin:3px 0 6px;font-size:12px;color:var(--ink-2)}
+.e2t li .e2loop{margin:0 0 6px}
+.e2t .ref{display:inline-block;font-size:11px;font-weight:600;color:var(--p);background:#fff;border:1px solid var(--p-100);border-radius:99px;padding:1px 9px;cursor:pointer}
+.grp .sc.page{margin-right:2px}
+.pgn{font-weight:600;color:var(--ink-2)}
+.pglk{color:#2722F8!important;font-weight:600;font-size:12px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.pglk:hover,.pglk.on{text-decoration:underline}
+.pvrow{flex-wrap:wrap;justify-content:space-between;gap:4px 10px}
+.pvst{display:inline-flex;gap:6px;align-items:center}
+.pvl{display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bd.scroll{overflow-y:auto;justify-content:flex-start}
+.bd.scroll>:first-child{margin-top:auto}
+.pgacc{cursor:pointer;user-select:none}
+.pgacc:hover{background:#F3F4F6}
+.pgacc .chev{width:12px;color:var(--muted);font-size:11px}
+.pgacc .cnt{margin-left:auto;white-space:nowrap;font-size:11px;color:var(--muted);font-weight:600}
+.bd.scroll .card{overflow:clip}
+.bd.scroll .card>.ch{position:sticky;top:0;z-index:3;background:#fff;box-shadow:0 1px 0 var(--line)}
+.bd.scroll .card .gwrap.open>.grp{position:sticky;top:37px;z-index:2}
+.gtog{cursor:pointer;user-select:none}
+.gtog:hover{background:#F3F4F6}
+.gtog .chev{width:12px;flex:none;color:var(--muted);font-size:11px;display:inline-block;transition:transform .15s}
+.gwrap:not(.open) .chev{transform:rotate(-90deg)}
+.gwrap:not(.open) .grows{display:none}
+.gtog .cnt{margin-left:auto;white-space:nowrap;font-size:11px;font-weight:600;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="top"><h1>AI chat panel — flows</h1><small>Global AI assistant · final scope (R1–R3, S1–S5). Chat replaces the config panel.</small><span class="tgl">Scope labels<button data-s="1">On</button><button data-s="0">Off</button></span><span class="vseg"><button data-v="cases" class="on">Cases</button><button data-v="uf">User flows</button><button data-v="e2e">End-to-end prototype</button></span><span class="nav-k"><span class="kbd">↑</span><span class="kbd">↓</span> case · <span class="kbd">←</span><span class="kbd">→</span> flow</span></div>
+<div class="app">
+  <aside class="side">
+    <div class="blk"><h3>Flow</h3><div id="flows"></div></div>
+    <div class="blk"><h3>Final scope</h3><div class="fs">
+      <div><b>R1</b><span><b style="width:auto;display:inline">In memory</b> — the AI writes every change into a temporary FE copy. Lost on reload.</span></div>
+      <div><b>R2</b><span><b style="width:auto;display:inline">Request allow permission</b> at the end of the session.<br>Theme settings: Apply · Save as draft · Dismiss<br>Theme builder: Apply · Dismiss → “Do you want to publish it?” Publish · Deny<br>Apply = Save as version › Apply this theme › Save as version (page builder, if any)</span></div>
+      <div><b>R3</b><span>Chat is disabled while a session runs.</span></div>
+    </div></div>
+  </aside>
+  <div class="stage"><div class="slot" id="slot"></div><div class="nav"><button id="prev">← Prev</button><span id="pos"></span><button id="next">Next →</button></div></div>
+  <div class="rcol">
+    <div class="blk"><div class="cshd"><h3>Case</h3><details class="lgpop"><summary><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Legend</summary><div class="legend"><span><i class="dot d-final"></i>Final scope</span><span><i class="dot d-ui"></i>UI mission scope — still to design</span><span><i class="dot d-built"></i>Built — as in the current build</span><span><i class="dot d-gap"></i>Gap — proposed design</span><span><i class="dot d-concept"></i>Concept — required, not in build</span><span><i class="dot d-ai"></i>AI text — only what the AI writes</span><span><i class="dot d-confirm"></i>Needs confirmation</span></div></details></div><div id="cases"></div>
+    </div>
+    <section class="info" id="info"></section>
+  </div>
+</div>
+<div class="ufv"><aside class="ufl"><div class="blk"><h3>User flows</h3><div id="uflist"></div></div>
+<div class="blk"><h3>Legend</h3><div class="lg"><span><i style="background:var(--ink)"></i>Start</span><span><i style="background:#fff;border:1.5px solid #CBD5E1"></i>Merchant action</span><span><i style="background:var(--p-50);border:1.5px solid var(--p-100)"></i>AI</span><span><i style="background:var(--bg);border:1.5px dashed #CBD5E1"></i>System</span><span><i style="background:#fff;border:1.5px solid var(--p)"></i>Screen state (click → case)</span><span><i style="background:var(--warn-50);border:1.5px solid #F59E0B"></i>Decision</span><span><i style="background:var(--ok-50);border:1.5px solid #6EE7B7"></i>End</span><span><i style="background:#fff;border:1.5px dashed #7C3AED"></i>Final scope rule</span><span><i style="background:#fff;border:1.5px dashed #0EA5E9"></i>UI mission scope (U1–U12)</span></div></div></aside>
+<section class="ufmain" id="ufmain"></section></div>
+<div class="e2ev"><section class="e2emain" id="e2e"></section></div>
+<script>
+const ic=(d,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const I={
+ spark:ic('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',15),
+ sparkL:ic('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',24),
+ x:ic('<path d="M18 6L6 18M6 6l12 12"/>',16),
+ end:ic('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',15),
+ plus:ic('<path d="M12 5v14M5 12h14"/>',18),
+ send:ic('<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',16),
+ stop:'<svg width="12" height="12" viewBox="0 0 12 12"><rect width="12" height="12" rx="2" fill="currentColor"/></svg>',
+ warn:ic('<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/>',15),
+ check:ic('<path d="M5 12l5 5L20 7"/>',14),
+ retry:ic('<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',13),
+ wrench:ic('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',13),
+ info:ic('<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>',15),
+ img:ic('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/>',16),
+ ban:ic('<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',15),
+};
+const IMG=['linear-gradient(135deg,#2722F8,#7A77FF)','linear-gradient(135deg,#FB581F,#FFB08F)','linear-gradient(135deg,#0F766E,#5EEAD4)','linear-gradient(135deg,#111827,#6B7280)','linear-gradient(135deg,#E5E7EB,#F9FAFB)','linear-gradient(135deg,#B45309,#FCD34D)'];
+/* ---------- panel parts ---------- */
+const head=(o={})=>`<div class="hd"><div class="hd-l"><span class="av">${I.spark}</span><div><b>Theme assistant</b></div></div><div class="hd-r">${o.end?`<button class="pill-b" title="End chat">${I.end}End chat</button>`:''}<button class="ib" title="Close — back to settings">${I.x}</button></div></div>`;
+const BLD=(pg='Home')=>`Theme builder · ${pg} · Indigo V1`;
+const emptyB=(dis)=>`<div class="bd center"><div class="empty"><div class="ico">${I.sparkL}</div><h4>Chat with the theme assistant</h4><p>Describe a change. You see it in the preview first.<br>Nothing is saved until you allow it.</p>${SCOPE?`<div class="scope-intro"><div class="r"><span class="sc theme">Theme settings</span>colors, fonts — all pages</div><div class="r"><span class="sc page">Theme builder</span>page layout and sections</div></div>`:''}<div class="ex ${dis?'dis':''}"><button>Make the product title bigger</button><button>Change the primary color</button><button>Make the theme Walmart-like</button></div></div></div>`;
+const th=(i,o={})=>`<div class="th ${o.cls||''} ${o.sm?'sm':''}" style="${o.cls?'':'background:'+IMG[i%6]}">${o.cls==='err'?I.warn:o.cls==='ph'?I.img:''}${o.cls==='skel'||o.cls==='ph'?'':`<span class="lbl">Image ${i+1}</span>`}${o.x?'<span class="x">×</span>':''}</div>`;
+function comp(o={}){
+ const s=o.state||'idle';
+ const send=s==='busy'?`<button class="send stop" title="Stop">${I.stop}</button>`:`<button class="send ${o.text&&s!=='dis'&&!o.block?'on':''}">${I.send}</button>`;
+ return `<div class="cw">${o.notice||''}<div class="cmp ${o.focus?'f':''} ${s==='dis'||s==='busy'?'dis':''}">${o.thumbs?`<div class="ths">${o.thumbs}</div>`:''}<div class="in"><button class="ci" title="Attach images (PNG, JPEG)">${I.plus}</button><div class="tx ${o.text?'':'ph'} ${o.caret?'cur':''}">${o.text||o.ph||'Prompt your request here'}</div>${send}</div></div>${o.hint?`<div class="hint ${o.hintCls||''}">${o.hint}</div>`:''}</div>`;
+}
+const P=(h,body,c,banner='')=>`<div class="pn">${h}${banner}${body}${c}</div>`;
+const B=(inner)=>`<div class="bd">${inner}</div>`;
+const user=(t,n=0)=>`<div class="u">${n?`<div class="ths">${Array.from({length:n},(_,i)=>th(i,{sm:1})).join('')}</div>`:''}${t}</div>`;
+const ai=(c)=>`<div class="a"><span class="av sm">${I.spark}</span><div class="c">${c}</div></div>`;
+const TODO='<span class="todo">TO DESIGN</span>';
+const ROWS=[{l:'Primary button',a:'#6366F1',b:'#DC2626'},{l:'Primary button hover',a:'#4F46E5',b:'#B91C1C'}];
+const rowH=r=>`<div class="row">${r.v?'<span class="sw" style="background:#fff;display:grid;place-items:center;font-size:9px;color:#6B7280">#</span>':`<span class="sw" style="background:${r.b}"></span>`}<span class="lb">${r.l}</span><span class="val">${r.v?`${r.a} <span class="arr">→</span> ${r.b}`:`${r.a?`${r.a.slice(1)} <span class="arr">→</span> `:''}${r.b.slice(1)}`}</span></div>`;
+/* page names are hyperlinks (S3/S5); Theme settings link when the chat is in the builder (S4) */
+const GH={theme:(lk,n=1)=>`<div class="grp gtog"><span class="chev">▾</span><span class="sc theme">${lk?'<a href="#">Theme settings ↗</a>':'Theme settings'}</span><span>all pages</span><span class="cnt">${n} change${n>1?'s':''}</span></div>`,page:(pg='Home',lk,n=1)=>`<div class="grp gtog"><span class="chev">▾</span><span class="sc page">Theme builder</span>${lk?`<a href="#" class="pglk" data-pg="${pg}">${pg} ↗</a>`:`<span class="pgn">${pg}</span>`}<span class="cnt">${n} change${n>1?'s':''}</span></div>`};
+const grpKey=r=>r.sc==='page'?'page:'+(r.pg||'Home'):'theme';
+/* changes card: AI result written In memory (R1) */
+const prop=(o={})=>{const list=o.rows||ROWS;let rows;
+ if(SCOPE){const keys=[...new Set(list.map(grpKey))];const fold=keys.length>1;rows=keys.map(k=>{const g=list.filter(r=>grpKey(r)===k),n=g.length;return `<div class="gwrap ${fold?'':'open'}">${k==='theme'?GH.theme(o.lkTheme,n):GH.page(k.slice(5),o.lkPage,n)}<div class="grows">${g.map(rowH).join('')}</div></div>`;}).join('');}
+ else rows=list.map(rowH).join('');
+ const n=list.length;
+ return `<div>${o.rat||'Primary buttons use the primary color. Here is a red that keeps white text readable.'}</div><div class="card"><div class="ch">${n} change${n>1?'s':''}${o.tag||''}</div>${rows}${o.foot?`<div class="cf">${o.foot}</div>`:''}</div>${o.after||''}${o.req||''}`;};
+/* Request allow permission (R2) */
+const BTN={set:[['Apply','pr'],['Save as draft',''],['Dismiss','gh']],bld:[['Apply','pr'],['Dismiss','gh']],pub:[['Publish','pr'],['Deny','gh']]};
+const CH={set:['Save as version · Theme settings','Apply this theme'],bld:['Save as version · Theme builder · Home'],mix:['Save as version · Theme settings','Apply this theme','Save as version · Theme builder · Home']};
+const chain=(steps,at,bad)=>`<ol class="chain">${steps.map((s,i)=>{const cl=bad===i?'bad':i<at?'ok':i===at?'run':'wait';return `<li class="${cl}"><span class="n">${cl==='ok'?I.check:cl==='bad'?'!':cl==='run'?'':i+1}</span>${s}</li>`;}).join('')}</ol>`;
+const req=(ctx='set',st='ask',o={})=>{
+ const H=t=>`<div class="rq-h">${I.info}${t}</div>`;
+ const done=(ic,t)=>`<div class="rq done">${H(o.h||'Request allow permission')}<div class="rq-s"><span class="${ic}">${ic==='ok'?I.check:I.ban}</span><span>${t}</span></div></div>`;
+ if(st==='ask'||st==='off')return `<div class="rq">${H('Request allow permission')}<div class="rq-t">${o.t||'Apply these changes?'}</div><div class="rq-d">${o.d||'Nothing is saved until you choose.'}</div><div class="rq-b">${BTN[ctx].map(b=>`<button class="btn ${st==='off'?'dis':b[1]}">${b[0]}</button>`).join('')}</div>${o.foot||''}</div>`;
+ if(st==='run')return `<div class="rq">${H('Applying changes')}${chain(o.steps||CH[ctx],o.at??1)}</div>`;
+ if(st==='fail')return `<div class="rq">${H('Applying changes')}${chain(o.steps||CH[ctx],o.at??1,o.at??1)}<div class="rq-d" style="padding-bottom:10px;color:var(--err)">${o.t||''}</div>${o.foot||''}</div>`;
+ if(st==='pubq')return `<div class="rq">${H('Request allow permission')}<div class="rq-t">Do you want to publish it?</div><div class="rq-d">${o.d||'Home is saved as a new version.'}</div><div class="rq-b">${BTN.pub.map(b=>`<button class="btn ${b[1]}">${b[0]}</button>`).join('')}</div></div>`;
+ return done(o.ic||'ok',o.t||'');};
+const errb=(t,d,o={})=>ai(`<div class="errb"><b>${t}</b>${d}${o.retry?`<div class="acts"><button class="btn">${I.retry}Try again</button>${o.extra||''}</div>`:''}</div>`);
+const U1='Make the primary button red';
+const APPLIED='Applied — Version 3 saved and the theme is applied.';
+const MIX=[ROWS[0],ROWS[1],{l:'Products per row',a:'3',b:'4',v:1,sc:'page',pg:'Home'}];
+const RUNNING=()=>comp({state:'dis',ph:'Wait until the assistant is done'});
+
+const CP=[['Bright red','#EF4444'],['Deep red','#B91C1C'],['Brick red','#9A3412'],['Rose','#E11D48']];
+const qcard=o=>`<div class="card"><div class="ch">Needs your input${o.step?`<span class="qstep">Question ${o.step}${o.total?' of '+o.total:''}</span>`:''}</div>${o.total?`<div class="qprog">${Array.from({length:o.total},(_,i)=>`<i class="${i<o.step-1?'d':i===o.step-1?'c':''}"></i>`).join('')}</div>`:''}${o.done?`<div class="qdone">${o.done.map((d,i)=>`<div><span class="ok">${I.check}</span>${i+1}. ${d[0]}<b>${d[1]}</b><a href="#">Edit</a></div>`).join('')}</div>`:''}<div class="badges">${o.badges||''}</div><div class="qtx">${o.q}</div>${o.pills?`<div class="pills">${o.pills}</div>`:''}${o.extra||''}</div>`;
+const colorPills=(sel)=>CP.map(c=>`<button class="cp ${sel===c[0]?'sel':''}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join('');
+const hexRow=(v,st)=>`<div class="or">or enter a hex code</div><div class="hex ${st||''}"><span class="hs" ${v&&st!=='bad'?`style="background:${v}"`:''}></span><span class="hv ${v?'':'ph'}">${v||'#RRGGBB'}${st==='f'?'<span class="cur"></span>':''}</span><button class="btn ${v&&st!=='bad'?'pr':'dis'}">Use color</button></div>${st==='bad'?'<div class="hexmsg bad">Enter a 6-digit hex code, e.g. #C81E1E.</div>':'<div class="hexmsg">The value is checked against the theme rules before the changes are shown.</div>'}`;
+const TGT='<button>Primary button</button><button>Page background</button><button>Banner</button><button>Links</button><button>Header</button><button>Something else…</button>';
+const scB=()=>SCOPE?'<span class="sc theme">Theme settings</span>':'';
+/* ---------- Flow 4 case 1: selectable answers + Something else ---------- */
+let Q1={kind:'hex',sel:null,val:'',done:''};
+const Q1D={
+ hex:{lab:'Hex code',t:'Primary button red',badges:['Colors','Primary button'],q:'Which red should the primary button use?',opts:CP.slice(0,3).map(c=>({l:c[0],sw:c[1]})),u:'Make the primary button red'},
+ text:{lab:'Text field',t:'Heading font',badges:['Typography','Headings'],q:'Which font should the headings use?',opts:[{l:'Inter'},{l:'Poppins'},{l:'Playfair Display'}],u:'Change the heading font'},
+ drop:{lab:'Dropdown',t:'Element',badges:['Colors'],q:'What should be red?',opts:[{l:'Primary button'},{l:'Links'},{l:'Header'}],more:['Page background','Banner','Footer background','Badges','Price','Sale label'],u:'Make it red'}
+};
+const HEXOK=v=>/^#[0-9a-fA-F]{6}$/.test(v);
+function q1Other(){const k=Q1.kind,v=Q1.val;
+ if(k==='hex'){const ok=HEXOK(v),bad=v.length>=7&&!ok;
+  return `<div class="hex q1x ${bad?'bad':'f'}"><span class="hs" ${ok?`style="background:${v}"`:''}></span><input class="q1in mono" data-q="val" placeholder="#RRGGBB" maxlength="7" value="${v}"></div><div class="hexmsg q1m ${bad?'bad':''}">${bad?'Enter a 6-digit hex code, e.g. #C81E1E.':'Enter a hex code, e.g. #C81E1E. It is checked against the theme rules.'}</div>`;}
+ if(k==='text')return `<div class="hex q1x f"><input class="q1in" data-q="val" placeholder="Type a font name, e.g. Lora" value="${v}"></div><div class="hexmsg">The AI checks whether the font is available.</div>`;
+ return `<div class="q1x"><select class="q1sel" data-q="val"><option value="">Choose an element…</option>${Q1D.drop.more.map(m=>`<option ${v===m?'selected':''}>${m}</option>`).join('')}</select></div><div class="hexmsg">Only elements the AI can change are listed.</div>`;
+}
+const q1Ready=()=>Q1.sel!==null&&(Q1.sel!=='other'||(Q1.kind==='hex'?HEXOK(Q1.val):!!Q1.val.trim()));
+const q1Label=()=>Q1.sel==='other'?Q1.val:Q1D[Q1.kind].opts[Q1.sel].l;
+function q1Card(){const d=Q1D[Q1.kind];
+ return `<div class="card q1"><div class="ch">Needs your input</div><div class="badges">${scB()}${d.badges.map(b=>`<span class="bdg">${b}</span>`).join('')}</div><div class="qtx">${d.q}</div><div class="pills sel1">${d.opts.map((o,i)=>`<button data-q="opt" data-i="${i}" class="${o.sw?'cp ':''}${Q1.sel===i?'sel':''}">${o.sw?`<i style="background:${o.sw}"></i>`:''}${o.l}</button>`).join('')}<button data-q="opt" data-i="other" class="${Q1.sel==='other'?'sel':''}">Something else…</button></div>${Q1.sel==='other'?q1Other():''}<div class="q1f"><button class="btn ${q1Ready()?'pr':'dis'}" data-q="send">Send answer</button></div></div>`;
+}
+function q1Case(){const d=Q1D[Q1.kind];
+ return P(head({end:1}),B(user(d.u)+ai(Q1.done?ANS([[d.t,Q1.done]]):q1Card())+(Q1.done?ai('<div class="dots"><i></i><i></i><i></i></div>'):'')),Q1.done?RUNNING():comp());}
+const Q1S={hex:[['Empty',''],['Valid','#C81E1E'],['Invalid','#C81E1G']],text:[['Empty',''],['Filled','Lora']],drop:[['Empty',''],['Selected','Banner']]};
+const q1Ctrl=()=>`<span class="vseg q1k" style="margin:4px 0 0">${Object.keys(Q1D).map(k=>`<button data-qk="${k}" class="${Q1.kind===k?'on':''}">${Q1D[k].lab}</button>`).join('')}</span> <button class="btn" data-qk="reset" style="margin-top:6px">↺ Reset</button><div style="margin-top:10px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Input state</div><span class="vseg q1k" style="margin:4px 0 0">${Q1S[Q1.kind].map(x=>`<button data-qs="${x[1]}" class="${Q1.sel==='other'&&!Q1.done&&Q1.val===x[1]?'on':''}">${x[0]}</button>`).join('')}</span>`;
+function q1Sync(){const s=document.getElementById('slot');const b=s.querySelector('[data-q="send"]');if(b)b.className='btn '+(q1Ready()?'pr':'dis');
+ if(Q1.kind==='hex'){const w=s.querySelector('.q1x'),m=s.querySelector('.q1m');if(!w)return;const ok=HEXOK(Q1.val),bad=Q1.val.length>=7&&!ok;w.className='hex q1x '+(bad?'bad':'f');w.querySelector('.hs').style.background=ok?Q1.val:'';m.className='hexmsg q1m '+(bad?'bad':'');m.textContent=bad?'Enter a 6-digit hex code, e.g. #C81E1E.':'Enter a hex code, e.g. #C81E1E. It is checked against the theme rules.';}}
+document.getElementById('slot').addEventListener('click',e=>{const t=e.target.closest('[data-q]');if(!t||!document.querySelector('.q1'))return;
+ if(t.dataset.q==='opt'){Q1.sel=t.dataset.i==='other'?'other':+t.dataset.i;draw();if(Q1.sel==='other'){const i=document.querySelector('.q1in,.q1sel');if(i){i.focus();if(i.setSelectionRange)i.setSelectionRange(i.value.length,i.value.length);}}}
+ if(t.dataset.q==='send'&&q1Ready()){A5={kind:Q1.kind,src:Q1.sel==='other'?'other':'opt',lab:q1Label()};goCase(4,'Question answered');}});
+document.getElementById('slot').addEventListener('input',e=>{if(e.target.dataset.q==='val'){Q1.val=e.target.value;q1Sync();}});
+document.getElementById('slot').addEventListener('change',e=>{if(e.target.dataset.q==='val'){Q1.val=e.target.value;q1Sync();}});
+document.querySelector('.rcol').addEventListener('click',e=>{const q=e.target.closest('[data-qs]');if(q){Q1.sel='other';Q1.val=q.dataset.qs;Q1.done='';draw();return;}const b=e.target.closest('[data-qk]');if(!b)return;Q1={kind:b.dataset.qk==='reset'?Q1.kind:b.dataset.qk,sel:null,val:'',done:''};draw();});
+const QS=(sel)=>`<div class="card"><div class="ch">Needs your input</div><div class="badges">${scB()}<span class="bdg">Colors</span><span class="bdg">Primary button</span></div><div class="qtx">Which red should the primary button use?</div><div class="pills sel1">${CP.slice(0,3).map(c=>`<button class="cp ${sel===c[0]?'sel':''}"><i style="background:${c[1]}"></i>${c[0]}</button>`).join('')}<button>Something else…</button></div><div class="q1f"><button class="btn ${sel?'pr':'dis'}">Send answer</button></div></div>`;
+/* answered question(s): one format for 1 or many */
+const ANS=rows=>`<div class="card"><div class="ch">Needs your input<span class="atag">${I.check} ${rows.length>1?rows.length+' answers':'Answered'}</span></div><div class="qdone" style="padding:8px 12px 10px">${rows.map((r,i)=>`<div><span class="ok">${I.check}</span>${i+1}. ${r[0]}<b>${r[1]}</b></div>`).join('')}</div></div>`;
+/* ---------- Flow 5: answered (mirrors Flow 4) ---------- */
+let A5={kind:'hex',src:'opt',lab:''};
+const RUNAGAIN=()=>ai(`<div class="prog"><span class="ok">${I.check} Answer received</span><span><span class="spin"></span> Checking for more questions…</span></div>`);
+const SUMROWS=[{l:'Primary button',a:'#6366F1',b:'#B91C1C'},{l:'Primary button hover',a:'#4F46E5',b:'#991B1B'}];
+const SUMHIST=()=>user(U1)+ai(ANS([['Primary button red','Deep red']]));
+const goCase=(fi,name)=>{f=fi;c=FLOWS[fi].cases.findIndex(x=>x.n===name);draw();};
+let MQLAST=null,S6='std',CB='prop';
+const a5Val=()=>A5.src==='opt'?Q1D[A5.kind].opts[1].l:Q1S[A5.kind][1][1];
+function a5Case(){if(A5.src==='free')return P(head({end:1}),B(user('Change the font')+ai(ANS([['Font','Poppins']]))+RUNAGAIN()),RUNNING());const d=Q1D[A5.kind];return P(head({end:1}),B(user(d.u)+ai(ANS([[d.t,A5.lab||a5Val()]]))+RUNAGAIN()),RUNNING());}
+const a5Ctrl=()=>`<div>Answer from</div><span class="vseg" style="margin:4px 0 0">${[['opt','Option'],['other','Something else…'],['free','Typed reply (no options)']].map(x=>`<button data-a5s="${x[0]}" class="${A5.src===x[0]?'on':''}">${x[1]}</button>`).join('')}</span>${A5.src==='free'?'':`<div style="margin-top:10px">Input type</div><span class="vseg" style="margin:4px 0 0">${Object.keys(Q1D).map(k=>`<button data-a5k="${k}" class="${A5.kind===k?'on':''}">${Q1D[k].lab}</button>`).join('')}</span>`}`;
+/* ---------- Flow 4: many questions, live ---------- */
+let MQ={step:0,ans:[],sel:null,val:'',done:false};
+const MQD=[
+ {t:'Overall mood',badge:'Style',q:'Which overall mood fits your shop?',opts:[{l:'Dark & minimal'},{l:'Light & airy'},{l:'Warm & natural'}],k:'text',ph:'Describe the mood, e.g. Playful'},
+ {t:'Primary color',badge:'Colors',q:'Which primary color should the shop use?',opts:[{l:'Black',sw:'#111827'},{l:'Navy',sw:'#1E3A8A'},{l:'Forest',sw:'#14532D'}],k:'hex'},
+ {t:'Headings',badge:'Typography',q:'Which heading style fits best?',opts:[{l:'Serif, elegant'},{l:'Modern sans'},{l:'Bold geometric'}],k:'text',ph:'Type a font name, e.g. Lora'},
+ {t:'Corners',badge:'Shape',q:'How rounded should buttons and cards be?',opts:[{l:'Sharp'},{l:'Slightly rounded'},{l:'Rounded'}],k:'drop',more:['2 px','4 px','8 px','12 px','16 px','Pill']},
+ {t:'Products per row',badge:'Product grid',page:1,q:'How many products per row on Home?',opts:[{l:'2'},{l:'3'},{l:'4'}],k:'drop',more:['5','6']}
+];
+const mqOk=()=>MQ.sel!==null&&(MQ.sel!=='other'||(MQD[MQ.step].k==='hex'?HEXOK(MQ.val):!!MQ.val.trim()));
+const mqLab=()=>MQ.sel==='other'?MQ.val:MQD[MQ.step].opts[MQ.sel].l;
+const mqMsg=(bad)=>bad?'Enter a 6-digit hex code, e.g. #C81E1E.':'Enter a hex code, e.g. #C81E1E. It is checked against the theme rules.';
+function mqOther(){const d=MQD[MQ.step],v=MQ.val;
+ if(d.k==='hex'){const ok=HEXOK(v),bad=v.length>=7&&!ok;return `<div class="hex q1x mqx ${bad?'bad':'f'}"><span class="hs" ${ok?`style="background:${v}"`:''}></span><input class="q1in mono" data-m="val" placeholder="#RRGGBB" maxlength="7" value="${v}"></div><div class="hexmsg mqm ${bad?'bad':''}">${mqMsg(bad)}</div>`;}
+ if(d.k==='text')return `<div class="hex q1x f"><input class="q1in" data-m="val" placeholder="${d.ph}" value="${v}"></div>`;
+ return `<div class="q1x"><select class="q1sel" data-m="val"><option value="">Choose…</option>${d.more.map(m=>`<option ${v===m?'selected':''}>${m}</option>`).join('')}</select></div>`;}
+function mqCard(){const d=MQD[MQ.step],n=MQD.length,last=MQ.step===n-1;
+ const done=MQ.ans.map((a,i)=>a&&i!==MQ.step?`<div><span class="ok">${I.check}</span>${i+1}. ${MQD[i].t}<b>${a.lab}</b><a href="#" data-m="edit" data-i="${i}">Edit</a></div>`:'').join('');
+ const scope=d.page?(SCOPE?'<span class="sc page">Theme builder · Home</span>':''):scB();
+ return `<div class="card mq"><div class="ch">Needs your input<span class="qstep">Question ${MQ.step+1} of ${n}</span></div><div class="qprog">${MQD.map((_,i)=>`<i class="${i===MQ.step?'c':MQ.ans[i]?'d':''}"></i>`).join('')}</div>${done?`<div class="qdone">${done}</div>`:''}<div class="badges">${scope}<span class="bdg">${d.badge}</span></div><div class="qtx">${d.q}</div><div class="pills sel1">${d.opts.map((o,i)=>`<button data-m="opt" data-i="${i}" class="${o.sw?'cp ':''}${MQ.sel===i?'sel':''}">${o.sw?`<i style="background:${o.sw}"></i>`:''}${o.l}</button>`).join('')}<button data-m="opt" data-i="other" class="${MQ.sel==='other'?'sel':''}">Something else…</button></div>${MQ.sel==='other'?mqOther():''}<div class="q1f" style="gap:6px">${MQ.step>0?'<button class="btn gh" data-m="back">← Back</button>':''}<button class="btn ${mqOk()?'pr':'dis'}" data-m="next">${last?'Send answers':'Next →'}</button></div></div>`;}
+function mqCase(){const u=user('Make my shop look more premium');
+ if(MQ.done)return P(head({end:1}),B(u+ai(ANS(MQ.ans.map((a,i)=>[MQD[i].t,a.lab])))+ai('<div class="dots"><i></i><i></i><i></i></div>')),RUNNING());
+ return P(head({end:1}),B(u+ai(mqCard())),comp());}
+function mqLoad(i){MQ.step=i;const a=MQ.ans[i];MQ.sel=a?a.sel:null;MQ.val=a?a.val:'';}
+function mqSync(){const s=document.getElementById('slot'),b=s.querySelector('[data-m="next"]');if(b)b.className='btn '+(mqOk()?'pr':'dis');
+ const w=s.querySelector('.mqx'),m=s.querySelector('.mqm');if(w){const ok=HEXOK(MQ.val),bad=MQ.val.length>=7&&!ok;w.className='hex q1x mqx '+(bad?'bad':'f');w.querySelector('.hs').style.background=ok?MQ.val:'';m.className='hexmsg mqm '+(bad?'bad':'');m.textContent=mqMsg(bad);}}
+const slotEl=document.getElementById('slot');
+slotEl.addEventListener('click',e=>{const t=e.target.closest('[data-m]');if(!t||!document.querySelector('.mq'))return;e.preventDefault();const a=t.dataset.m;
+ if(a==='opt'){MQ.sel=t.dataset.i==='other'?'other':+t.dataset.i;if(MQ.sel!=='other')MQ.val=MQ.ans[MQ.step]&&MQ.ans[MQ.step].sel==='other'?MQ.val:'';draw();if(MQ.sel==='other'){const i=document.querySelector('.mq .q1in,.mq .q1sel');if(i)i.focus();}}
+ if(a==='next'&&mqOk()){MQ.ans[MQ.step]={sel:MQ.sel,val:MQ.val,lab:mqLab()};const nx=MQD.findIndex((_,i)=>!MQ.ans[i]);if(MQ.step===MQD.length-1&&nx<0){MQLAST=MQ.ans.map(a=>a.lab);MQ={step:0,ans:[],sel:null,val:'',done:false};goCase(4,'Many questions — answered');return;}mqLoad(MQ.step<MQD.length-1?MQ.step+1:nx);draw();}
+ if(a==='back'){mqLoad(MQ.step-1);draw();}
+ if(a==='edit'){if(mqOk())MQ.ans[MQ.step]={sel:MQ.sel,val:MQ.val,lab:mqLab()};mqLoad(+t.dataset.i);draw();}});
+slotEl.addEventListener('input',e=>{if(e.target.dataset.m==='val'){MQ.val=e.target.value;mqSync();}});
+slotEl.addEventListener('change',e=>{if(e.target.dataset.m==='val'){MQ.val=e.target.value;mqSync();}});
+document.querySelector('.rcol').addEventListener('click',e=>{const b=e.target.closest('[data-mk]');if(!b)return;MQ={step:0,ans:[],sel:null,val:'',done:false};draw();});
+/* ---------- Flow 9 edge case: 7 pages x ~9 changes ---------- */
+const EDGEP=['Home','Category','Product','Cart','Checkout','Search results','Account'];
+const EDGEC=[['Products per row','3','4'],['Banner height','480 px','560 px'],['Section spacing','32 px','48 px'],['Heading size','28 px','32 px'],['Button style','Outline','Filled'],['Image ratio','1:1','4:5'],['Show breadcrumbs','Off','On'],['Sticky header','Off','On'],['Footer columns','3','4'],['Card shadow','None','Soft']];
+const EDGEN=[9,8,10,9,8,9,10];
+const EDGER=EDGEP.flatMap((pg,i)=>EDGEC.slice(0,EDGEN[i]).map(c=>({l:c[0],a:c[1],b:c[2],v:1,sc:'page',pg})));
+let EDGE={mode:'all',open:{0:true}};
+function edgeGrouped(){const n=EDGER.length;
+ return `<div>I updated ${EDGEP.length} pages. Here is everything I changed:</div><div class="card"><div class="ch">${n} changes · ${EDGEP.length} pages</div>${EDGEP.map((pg,i)=>{const rs=EDGER.filter(r=>r.pg===pg),op=!!EDGE.open[i];return `<div class="grp pgacc" data-pa="${i}"><span class="chev">${op?'▾':'▸'}</span>${SCOPE?'<span class="sc page">Theme builder</span>':''}<a href="#" class="pglk" data-pg="${pg}">${pg} ↗</a><span class="cnt">${rs.length} changes</span></div>${op?rs.map(rowH).join(''):''}`;}).join('')}</div>`;}
+function edgeCase(){const body=prop({rat:`I updated ${EDGEP.length} pages. Here is everything I changed:`,rows:EDGER,lkPage:1});
+ return P(head({end:1}),`<div class="bd scroll">${user('Make every page feel more spacious and modern')+ai(body+req('set',undefined,{t:`Apply ${EDGER.length} changes to ${EDGEP.length} pages?`}))}</div>`,comp());}
+const edgeCtrl=()=>`<span class="vseg" style="margin:4px 0 0">${[['all','All rows (as is)'],['grp','Grouped by page']].map(x=>`<button data-edm="${x[0]}" class="${EDGE.mode===x[0]?'on':''}">${x[1]}</button>`).join('')}</span>`;
+const ERRV=[['validate','Result didn\'t validate','The assistant couldn\'t make a valid change','Nothing was changed. Try again, or describe the change differently.',1],['timeout','Took too long','The assistant took too long','The turn exceeded the server timeout. Try again in a moment.',1],['network','Network error','The assistant could not be reached','Try again in a moment.',1],['image','Image can\'t be used','An image couldn\'t be used','Send PNG or JPEG images up to 5 MB each and 8 MB together, then try again.',1],['running','Already running','A turn is already streaming','Wait for the current reply to finish, or end this chat and start a new one.',0],['other','Anything else','The assistant couldn\'t finish this turn','Try again, or end this chat and start a new one.',1]];
+let ERR='validate';
+/* ---------- flows & cases ---------- */
+const FLOWS=[
+{n:'1. Opening the chat',cases:[
+ {n:'Empty, new chat',st:'built',when:'First open, or after End chat.',shows:'Sparkle icon, “Chat with the theme assistant”, one line on how it works, three example prompts. Clicking an example sends it straight away.',note:'Copy updated to the final scope: changes show in the preview first and nothing is saved until the merchant allows it (R1, R2).',
+  r:()=>P(head(),emptyB(),comp())},
+ {n:'No permission',st:'ui',ref:'U11',when:'The merchant has no right to change the theme.',shows:'Not designed yet.',note:'UI mission scope U11. Sketch: input disabled with a short reason. Target user = merchant admin or staff who can configure the storefront layout.',
+  r:()=>P(head(),emptyB(true),comp({state:'dis',hint:`${I.ban} You don't have permission to change this theme. ${TODO}`,hintCls:'warn'}))},
+ {n:'Session resumed',st:'built',when:'Session id is in the URL (reload, shared link).',shows:'History loads. Older messages load when scrolling up, with a loading state.',note:'Earlier requests show their final answer (e.g. Applied). Changes that were never answered are gone after a reload (R1).',
+  r:()=>P(head({sub:'Session resumed',end:1}),B(`<div class="load"><span class="spin"></span>Loading older messages…</div>${user(U1)}${ai(prop({tag:'',prev:false,req:req('set','done',{t:APPLIED})}))}`),comp())},
+ {n:'Session can\'t load',st:'built',when:'History request fails.',shows:'Red banner with Retry. The link is kept.',
+  r:()=>P(head({sub:'Session resumed',end:1}),`<div class="bd center"></div>`,comp(),`<div class="banner err">${I.warn}<span>Couldn't load this chat session. The link is kept so you can retry once the assistant is reachable again.</span><button class="btn b">Retry</button></div>`)},
+ {n:'Session gone',st:'built',when:'Session was ended, or the user has no access to it.',shows:'Silently drops the old link and shows a new empty chat. No message.',note:'Same screen as “Empty, new chat”.',
+  r:()=>P(head(),emptyB(),comp())}
+]},
+{n:'2. Writing a message + images',cases:[
+ {n:'Typing',st:'built',when:'Merchant writes a request.',shows:'Send enabled as soon as there is text. Text is always required.',
+  r:()=>P(head(),emptyB(),comp({focus:1,text:'Make the headings a bit bigger',caret:1}))},
+ {n:'Images attached',st:'built',when:'Merchant adds PNG or JPEG files.',shows:'Square thumbnails above the input, labelled Image 1 to Image 6 in order. Remove button on hover or focus.',
+  r:()=>P(head(),emptyB(),comp({focus:1,thumbs:th(0)+th(1,{x:1})+th(2),text:'Use the colors from these images',caret:1}))},
+ {n:'Image uploading',st:'built',when:'Right after attaching.',shows:'Skeleton on the tile. Send disabled until every upload finished.',
+  r:()=>P(head(),emptyB(),comp({focus:1,thumbs:th(0)+th(1)+th(2,{cls:'skel'}),text:'Use the colors from these images',block:1}))},
+ {n:'Upload failed',st:'built',when:'Network or server error on one image.',shows:'Error icon on that tile. The merchant removes it and can still send the rest.',
+  r:()=>P(head(),emptyB(),comp({focus:1,thumbs:th(0)+th(1,{cls:'err',x:1})+th(2),text:'Use the colors from these images'}))},
+ {n:'File refused',st:'built',when:'7th image, WebP/GIF/HEIC, over 5 MB, or over 8 MB together.',shows:'Notice naming each refused file and the reason. Accepted files stay.',
+  r:()=>P(head(),emptyB(),comp({focus:1,notice:`<div class="notice"><b>2 files weren't added</b><ul><li>banner.webp — PNG or JPEG only</li><li>photo-7.jpg — up to 6 images</li></ul></div>`,thumbs:[0,1,2,3,4,5].map(i=>th(i)).join(''),text:'Use the colors from these images'}))},
+ {n:'Images, no text',st:'gap',when:'Text cleared while images are attached.',shows:'Today: Send disabled, no hint explains why.',note:'Proposed: keep Send disabled and add a hint under the input.',
+  r:()=>P(head(),emptyB(),comp({focus:1,thumbs:th(0)+th(1),block:1,hint:`${I.info} Add a short description to send your images. <span class="tag-new">PROPOSED</span>`,hintCls:'warn'}))}
+]},
+{n:'3. AI running',cases:[
+ {n:'Thinking',st:'final',ref:'S1 · R3',when:'Session started, nothing streamed yet.',shows:'Assistant bubble with three bouncing dots. Chat input disabled.',
+  r:()=>P(head({end:1}),B(user(U1)+ai('<div class="dots"><i></i><i></i><i></i></div>')),RUNNING())},
+ {n:'Tool progress — today',st:'gap',when:'The AI calls a tool (find fields, read values, validate).',shows:'Today: wrench icon and the raw tool name plus a label.',note:'See next case for the proposed version.',
+  r:()=>P(head({end:1}),B(user(U1)+ai(`<div class="raw">${I.wrench}<code>read_theme_values</code> Reading values</div>`)),RUNNING())},
+ {n:'Tool progress — proposed',st:'gap',when:'Same as above.',shows:'Proposed: friendly step names, no raw tool names. Done steps get a check.',
+  r:()=>P(head({end:1}),B(user(U1)+ai(`<div class="prog"><span class="ok">${I.check} Found matching settings</span><span class="ok">${I.check} Read current values</span><span><span class="spin"></span> Checking new values…</span></div>`)),RUNNING())}
+]},
+{n:'4. AI asks a question',cases:[
+ {n:'Question with options',st:'gap',when:'Target or value is unclear, e.g. which shade, which font, which element.',shows:'Today: pills send the answer straight away; no way to give an answer outside the options.',note:'Proposed: options are selectable (one at a time) and sent with “Send answer”. The last option is always “Something else…”, which opens the input that fits the question: hex code for a colour, text field for a free value (e.g. a font), dropdown for a fixed list (e.g. other editable elements). Input states (hex): empty → valid (live swatch, Send active) → invalid (red field, fix-it message, Send disabled). Text and dropdown: empty → filled. Try it in the panel, or jump to a state with the controls under the case.',ctrl:q1Ctrl,
+  r:q1Case},
+ {n:'Question without options',st:'built',when:'AI needs a free answer.',shows:'Same card without pills. The merchant replies in the input.',
+  r:()=>P(head({end:1}),B(user('Change the font')+ai(`<div class="card"><div class="ch">Needs your input</div><div class="qtx">Which font would you like? You can name one, e.g. “Poppins”.</div><div style="height:6px"></div></div>`)),comp({focus:1,caret:1}))},
+ {n:'Many questions — in progress',st:'gap',when:'A vague request needs several answers, e.g. “Make my shop look more premium”.',shows:'Proposed: one card at a time with “Question 1 of 5” and a progress bar. Pick an option (or “Something else…”) and click Next. Answered questions collapse into a list with Edit; Back returns to the previous one. The last question shows “Send answers”, then all answers are summarized and the AI runs again.',note:'Try it in the panel. “of 5” only works if the AI says up front how many questions it has; otherwise show “Question 3” without a total. In the build every question is its own turn.',ctrlLab:'Prototype',ctrl:()=>`<button class="btn" data-mk="reset">↺ Reset</button>`,
+  r:mqCase}
+]},
+{n:'5. Merchant answers → AI running again',cases:[
+ {n:'Question answered',st:'gap',ref:'S1 · R3',when:'The merchant sent the answer to a question (Flow 4 › Question with options or without options).',shows:'The question collapses into the answered card (“✓ Answered”, one row: question → answer). Right below, the AI runs again and checks for more questions; chat disabled.',note:'One case for every answer source: an option, “Something else…” (hex, text, dropdown) or a typed reply to a question without options — switch under the case. “Send answer” in Flow 4 lands here with your answer.',ctrlLab:'Answer',ctrl:a5Ctrl,
+  r:a5Case},
+ {n:'Many questions — answered',st:'gap',ref:'S1 · R3',when:'The merchant clicked “Send answers” on the last question (Flow 4).',shows:'Same answered card: “✓ 5 answers”, one row per question. The AI runs again and checks for more questions; chat disabled.',note:'“Send answers” in Flow 4 lands here with the answers you picked.',
+  r:()=>{const L=MQLAST||MQD.map((q,i)=>q.opts[[0,0,0,1,1][i]].l);return P(head({end:1}),B(user('Make my shop look more premium')+ai(ANS(MQD.map((q,i)=>[q.t,L[i]])))+RUNAGAIN()),RUNNING());}}
+]},
+{n:'6. No more questions → summary + request',cases:[
+ {n:'Summary + request',st:'final',ref:'S1 · R1 · R2',when:'After running again, the AI detects no more questions.',shows:'The AI summarizes everything in one message: the answered card, the change list, then the Request allow permission (Apply · Save as draft · Dismiss).',note:'Variants of the AI message are under the case: standard, partly possible (names what it could not change), setting is global (says it applies to all pages). Layout is the same; only the AI text and rows change.',ctrlLab:'AI message',ctrl:()=>`<span class="vseg" style="margin:4px 0 0">${[['std','Standard'],['partly','Partly possible'],['global','Setting is global']].map(x=>`<button data-s6="${x[0]}" class="${S6===x[0]?'on':''}">${x[1]}</button>`).join('')}</span>`,
+  r:()=>{const V={std:[SUMHIST(),'Here is everything I changed:',SUMROWS],partly:[user('Make the button red and change its label to “Shop now”'),'I changed the button color. The button label isn\'t a theme setting, so I couldn\'t change it here.',[ROWS[0]]],global:[user('Make the category page background red'),'Background color is a theme-wide setting, so this change applies to all pages, not only the category page.',[{l:'Background',a:'#FFFFFF',b:'#FEE2E2'}]]}[S6];return P(head({end:1}),B(V[0]+ai(prop({rat:V[1],rows:V[2],req:req('set')}))),comp());}},
+ {n:'Can\'t be changed',st:'gap',when:'Nothing in the request maps to an editable field, e.g. the footer text. No changes, so no request.',shows:'Today: a question card with no options; reads like a question though it is a refusal. Proposed: a neutral info card.',note:'Switch Today / Proposed under the case.',ctrlLab:'Version',ctrl:()=>`<span class="vseg" style="margin:4px 0 0">${[['today','Today'],['prop','Proposed']].map(x=>`<button data-cb="${x[0]}" class="${CB===x[0]?'on':''}">${x[1]}</button>`).join('')}</span>`,
+  r:()=>P(head({end:1}),B(user('Change the footer text')+ai(CB==='today'?`<div class="card"><div class="ch">Needs your input</div><div class="qtx">The footer text has no editable theme setting, so it cannot be changed here.</div><div style="height:6px"></div></div>`:`<div class="info-c"><b style="display:flex;gap:6px;align-items:center">${I.ban} Can't be changed here <span class="tag-new" style="margin-left:auto">PROPOSED</span></b>The footer text has no editable theme setting, so it cannot be changed here.</div>`)),comp())}
+]},
+{n:'7. Theme settings → request answered',cases:[
+ {n:'Applied',st:'final',ref:'R2',when:'Every step succeeded.',shows:'Request closes with a confirmation; the change list stays as a record.',
+  r:()=>P(head({end:1}),B(SUMHIST()+ai(prop({rat:'Here is everything I changed:',rows:SUMROWS,req:req('set','done',{t:APPLIED})}))),comp())},
+ {n:'Saved as draft',st:'final',ref:'R2',when:'Merchant clicks Save as draft.',shows:'Request closes: the changes are in the draft of this theme, not live.',
+  r:()=>P(head({end:1}),B(SUMHIST()+ai(prop({rat:'Here is everything I changed:',rows:SUMROWS,req:req('set','done',{t:'Saved as draft. Nothing is live yet.'})}))),comp())},
+ {n:'Dismissed',st:'ui',ref:'R2 · U2',when:'Merchant clicks Dismiss — on the Theme settings request or the Theme builder request.',shows:'Not designed yet. Same result in both contexts, and for all pages at once (S5).',note:'UI mission scope U2 — what the chat and preview show after Dismiss. Sketch: In memory changes dropped, preview back to the saved state.',
+  r:()=>P(head({end:1}),B(SUMHIST()+ai(prop({rat:'Here is everything I changed:',rows:SUMROWS,req:req('set','done',{ic:'no',t:`Dismissed. Nothing was saved. ${TODO}`})}))),comp())}
+]},
+{n:'8. Theme builder → request → publish',cases:[
+ {n:'Changes ready on the page',st:'final',ref:'S1 · R1 · R2',when:'The AI finished in the Theme builder on Home. Changes are In memory and shown in the page preview.',shows:'Change list for the page, then the Request allow permission with Apply · Dismiss.',
+  r:()=>P(head({end:1,ctx:BLD()}),B(user('Show 4 products per row')+ai(prop({rat:'Products per row is set on the product grid of this page.',rows:[{l:'Products per row',a:'3',b:'4',v:1,sc:'page'}],req:req('bld')}))),comp())},
+ {n:'Applied → publish?',st:'final',ref:'R2',when:'Apply finished.',shows:'Second request: “Do you want to publish it?” with Publish · Deny.',note:'Which steps of the Apply chain run for builder-only changes isn\'t written in the final scope (“if any”). Shown here: page version only — confirm.',
+  r:()=>P(head({end:1,ctx:BLD()}),B(user('Show 4 products per row')+ai(prop({tag:'',prev:false,rat:'Products per row is set on the product grid of this page.',rows:[{l:'Products per row',a:'3',b:'4',v:1,sc:'page'}],req:req('bld','done',{t:'Applied — Home saved as a new version.'})+req('pub','pubq')}))),comp())},
+ {n:'Published',st:'final',ref:'R2',when:'Merchant clicks Publish.',shows:'Confirmation. The Theme builder shows the new “Last publish” time.',
+  r:()=>P(head({end:1,ctx:BLD()}),B(user('Show 4 products per row')+ai(prop({tag:'',prev:false,rat:'Products per row is set on the product grid of this page.',rows:[{l:'Products per row',a:'3',b:'4',v:1,sc:'page'}],req:req('bld','done',{t:'Applied — Home saved as a new version.'})+req('pub','done',{t:'Home is published.'})}))),comp())},
+ {n:'Denied',st:'ui',ref:'R2 · U3',when:'Merchant clicks Deny.',shows:'Not designed yet.',note:'UI mission scope U3 — what the chat shows after Deny. Sketch: the version stays saved, nothing is published.',
+  r:()=>P(head({end:1,ctx:BLD()}),B(user('Show 4 products per row')+ai(prop({tag:'',prev:false,rat:'Products per row is set on the product grid of this page.',rows:[{l:'Products per row',a:'3',b:'4',v:1,sc:'page'}],req:req('bld','done',{t:'Applied — Home saved as a new version.'})+req('pub','done',{ic:'no',t:`Not published. ${TODO}`})}))),comp())}
+]},
+{n:'9. Cross-scope & many pages',cases:[
+ {n:'Many pages (7 pages · 63 changes)',st:'final',ref:'S3 · S5 · U7',when:'The merchant is in Theme settings and one prompt changes 7 pages with about 9 changes each. Source of truth for page changes from another tab (S3) and many pages (S5); one page works the same way.',shows:'Stress test for the change list: 63 changes on 7 pages. Every page group is folded by default and shows its change count, so all pages fit at once. Click a page row (▸) to open its changes; the page link reloads the preview.',note:'UI mission scope U7 (change list display: grouping, counts). Rule: when a change list has more than one group, all groups start folded; a single group starts open. The card header stays pinned while scrolling.',
+  r:edgeCase},
+ {n:'Builder → settings change',st:'final',ref:'S4',when:'Merchant is in the Theme builder and asks for a colour or font token, e.g. “Make all buttons red”.',shows:'The FE updates the tokens In memory. The chat shows a hyperlink to Theme settings and the Request allow permission.',note:'Shown: the request set for the tab the chat is open in (Theme builder) — confirm.',
+  r:()=>P(head({end:1,ctx:BLD()}),B(user('Make all buttons red')+ai(prop({rat:'Button colour is a theme-wide token, so it changes on every page.',lkTheme:1,req:req('bld')}))),comp())},
+ {n:'Settings + builder in one prompt',st:'final',ref:'R2 · S5',when:'One prompt asks for a theme token and a page change.',shows:'One change list, one request. Apply runs Save as version (Theme settings) › Apply this theme › Save as version (Theme builder).',
+  r:()=>P(head({end:1}),B(user('Make the buttons red and show 4 products per row on Home')+ai(prop({rat:'Button colour is a theme setting; products per row is part of the Home page.',rows:MIX,lkPage:1,req:req('set','run',{steps:CH.mix,at:2})}))),RUNNING())}
+]},
+{n:'10. Errors',cases:[
+ {n:'AI error',st:'built',when:'The AI turn fails after the prompt or an answer was sent.',shows:'Red assistant bubble with a title and one line of detail; nothing is changed. Try again for temporary failures.',note:'One layout for every AI error — switch the error under the case. Proposed: “Try again” on every retryable error, and plain copy for “Result didn\'t validate” (today: “The assistant\'s reply didn\'t fit the theme contract.”).',ctrlLab:'Error',ctrl:()=>`<span class="vseg" style="margin:4px 0 0;flex-wrap:wrap">${ERRV.map(x=>`<button data-err="${x[0]}" class="${ERR===x[0]?'on':''}">${x[1]}</button>`).join('')}</span>`,
+  r:()=>{const v=ERRV.find(x=>x[0]===ERR);return P(head({end:1}),B((ERR==='image'?user('Use these colors',2):user(U1))+errb(v[2],v[3],{retry:v[4]})),comp());}},
+ {n:'Version changed before allowing',st:'concept',ref:'U5',when:'The theme version changes before the merchant answers the request (concept §9) — also when the merchant switches theme or version while changes are In memory (U5).',shows:'Concept: reject the confirmation and run again for the current version.',note:'Proposed: request buttons disabled, with a button to run again. Merged with “Theme / version switched” (U5).',
+  r:()=>P(head({end:1}),B(user(U1)+ai(prop({req:req('set','off',{d:'This theme version changed since the AI made these changes.',foot:`<div class="rq-b" style="padding-top:0"><button class="btn pr">${I.retry}Run again</button></div>`})}))),comp())}
+]},
+{n:'11. Session done',cases:[
+ {n:'End chat available',st:'built',when:'A session exists.',shows:'End chat button in the header. Ends the session, clears messages and attachments, back to the empty state.',
+  r:()=>P(head({end:1}),B(user(U1)+ai(prop({tag:'',prev:false,req:req('set','done',{t:APPLIED})}))),comp())},
+ {n:'End chat failed',st:'built',when:'Server didn\'t confirm.',shows:'Red banner with Retry.',
+  r:()=>P(head({end:1}),B(user(U1)+ai(prop({tag:'',prev:false,req:req('set','done',{t:APPLIED})}))),comp(),`<div class="banner err">${I.warn}<span>Couldn't end this chat. Try again, or refresh the page to recover the session.</span><button class="btn b">Retry</button></div>`)},
+ {n:'End chat with request pending',st:'ui',ref:'U10',when:'Merchant clicks End chat while a request is still open.',shows:'Not designed yet.',note:'UI mission scope U10. Ending the chat would drop the In memory changes.',
+  r:()=>P(head({end:1}),B(user(U1)+ai(prop({req:req('set')}))+`<div class="info-c"><b>End chat? ${TODO}</b>Your changes haven't been saved yet.</div>`),comp())}
+]}
+];
+const ST={final:['c-final','Final scope'],ui:['c-ui','UI mission scope — to design'],built:['c-built','Built'],gap:['c-gap','Gap — proposed'],concept:['c-concept','Concept — not in build'],ai:['c-ai','AI text'],confirm:['c-confirm','Needs confirmation']};
+let f=0,c=0,SCOPE=true;
+try{const s=JSON.parse(localStorage.getItem('ai-chat-flows')||'null');if(s){f=s.f;c=s.c;}}catch(e){}
+function draw(){
+ const F=FLOWS[f],C=F.cases[c];
+ document.getElementById('flows').innerHTML=FLOWS.map((x,i)=>`<label class="opt ${i===f?'on':''}"><input type="radio" name="fl" value="${i}" ${i===f?'checked':''}><span>${x.n}</span><span class="n">${x.cases.length}</span></label>`).join('');
+ document.getElementById('cases').innerHTML=F.cases.map((x,i)=>`<label class="opt ${i===c?'on':''}"><input type="radio" name="cs" value="${i}" ${i===c?'checked':''}><span>${x.n}</span><i class="dot d-${x.st}" style="margin-left:auto"></i></label>${i===c&&x.ctrl?`<div class="cctrl"><div class="cl">${x.ctrlLab||'“Something else…” opens'}</div>${x.ctrl()}</div>`:''}`).join('');
+ document.getElementById('slot').innerHTML=C.r();{const sb=document.querySelector('#slot .bd.scroll');if(sb)sb.scrollTop=window.__keepScroll??sb.scrollHeight;window.__keepScroll=undefined;}
+ const [cls,lab]=ST[C.st];
+ document.getElementById('info').innerHTML=`<div class="fl">${F.n}</div><h2>${C.n}</h2><span class="chip ${cls}">${lab}</span><dl><dt>When it happens</dt><dd>${C.when}</dd>${C.ref?`<dt>Final scope ref</dt><dd>${C.ref}</dd>`:''}<dt>${C.st==='gap'||C.st==='concept'?'Today / source':'What the UI shows'}</dt><dd>${C.shows}</dd>${C.note?`<dt>Design note</dt><dd>${C.note}</dd>`:''}${SCOPE?`<dt>Scope labels</dt><dd>Every change is labelled <span class="sc theme">Theme settings</span> (all pages) or <span class="sc page">Theme builder · page</span>. Page names and “Theme settings” become hyperlinks when the change lands outside the open tab (S3, S4, S5).</dd>`:''}</dl>`;
+ document.querySelectorAll('.tgl button').forEach(b=>b.classList.toggle('on',(b.dataset.s==='1')===SCOPE));
+ document.getElementById('pos').textContent=`${c+1} / ${F.cases.length}`;
+ try{localStorage.setItem('ai-chat-flows',JSON.stringify({f,c}));}catch(e){}
+}
+document.getElementById('flows').onchange=e=>{f=+e.target.value;c=0;draw();};
+document.getElementById('cases').onchange=e=>{c=+e.target.value;draw();};
+const step=d=>{c+=d;if(c<0){f=(f-1+FLOWS.length)%FLOWS.length;c=FLOWS[f].cases.length-1;}else if(c>=FLOWS[f].cases.length){f=(f+1)%FLOWS.length;c=0;}draw();};
+document.querySelector('.tgl').onclick=e=>{const b=e.target.closest('button');if(!b)return;SCOPE=b.dataset.s==='1';draw();};
+document.getElementById('prev').onclick=()=>step(-1);document.getElementById('next').onclick=()=>step(1);
+addEventListener('keydown',e=>{if(document.body.classList.contains('uf')||document.body.classList.contains('e2e'))return;if(e.target.closest&&e.target.closest('input,select,textarea'))return;if(e.key==='ArrowDown'){e.preventDefault();step(1);}if(e.key==='ArrowUp'){e.preventDefault();step(-1);}if(e.key==='ArrowRight'){f=(f+1)%FLOWS.length;c=0;draw();}if(e.key==='ArrowLeft'){f=(f-1+FLOWS.length)%FLOWS.length;c=0;draw();}});
+if(!FLOWS[f]||!FLOWS[f].cases[c]){f=0;c=0;}
+draw();
+
+/* ================= USER FLOWS ================= */
+const N=(t,x,o={})=>({t,x,...o});
+const D=(x,paths)=>({t:'q',x,paths});
+const Pth=(l,n)=>({l,n});
+// case refs [flowIndex, caseIndex]
+// case refs [flowIndex, caseIndex]
+const C={askQ:[3,0],answer:[4,0],summary:[5,0],empty:[0,0],noPerm:[0,1],files:[1,1],thinking:[2,0],rerun:[4,0],ready:[5,0],chain:[8,2],applied:[6,0],draft:[6,1],dismissed:[6,2],bReq:[7,0],pubQ:[7,1],published:[7,2],denied:[7,3],bDismiss:[6,2],s3:[8,0],s3open:[8,0],s4:[8,1],s5:[8,0],mixed:[8,2],askEl:[3,0],multi:[3,2],cant:[5,1],partly:[5,0],global:[5,0],err:[9,0],ver:[9,1],endPending:[10,2],switch:[9,1]};
+/* shared: S1 core loop up to "changes shown" */
+const LOOP=(where,tail=[],sref='summary')=>[
+  N('user','Types a prompt (optional images)',{ref:'files'}),
+  N('ai','AI running · chat disabled',{ref:'thinking',fs:'S1 · R3'}),
+  N('ai','AI asks a question',{ref:'askQ'}),
+  N('user','Merchant answers',{ref:'answer'}),
+  N('ai','AI running again · chat disabled',{ref:'rerun',fs:'R3'}),
+  D('More questions?',[
+   Pth('Yes',[N('sys','→ back to “AI asks a question”',{loop:1})]),
+   Pth('No more',[N('ui',`AI summarizes all changes (In memory · ${where} preview) + shows request`,{ref:sref,fs:'S1 · R1 · R2'}),...tail])])];
+const SET_REQ=()=>[
+  D('Merchant answers',[
+   Pth('Apply',[N('sys','Save as version › Apply this theme',{ref:'chain',fs:'R2'}),N('ui','Applied',{ref:'applied'}),N('end','Version saved · theme applied')]),
+   Pth('Save as draft',[N('ui','Saved as draft',{ref:'draft'}),N('end','In the draft · not live')]),
+   Pth('Dismiss',[N('ui','Dismissed',{ref:'dismissed',ui:'U2'}),N('end','Nothing saved')])])];
+const BLD_REQ=()=>[
+  D('Merchant answers',[
+   Pth('Apply',[N('sys','Apply chain (page version)',{fs:'R2'}),N('ui','“Do you want to publish it?”',{ref:'pubQ'}),
+     D('Merchant',[Pth('Publish',[N('ui','Published',{ref:'published'}),N('end','Page live')]),Pth('Deny',[N('ui','Not published',{ref:'denied',ui:'U3'}),N('end','Version saved · not live')])])]),
+   Pth('Dismiss',[N('ui','Dismissed',{ref:'bDismiss',ui:'U2'}),N('end','Nothing saved')])])];
+const UF=[
+{id:'set',grp:'Final',n:'A. Theme settings → Theme settings',sub:'S1 + S2 · happy case with preview',
+ lead:'The merchant is in Theme settings and asks for a colour, font or text-style change.',
+ rule:'R1: the AI writes into In memory and the preview updates. R2: nothing is saved until the merchant answers the request. R3: chat disabled while the AI runs.',
+ nodes:[N('start','Merchant opens the AI chat<br><small>Theme settings · theme T · version V</small>'),N('ui','Empty chat with suggestions',{ref:'empty'}),...LOOP('Theme settings',SET_REQ())]},
+{id:'bld',grp:'Final',n:'B. Theme builder → Theme builder',sub:'S1 · request + publish',
+ lead:'The merchant is in the Theme builder on a page and asks for a change on that page.',
+ rule:'R2 Theme builder: Apply · Dismiss, then “Do you want to publish it?” Publish · Deny.',
+ nodes:[N('start','Merchant opens the AI chat<br><small>Theme builder · Home · theme T</small>'),...LOOP('page',BLD_REQ(),'bReq')]},
+{id:'s3',grp:'Final',n:'C. Theme settings → Theme builder',sub:'S3 · e.g. “Show 4 products per row on Home”',
+ lead:'The merchant is in Theme settings but the request is about a page.',
+ rule:'S3: the FE updates the UI of that page. The chat shows the page name as a hyperlink; clicking it switches to the Builder and shows that page\'s preview.',
+ nodes:[N('start','Merchant in Theme settings · theme T'),...LOOP('Home page',[
+  N('ui','Chat shows page name + hyperlink',{ref:'s3',fs:'S3'}),
+  D('Clicks the page link?',[Pth('Yes',[N('sys','Switches to Theme builder · Home preview',{ref:'s3open'})]),Pth('No',[N('sys','Stays in Theme settings')])]),
+  N('ui','Request allow permission (R2)',{ref:'s3',open:'Which button set — Theme settings or Theme builder — isn\'t written in S3.'}),N('end','Answered as in A / B')])]},
+{id:'s4',grp:'Final',n:'D. Theme builder → Theme settings',sub:'S4 · colour / font tokens',
+ lead:'The merchant is in the Theme builder and asks for a shop-wide colour or font.',
+ rule:'S4: the FE updates the tokens. The chat shows a hyperlink to Theme settings and the Request allow permission.',
+ nodes:[N('start','Merchant in Theme builder · Home · theme T'),...LOOP('token',[
+  N('ui','Hyperlink to Theme settings + request',{ref:'s4',fs:'S4',open:'Which button set appears here — confirm.'}),
+  D('Merchant answers',[Pth('Apply',[N('sys','Save as version › Apply this theme',{fs:'R2'}),N('end','Tokens live on all pages')]),Pth('Dismiss',[N('end','Nothing saved',{ui:'U2'})])])])]},
+{id:'s5',grp:'Final',n:'E. Many pages / settings + builder',sub:'S5 (MVP) · one prompt, one request',
+ lead:'One prompt changes several pages, or theme tokens and pages together.',
+ rule:'S5: Apply or Dismiss applies to all pages at once. R2 solves the order: Save as version (Theme settings) › Apply this theme › Save as version (page builder).',
+ nodes:[N('start','Merchant anywhere · theme T'),...LOOP('every changed page',[
+  N('ui','Changes grouped per page, page names as links',{ref:'s5',fs:'S5'}),
+  D('Merchant answers',[
+   Pth('Apply',[N('sys','Save as version › Apply this theme › Save as version (pages)',{ref:'mixed',fs:'R2'}),N('end','All pages saved')]),
+   Pth('Dismiss',[N('end','All pages discarded',{ui:'U2'})])])])]},
+{id:'unclear',grp:'Supporting',n:'F. Vague or multi-step request',sub:'e.g. “Make my shop look more premium”',
+ lead:'The AI needs several answers before it can make changes.',
+ rule:'S1: AI asks → merchant answers → AI runs and validates again. “Question 3 of 5” only works if the AI states the total up front.',
+ nodes:[N('start','Vague prompt'),N('ai','Needs several answers'),N('ui','Question card with progress',{ref:'multi',open:'Can the AI give the total?'}),
+  D('Merchant',[Pth('Answers / types hex',[N('sys','Next question',{loop:1})]),Pth('Edits earlier answer',[N('sys','Re-asks from that step')])]),
+  N('ai','AI runs again · no more questions',{ref:'rerun'}),N('ui','AI summarizes all changes + shows request',{ref:'summary'})]},
+{id:'cant',grp:'Supporting',n:'G. Not possible here',sub:'Content, unsupported field, partly possible',
+ lead:'The request maps to nothing editable, or only part of it does.',
+ rule:'A refusal needs its own clear display, not a question card. No request when nothing changed.',
+ nodes:[N('start','Prompt'),N('ai','Checks editable fields'),
+  D('How much can be changed?',[
+   Pth('Nothing',[N('ui','“Can\'t be changed here”',{ref:'cant'}),N('end','No request')]),
+   Pth('Part of it',[N('ui','Changes + request; text names what was skipped',{ref:'partly'})]),
+   Pth('All, but setting is global',[N('ui','Changes + request; says it applies to all pages',{ref:'global'})])])]},
+{id:'fail',grp:'Supporting',n:'H. Something fails',sub:'Error, version changed, chain fails, limit',
+ lead:'Failures leave the saved theme as it was.',
+ rule:'Concept §9 + NFR. Version changed before allowing → run again for the current version.',
+ nodes:[N('start','Prompt or Apply'),
+  D('What failed?',[
+   Pth('AI / network / timeout',[N('ui','Error + Try again',{ref:'err'})]),
+   Pth('Version changed',[N('ui','Request disabled + Run again',{ref:'ver'})]),
+   Pth('Chain fails midway',[N('ui','Step marked failed',{ref:'applyFail',ui:'U8'})]),
+   Pth('Limit reached',[N('ui','Input disabled + reason',{ref:'rate',ui:'U12'})])])]},
+{id:'blocked',grp:'Supporting',n:'I. Can\'t use the AI here',sub:'No permission',
+ lead:'The chat explains why it is disabled instead of failing later.',
+ rule:'Target user = merchant admin or staff with permission to configure the storefront layout.',
+ nodes:[N('start','Merchant opens the chat'),
+  D('Can the merchant edit?',[
+   Pth('No permission',[N('ui','Input disabled + reason',{ref:'noPerm',ui:'U11'})]),
+   Pth('Yes',[N('sys','→ Flow A / B',{loop:1})])])]},
+{id:'leave',grp:'Supporting',n:'J. Leaving with changes In memory',sub:'Reload, close, switch, End chat, manual edit',
+ lead:'In memory changes exist only until the merchant answers the request.',
+ rule:'R1: In memory is lost on reload (FE handles). The other cases are UI mission scope.',
+ nodes:[N('start','Changes In memory · request open'),
+  D('What does the merchant do?',[
+   Pth('Reload',[N('ui','Changes lost',{ref:'reload',fs:'R1'})]),
+   Pth('Close / switch tab while running',[N('ui','Still running',{ref:'leave',ui:'U9'})]),
+   Pth('Switch theme / version',[N('ui','Request for old version',{ref:'switch',ui:'U5'})]),
+   Pth('Edit by hand',[N('ui','Conflict',{ref:'manual',ui:'U6'})]),
+   Pth('End chat',[N('ui','Confirm end',{ref:'endPending',ui:'U10'})])])]},
+];
+const refHTML=k=>{const c=C[k];return c?`<a class="ref" data-f="${c[0]}" data-c="${c[1]}">→ ${FLOWS[c[0]].n.split(' ')[0]} ${FLOWS[c[0]].cases[c[1]].n}</a>`:'';};
+function nodeHTML(nd,join){
+ if(nd.t==='q'){return `<div class="nd q">${nd.x}</div><div class="ln"></div><div class="brs ${join?'join':''}" data-br>${nd.paths.map(p=>`<div class="path"><span class="pl">${p.l}</span><div class="ln"></div>${seq(p.n)}${join?'<div class="fill"></div>':''}</div>`).join('')}</div>`;}
+ const K={start:'Start',user:'Merchant',ai:'AI',sys:'System',ui:'Screen',end:'End',stop:'Stop'}[nd.t]||'';
+ return `<div class="nd ${nd.t}"><span class="k">${K}</span>${nd.x}${nd.ref?`<br>${refHTML(nd.ref)}`:''}${nd.fs?`<br><span class="pr">${nd.fs}</span>`:''}${nd.ui?`<br><span class="ui-q">UI MISSION ${nd.ui}</span>`:''}${nd.open?`<br><span class="open" title="${nd.open}">OPEN Q</span><div class="loop" style="color:var(--err)">${nd.open}</div>`:''}</div>`;
+}
+const seq=arr=>arr.map((n,i)=>nodeHTML(n,i<arr.length-1)+(i<arr.length-1&&arr[i].t!=='q'?'<div class="ln arrow"></div>':(i<arr.length-1?'<div class="ln arrow"></div>':''))).join('');
+let uf=0;
+function drawUF(){
+ document.getElementById('uflist').innerHTML=['Final','Supporting'].map(g=>`<div style="font-size:11px;color:var(--muted);margin:8px 10px 2px">${g==='Final'?'Final scope (S1–S5)':'Supporting flows'}</div>`+UF.map((x,i)=>x.grp===g?`<label class="opt ${i===uf?'on':''}"><input type="radio" name="uf" value="${i}" ${i===uf?'checked':''}><span>${x.n}<small>${x.sub}</small></span></label>`:'').join('')).join('');
+ const F=UF[uf];
+ document.getElementById('ufmain').innerHTML=`<h2>${F.n}</h2><p class="lead">${F.lead}</p><div class="rule">${F.rule}</div><div class="fc">${seq(F.nodes)}</div>`;
+ requestAnimationFrame(()=>document.querySelectorAll('[data-br]').forEach(b=>{const ps=[...b.children];if(ps.length<2){b.style.setProperty('--l','50%');b.style.setProperty('--r','50%');return;}const bb=b.getBoundingClientRect(),f=ps[0].getBoundingClientRect(),l=ps[ps.length-1].getBoundingClientRect();b.style.setProperty('--l',(f.left+f.width/2-bb.left)+'px');b.style.setProperty('--r',(bb.right-(l.left+l.width/2))+'px');}));
+}
+document.getElementById('uflist').onchange=e=>{uf=+e.target.value;drawUF();};
+document.getElementById('ufmain').onclick=e=>{const a=e.target.closest('.ref');if(!a)return;f=+a.dataset.f;c=+a.dataset.c;setView('cases');draw();};
+/* ================= END-TO-END (live, clickable) ================= */
+const DOTS3='<div class="dots"><i></i><i></i><i></i></div>';
+const shade=(hex,lab)=>{if(lab==='Same as button')return hex;const k=lab==='Lighter shade'?1.25:0.8,n=parseInt(hex.slice(1),16);return '#'+[16,8,0].map(s=>Math.min(255,Math.round(((n>>s)&255)*k)).toString(16).padStart(2,'0')).join('').toUpperCase();};
+const E2D={
+ set:{prompt:U1,ctx:'set',qs:[
+  {t:'Primary button red',k:'hex',q:'Which red should the primary button use?',badges:()=>scB()+'<span class="bdg">Colors</span><span class="bdg">Primary button</span>',opts:CP.slice(0,3).map(c=>({l:c[0],v:c[1],sw:c[1]}))},
+  {t:'Hover color',k:'drop',q:'Should the hover state use a darker shade?',badges:()=>scB()+'<span class="bdg">Colors</span><span class="bdg">Primary button hover</span>',opts:[{l:'Yes, darker'},{l:'Keep current'}],more:['Lighter shade','Same as button']}],
+  rows:a=>{const hex=(a[0]&&a[0].v)||'#B91C1C',r=[{l:'Primary button',a:'#6366F1',b:hex}];if(a[1]&&a[1].lab!=='Keep current')r.push({l:'Primary button hover',a:'#4F46E5',b:shade(hex,a[1].lab)});return r;}},
+ bld:{prompt:'Show more products per row',ctx:'bld',qs:[
+  {t:'Products per row',k:'drop',q:'How many products per row on Home?',badges:()=>(SCOPE?'<span class="sc page">Theme builder · Home</span>':'')+'<span class="bdg">Product grid</span>',opts:[{l:'3'},{l:'4'},{l:'5'}],more:['2','6']}],
+  rows:a=>[{l:'Products per row',a:'3',b:a[0]?a[0].lab:'4',v:1,sc:'page'}]}
+};
+const E2S={
+ set:[['Open the chat','Empty state with an example prompt.',C.empty],['Type a prompt','Type anything or click the example, then Send.',C.files],['AI running','Chat disabled (R3).',C.thinking],['AI asks a question','Options + “Something else…”.',C.askQ],['Merchant answers','Pick an option → Send answer.',C.askQ],['AI running again','Answered card. More questions? → back to step 4.',C.answer],['Summary + request','No more questions: changes In memory + preview (R1), then Request allow permission (R2).',C.summary],['Apply running','Save as version › Apply this theme.',C.chain],['Applied','Version saved, theme applied.',C.applied]],
+ bld:[['Open the chat','Empty state with an example prompt.',C.empty],['Type a prompt','Type anything or click the example, then Send.',C.files],['AI running','Chat disabled (R3).',C.thinking],['AI asks a question','Options + “Something else…”.',C.askQ],['Merchant answers','Pick an option → Send answer.',C.askQ],['AI running again','Answered card. More questions? → back to step 4.',C.answer],['Summary + request','No more questions: changes In memory + preview (R1), then Request allow permission (R2).',C.bReq],['Apply running','Save as version (page).',C.bReq],['Do you want to publish it?','Second request: Publish · Deny.',C.pubQ],['Published','Page live.',C.published]]};
+const E2B={set:[['draft','Save as draft','In the draft, not live.',C.draft],['dismissed','Dismiss','Nothing saved. U2 · to design.',C.dismissed]],bld:[['dismissed','Dismiss','Nothing saved. U2 · to design.',C.bDismiss],['denied','Deny','Version saved, not published. U3 · to design.',C.denied]]};
+let E={path:'set',st:'empty',prompt:'',text:'',qi:0,ans:[],sel:null,val:'',at:0,tok:0};
+const E2X=()=>E2D[E.path];
+const later=(ms,fn)=>{const t=E.tok;setTimeout(()=>{if(t===E.tok)fn();},ms);};
+const esc=v=>String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const e2Ok=()=>{const d=E2X().qs[E.qi];return E.sel!==null&&(E.sel!=='other'||(d.k==='hex'?HEXOK(E.val):!!E.val.trim()));};
+function e2Other(d){const v=E.val;
+ if(d.k==='hex'){const ok=HEXOK(v),bad=v.length>=7&&!ok;return `<div class="hex q1x e2x ${bad?'bad':'f'}"><span class="hs" ${ok?`style="background:${v}"`:''}></span><input class="q1in mono" data-e2v placeholder="#RRGGBB" maxlength="7" value="${esc(v)}"></div><div class="hexmsg e2m ${bad?'bad':''}">${mqMsg(bad)}</div>`;}
+ if(d.k==='text')return `<div class="hex q1x f"><input class="q1in" data-e2v placeholder="Type your answer" value="${esc(v)}"></div>`;
+ return `<div class="q1x"><select class="q1sel" data-e2v><option value="">Choose…</option>${d.more.map(m=>`<option ${v===m?'selected':''}>${m}</option>`).join('')}</select></div>`;}
+function e2Q(){const X=E2X(),d=X.qs[E.qi],n=X.qs.length;
+ const done=E.ans.map((a,i)=>`<div><span class="ok">${I.check}</span>${i+1}. ${X.qs[i].t}<b>${a.lab}</b></div>`).join('');
+ return `<div class="card"><div class="ch">Needs your input${n>1?`<span class="qstep">Question ${E.qi+1} of ${n}</span>`:''}</div>${n>1?`<div class="qprog">${X.qs.map((_,i)=>`<i class="${i===E.qi?'c':i<E.qi?'d':''}"></i>`).join('')}</div>`:''}${done?`<div class="qdone">${done}</div>`:''}<div class="badges">${d.badges()}</div><div class="qtx">${d.q}</div><div class="pills sel1">${d.opts.map((o,i)=>`<button data-e2o="${i}" class="${o.sw?'cp ':''}${E.sel===i?'sel':''}">${o.sw?`<i style="background:${o.sw}"></i>`:''}${o.l}</button>`).join('')}<button data-e2o="other" class="${E.sel==='other'?'sel':''}">Something else…</button></div>${E.sel==='other'?e2Other(d):''}<div class="q1f"><button class="btn ${e2Ok()?'pr':'dis'}" data-e2="ans">Send answer</button></div></div>`;}
+const e2Comp=()=>`<div class="cw"><div class="cmp"><div class="in"><button class="ci" title="Attach images (PNG, JPEG)">${I.plus}</button><input class="e2in" placeholder="Prompt your request here" value="${esc(E.text)}"><button class="send" data-e2="send" title="Send">${I.send}</button></div></div></div>`;
+const e2Empty=()=>emptyB().replace('<button>Make the product title bigger</button><button>Change the primary color</button><button>Make the theme Walmart-like</button>',`<button data-e2ex>${E2X().prompt}</button>`);
+function e2Panel(){const X=E2X(),H=head({end:1}),u=user(esc(E.prompt));
+ const ansCard=()=>E.ans.length?ai(ANS(E.ans.map((a,i)=>[X.qs[i].t,a.lab]))):'';
+ const prog=ai(`<div class="prog"><span class="ok">${I.check} Found matching settings</span><span><span class="spin"></span> Checking new values…</span></div>`);
+ const sum=(rq,done)=>B(u+ansCard()+ai(prop({rat:'Here is everything I changed:',rows:X.rows(E.ans),tag:done?'':undefined,prev:done?false:undefined,req:rq})));
+ const OKB='Applied — Home saved as a new version.';
+ switch(E.st){
+  case 'empty':return P(head(),e2Empty(),e2Comp());
+  case 'run1':return P(H,B(u+ai(DOTS3)),RUNNING());
+  case 'ask':return P(H,B(u+ai(e2Q())),comp());
+  case 'run2':return P(H,B(u+ansCard()+RUNAGAIN()),RUNNING());
+  case 'sum':return P(H,sum(req(X.ctx)),comp());
+  case 'chain':return P(H,sum(req(X.ctx,'run',{steps:CH[X.ctx],at:E.at})),RUNNING());
+  case 'applied':return P(H,sum(req('set','done',{t:APPLIED}),1),e2Comp());
+  case 'draft':return P(H,sum(req('set','done',{t:'Saved as draft. Nothing is live yet.'}),1),e2Comp());
+  case 'dismissed':return P(H,sum(req(X.ctx,'done',{ic:'no',t:'Dismissed. Nothing was saved.'}),1),e2Comp());
+  case 'pubq':return P(H,sum(req('bld','done',{t:OKB})+req('pub','pubq'),1),comp());
+  case 'published':return P(H,sum(req('bld','done',{t:OKB})+req('pub','done',{t:'Home is published.'}),1),e2Comp());
+  case 'denied':return P(H,sum(req('bld','done',{t:OKB})+req('pub','done',{ic:'no',t:'Not published.'}),1),e2Comp());}}
+function e2Cur(){const m={empty:E.text.trim()?1:0,run1:2,ask:E.sel!==null?4:3,run2:5,sum:6,chain:7,applied:8,pubq:8,published:9};return E.st in m?m[E.st]:-1;}
+function e2Track(){const S=E2S[E.path],cur=e2Cur(),br=E2B[E.path],end=['applied','published','draft','dismissed','denied'].includes(E.st);
+ const li=(n,t,d,ref,cls,extra='')=>`<li class="${cls}"><span class="e2n">${cls==='done'?I.check:n}</span><div><b>${t}</b>${cls.startsWith('cur')?`<p>${d}</p>${extra}${ref?`<a class="ref" data-f="${ref[0]}" data-c="${ref[1]}">Open case →</a>`:''}`:''}</div></li>`;
+ const n=E2X().qs.length,bm={draft:6,dismissed:6,denied:8},doneTo=E.st in bm?bm[E.st]:cur-1;
+ document.getElementById('e2track').innerHTML=`<div class="blk e2t"><h3>Where you are</h3><ol>${S.map((s,i)=>li(i+1,s[0],s[1],s[2],i<=doneTo?'done':i===cur?(i===S.length-1?'cur last':'cur'):'',i===3||i===5?`<div class="e2loop">${n>1?`Question ${Math.min(E.qi+1,n)} of ${n}`:'1 question'} · ↺ loops until no more questions</div>`:'')).join('')}</ol><h3>Other answers at the request</h3><ol>${br.map((b,i)=>li(String.fromCharCode(97+i),b[1],b[2],b[3],E.st===b[0]?'cur':'br')).join('')}</ol></div>`;}
+function e2Draw(){document.getElementById('e2panel').innerHTML=e2Panel();e2Track();}
+function drawE2E(){document.getElementById('e2e').innerHTML=`<div class="e2top"><div><h2>End-to-end prototype</h2><p class="lead">Click through one real request: type a prompt (or click the example) → AI running → answer the AI's questions → AI running again → summary + request → answer the request.</p></div><div class="e2acts"><span class="vseg">${[['set','Theme settings'],['bld','Theme builder']].map(x=>`<button data-e2p="${x[0]}" class="${E.path===x[0]?'on':''}">${x[1]}</button>`).join('')}</span><button class="btn" data-e2="reset">↺ Restart</button></div></div><div class="e2l"><div class="slot" id="e2panel"></div><div id="e2track"></div></div>`;e2Draw();}
+function e2Reset(){E.tok++;Object.assign(E,{st:'empty',prompt:'',text:'',qi:0,ans:[],sel:null,val:'',at:0});drawE2E();}
+function e2Send(t){E.tok++;Object.assign(E,{prompt:t,text:'',qi:0,ans:[],sel:null,val:'',at:0,st:'run1'});e2Draw();later(1400,()=>{E.st='ask';e2Draw();});}
+function e2Answer(){if(!e2Ok())return;const d=E2X().qs[E.qi];E.ans[E.qi]={lab:E.sel==='other'?E.val:d.opts[E.sel].l,v:E.sel==='other'?E.val:d.opts[E.sel].v};E.st='run2';e2Draw();
+ later(1300,()=>{if(E.qi<E2X().qs.length-1){E.qi++;E.sel=null;E.val='';E.st='ask';}else E.st='sum';e2Draw();});}
+function e2Apply(){const steps=CH[E2X().ctx];E.st='chain';E.at=0;e2Draw();const tick=()=>later(800,()=>{E.at++;if(E.at>=steps.length){E.st=E.path==='set'?'applied':'pubq';e2Draw();}else{e2Draw();tick();}});tick();}
+function e2Sync(){const p=document.getElementById('e2panel'),b=p.querySelector('[data-e2="ans"]');if(b)b.className='btn '+(e2Ok()?'pr':'dis');
+ const w=p.querySelector('.e2x'),m=p.querySelector('.e2m');if(w){const ok=HEXOK(E.val),bad=E.val.length>=7&&!ok;w.className='hex q1x e2x '+(bad?'bad':'f');w.querySelector('.hs').style.background=ok?E.val:'';m.className='hexmsg e2m '+(bad?'bad':'');m.textContent=mqMsg(bad);}}
+const e2El=document.getElementById('e2e');
+e2El.addEventListener('click',e=>{const t=e.target;let x;
+ if(x=t.closest('[data-e2p]')){E.path=x.dataset.e2p;e2Reset();return;}
+ if(x=t.closest('[data-e2="reset"]')){e2Reset();return;}
+ if(x=t.closest('.ref')){f=+x.dataset.f;c=+x.dataset.c;setView('cases');draw();return;}
+ if(x=t.closest('[data-e2ex]')){e2Send(E2X().prompt);return;}
+ if(x=t.closest('[data-e2="send"]')){if(E.text.trim())e2Send(E.text.trim());else{const i=e2El.querySelector('.e2in');if(i)i.focus();}return;}
+ if(x=t.closest('[data-e2o]')){E.sel=x.dataset.e2o==='other'?'other':+x.dataset.e2o;e2Draw();if(E.sel==='other'){const i=e2El.querySelector('[data-e2v]');if(i)i.focus();}return;}
+ if(x=t.closest('[data-e2="ans"]')){e2Answer();return;}
+ if(x=t.closest('.rq .rq-b .btn')){if(x.classList.contains('dis'))return;const l=x.textContent.trim();
+  if(l==='Apply')e2Apply();else if(l==='Save as draft'){E.st='draft';e2Draw();}else if(l==='Dismiss'){E.st='dismissed';e2Draw();}else if(l==='Publish'){E.st='published';e2Draw();}else if(l==='Deny'){E.st='denied';e2Draw();}}});
+e2El.addEventListener('input',e=>{if(e.target.classList.contains('e2in')){const was=!!E.text.trim();E.text=e.target.value;if(was!==!!E.text.trim())e2Track();}else if(e.target.hasAttribute('data-e2v')){E.val=e.target.value;e2Sync();}});
+e2El.addEventListener('change',e=>{if(e.target.hasAttribute('data-e2v')){E.val=e.target.value;e2Sync();}});
+e2El.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList.contains('e2in')&&E.text.trim()){e.preventDefault();e2Send(E.text.trim());}});
+function setView(v){document.body.classList.toggle('uf',v==='uf');document.body.classList.toggle('e2e',v==='e2e');if(v==='e2e')drawE2E();document.querySelectorAll('.vseg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='uf')drawUF();try{localStorage.setItem('ai-chat-view',v);}catch(e){}}
+document.querySelector('.vseg').onclick=e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v);};
+try{const v=localStorage.getItem('ai-chat-view');if(v==='uf'||v==='e2e')setView(v);}catch(e){}
+document.addEventListener('click',e=>{const d=document.querySelector('.lgpop');if(d&&d.open&&!d.contains(e.target))d.open=false;});
+document.querySelector('.rcol').addEventListener('click',e=>{const k=e.target.closest('[data-a5k]'),t=e.target.closest('[data-a5s]');if(k){A5.kind=k.dataset.a5k;A5.lab='';draw();}if(t){A5.src=t.dataset.a5s;A5.lab='';draw();}});
+document.addEventListener('click',e=>{const a=e.target.closest('.pglk');if(!a)return;e.preventDefault();const pg=a.dataset.pg,m=a.closest('.c')||document;m.querySelectorAll('.pglk').forEach(x=>x.classList.toggle('on',x.dataset.pg===pg));const st=m.querySelector('.pvst');if(st){st.innerHTML=`<span class="spin"></span> Loading ${pg} preview…`;setTimeout(()=>{st.innerHTML=`<span class="ok">${I.check}</span>Showing ${pg} preview`;},700);}});
+document.querySelector('.rcol').addEventListener('click',e=>{const b=e.target.closest('[data-edm]');if(b){EDGE.mode=b.dataset.edm;draw();}});
+document.getElementById('slot').addEventListener('click',e=>{const h=e.target.closest('[data-pa]');if(!h||e.target.closest('.pglk'))return;const i=+h.dataset.pa;EDGE.open[i]=!EDGE.open[i];const sb=document.querySelector('#slot .bd.scroll');window.__keepScroll=sb?sb.scrollTop:undefined;draw();});
+document.addEventListener('click',e=>{const h=e.target.closest('.gtog');if(!h||e.target.closest('a'))return;const w=h.closest('.gwrap');if(w)w.classList.toggle('open');});
+document.querySelector('.rcol').addEventListener('click',e=>{const a=e.target.closest('[data-s6]'),b=e.target.closest('[data-cb]');if(a){S6=a.dataset.s6;draw();}if(b){CB=b.dataset.cb;draw();}});
+document.querySelector('.rcol').addEventListener('click',e=>{const b=e.target.closest('[data-err]');if(b){ERR=b.dataset.err;draw();}});
+</script>
+</body>
+</html>

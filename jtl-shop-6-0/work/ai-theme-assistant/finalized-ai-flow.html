@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finalized AI Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#2722F8;--p-50:#EEEDFF;--p-100:#DCDBFE;--h:#FB581F;--h-50:#FFF1EB;--ink:#111827;--ink-2:#374151;--muted:#6B7280;--line:#E5E7EB;--bg:#F9FAFB;--page:#F3F4F6;--ok:#059669;--ok-50:#ECFDF5;--err:#DC2626;--err-50:#FEF2F2;--warn:#B45309;--warn-50:#FFFBEB;--vio:#6D28D9;--vio-50:#F3E8FF}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--page);font-size:14px;line-height:1.5}
+.top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1500px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.top h1{margin:0;font-size:16px}
+.top small{color:var(--muted)}
+.prog{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);margin-left:auto}
+.bar{width:140px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--ok);width:0}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px}
+.seg button{font:inherit;font-size:12.5px;font-weight:600;border:0;background:none;border-radius:6px;padding:4px 10px;color:var(--muted);cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.btn{font:inherit;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 11px;cursor:pointer;color:var(--ink)}
+.btn.pr{background:var(--p);border-color:var(--p);color:#fff}
+.wrap{max-width:1500px;margin:0 auto;padding:20px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.intro p{margin:0;color:var(--ink-2);font-size:13.5px}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.tag{display:inline-block;font-size:11px;font-weight:600;border-radius:99px;padding:2px 9px;white-space:nowrap}
+.t-team{background:var(--ink);color:#fff}.t-ok{background:var(--ok-50);color:var(--ok)}.t-prop{background:var(--vio-50);color:var(--vio)}.t-dec{background:var(--warn-50);color:var(--warn)}.t-dev{background:var(--err-50);color:var(--err)}.t-info{background:var(--bg);color:var(--ink-2);border:1px solid var(--line)}
+.tw{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1100px;table-layout:fixed}
+th,td{text-align:left;vertical-align:top;padding:7px 12px;border-bottom:1px solid var(--line);font-size:13.5px}
+thead th{position:sticky;top:0;background:var(--bg);font-size:12px;color:var(--ink-2);font-weight:600;z-index:1}
+th.me,td.me{background:#FBFBFF;border-left:2px solid var(--p-100);width:30%}
+td.n{white-space:nowrap;width:52px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+td.t{width:20%;font-weight:600}
+td.c{width:34%;color:var(--ink-2)}
+td.c ol,td.c ul{margin:4px 0 0;padding-left:18px}
+td.k{width:120px}
+tr.grp td{background:var(--p-50);color:#1E1B7A;font-weight:700;font-size:13px;padding:9px 14px;position:sticky;left:0}
+tr.grp td small{font-weight:500;color:var(--ink-2);margin-left:6px}
+tr.done td.n{color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
+.chk{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--ok);color:#fff;font-size:11px;margin-right:6px;vertical-align:-3px}
+.dec{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.nb{margin-left:auto;position:relative;width:28px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.nb:hover{color:var(--ink)}
+.nb.has{color:var(--p);border-color:var(--p-100);background:var(--p-50)}
+.nb.has::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--h);border:2px solid #fff}
+.nb.open{background:var(--p);border-color:var(--p);color:#fff}
+.peek{font-size:12px;color:var(--ink-2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;cursor:pointer}
+.dec button{font:inherit;font-size:11.5px;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:99px;padding:2px 9px;cursor:pointer;color:var(--ink-2)}
+.dec button.on[data-v="ok"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.dec button.on[data-v="change"]{background:var(--h);border-color:var(--h);color:#fff}
+.dec button.on[data-v="q"]{background:var(--p);border-color:var(--p);color:#fff}
+textarea{width:100%;min-height:52px;margin-top:6px;font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;resize:vertical;background:#fff}
+textarea:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px var(--p-50)}
+.pre{font-size:12px;color:var(--muted);margin-top:4px}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media(max-width:800px){.intro{grid-template-columns:1fr}}
+.fs{background:#fff;border:2px solid var(--ok);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.fs-h{display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--ok-50);border-bottom:1px solid #A7F3D0}
+.fs-h b{font-size:15px;color:#065F46}
+.fs-h .tag{margin-right:auto}
+.fs table{min-width:0;table-layout:auto}
+.fs td{font-size:13.5px;padding:9px 14px}
+.fs td.id{width:52px;font-weight:700;color:var(--ok)}
+.fs td.sc{width:24%;font-weight:600}
+.fs .flow{font-weight:500;color:var(--ink)}
+.fs .opt{display:inline-block;border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:1px 7px;margin:2px 4px 2px 0;font-size:12.5px}
+.fs .vi{color:var(--ink-2)}
+.fs.l-en .vi,.fs.l-vi .en{display:none}
+.fs.l-both .vi{display:block;margin-top:4px;padding-top:4px;border-top:1px dashed var(--line)}
+.fs .oq{padding:12px 18px;background:var(--warn-50);border-top:1px solid #FDE68A;font-size:13px}
+.fs .oq b{color:var(--warn)}
+.fs .oq ul{margin:6px 0 0;padding-left:20px}
+.fs .oq.ui{background:var(--p-50);border-top:1px solid var(--p-100)}
+.fs .oq.ui b{color:var(--p)}
+.fs .oq ol{margin:6px 0 0;padding-left:20px}
+.fs .oq li{margin:3px 0}
+.gone{border-top:1px solid var(--line);padding:10px 18px;font-size:13px;color:var(--ink-2)}
+.gone summary{cursor:pointer;font-weight:600;color:var(--muted)}
+.gone ul{margin:8px 0 0;padding-left:18px}.gone li{margin:3px 0}
+.fs td ul{margin:6px 0 0;padding-left:18px}.fs td li{margin:3px 0}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <h1>Finalized AI flow</h1><small>Trợ lý AI · Theme Editor · tổng hợp 2 lần thảo luận gần nhất</small>
+  <div class="seg" id="filter"><button data-f="all" class="on">Tất cả</button><button data-f="open">Chưa xử lý</button><button data-f="q">Câu hỏi / cần sửa</button></div>
+  <span class="prog"><span id="cnt">0/0</span><span class="bar"><i id="bar"></i></span></span>
+  <button class="btn" id="copyBtn">Copy ghi chú</button>
+  <button class="btn pr" id="dlBtn">Lưu HTML kèm ghi chú</button>
+</div></div>
+<div class="wrap">
+  <div class="intro">
+    <p><b>Final scope</b> là phần đã chốt. Bảng <b>UI mission scope</b> bên dưới là những gì UI còn phải handle sau khi đối chiếu với Final scope. Cột bên phải để đánh dấu <b>Đồng ý / Cần sửa / Câu hỏi</b> và ghi chú (icon note). Bấm <b>Lưu HTML kèm ghi chú</b> để lưu vào file.</p>
+    <div class="legend"><span class="tag t-team">Logic team</span><span class="tag t-ok">Đã xác nhận</span><span class="tag t-prop">Đề xuất</span><span class="tag t-dec">Cần quyết định</span><span class="tag t-dev">Hỏi dev</span><span class="tag t-info">Thông tin</span></div>
+  </div>
+<section class="fs l-both" id="fs"><div class="fs-h"><b>Final scope</b><span class="tag t-ok">Đã chốt · Confirmed</span><div class="seg" id="fsLang"><button data-l="en">EN</button><button data-l="vi">VI</button><button data-l="both" class="on">EN + VI</button></div></div>
+<table><thead><tr><th>#</th><th><span>Rule · Scenario / Quy tắc · Kịch bản</span></th><th>Flow / Luồng</th></tr></thead><tbody><tr><td class="id">R1</td><td class="sc"><div class="en">In memory</div><div class="vi">In memory</div></td><td class="flow"><div class="en">In every case, the AI runs and writes the changes into <b>In memory</b> — a temporary copy on the FE that is lost on reload (FE handles this).</div><div class="vi">Trong bất kỳ trường hợp nào, AI sẽ chạy và cập nhật thay đổi vào <b>In memory</b> — tức là một bản lưu tạm trên FE, reload thì sẽ mất (phương án xử lý: FE handle).</div></td></tr><tr><td class="id">R2</td><td class="sc"><div class="en">Request allow permission</div><div class="vi">Request allow permission</div></td><td class="flow"><div class="en">The session runs to the end, and only then is the flow closed with a <b>Request allow permission</b>:<ul><li><b>Theme settings:</b> 3 buttons <span class="opt">Apply changes</span><span class="opt">Save as draft</span><span class="opt">Dismiss</span></li><li><b>Theme builder:</b> 2 buttons <span class="opt">Apply changes</span><span class="opt">Dismiss</span> → once this session is done, a follow-up request “Do you want to publish it” <span class="opt">Publish</span><span class="opt">Deny</span></li><li><b>Apply changes:</b> the system runs underneath Save as version › Apply this theme › Save as version (in the page builder, if any) accordingly.</li></ul></div><div class="vi">Session chạy đến cuối cùng mới chốt flow bằng <b>Request allow permission</b>:<ul><li><b>Theme settings:</b> hiện 3 buttons <span class="opt">Apply changes</span><span class="opt">Save as draft</span><span class="opt">Dismiss</span></li><li><b>Theme builder:</b> hiện 2 buttons <span class="opt">Apply changes</span><span class="opt">Dismiss</span> → xong session này sẽ hiện tiếp request “Do you want to publish it” <span class="opt">Publish</span><span class="opt">Deny</span></li><li><b>Apply changes:</b> hệ thống chạy ngầm Save as version › Apply this theme › Save as version (trong page builder nếu có) tương ứng.</li></ul></div></td></tr><tr><td class="id">R3</td><td class="sc"><div class="en">Chat while running</div><div class="vi">Chat khi đang chạy</div></td><td class="flow"><div class="en">While a session is running, the chat is disabled.</div><div class="vi">Session đang chạy ⇒ chat bị disabled.</div></td></tr><tr><td class="id">S1</td><td class="sc"><div class="en">Core loop</div><div class="vi">Luồng chính</div></td><td class="flow"><div class="en">Prompt → AI runs → AI asks questions → merchant answers → AI runs and validates again → AI finalizes and <b>shows the changes</b> (tokens, colours, text, structure?) → <b>Request allow permission</b> (R2).</div><div class="vi">Prompt → AI chạy → AI hỏi lại → merchant trả lời → AI chạy và kiểm tra lại → AI chốt và <b>hiển thị các thay đổi</b> (token, màu, text, cấu trúc?) → <b>Request allow permission</b> (R2).</div></td></tr><tr><td class="id">S2</td><td class="sc"><div class="en">In Theme settings → change Theme settings</div><div class="vi">Ở Theme settings → sửa Theme settings</div></td><td class="flow"><div class="en"><b>Happy case.</b> AI updates the theme settings and shows the preview.</div><div class="vi"><b>Happy case.</b> AI cập nhật Theme settings và hiển thị preview.</div></td></tr><tr><td class="id">S3</td><td class="sc"><div class="en">In Theme settings → change Theme builder</div><div class="vi">Ở Theme settings → sửa Theme builder</div></td><td class="flow"><div class="en">AI session runs → FE updates the UI of that specific page → chat shows the <b>page name + hyperlink</b> → clicking the link switches to the Builder and shows the preview of that page.</div><div class="vi">Phiên AI chạy xong → FE cập nhật UI của đúng trang đó → chat hiển thị <b>tên trang + hyperlink</b> → bấm link chuyển sang Builder và hiển thị preview trang đó.</div></td></tr><tr><td class="id">S4</td><td class="sc"><div class="en">In Theme builder → change Theme settings (colour, font tokens)</div><div class="vi">Ở Theme builder → sửa Theme settings (token màu, font)</div></td><td class="flow"><div class="en">AI session runs → FE updates the tokens → chat shows a <b>hyperlink to Theme settings</b> + <b>Request allow permission</b>.</div><div class="vi">Phiên AI chạy xong → FE cập nhật token → chat hiển thị <b>hyperlink tới Theme settings</b> + <b>Request allow permission</b>.</div></td></tr><tr><td class="id">S5</td><td class="sc"><div class="en">One prompt for many pages (MVP)</div><div class="vi">Một prompt sửa nhiều trang (MVP)</div></td><td class="flow"><div class="en"><b>Apply changes</b> or <b>Dismiss</b> applies to <b>all pages at once</b>.</div><div class="vi"><b>Apply changes</b> hoặc <b>Dismiss</b> áp dụng cho <b>tất cả các trang cùng lúc</b>.</div></td></tr></tbody></table>
+
+<details class="gone"><summary>Đã bỏ (trùng hoặc đã giải quyết) · 21 mục</summary><ul><li><b>Nhóm “Cần hỏi dev” (B1–B4)</b> — bỏ theo yêu cầu</li><li><b>Reload / rời editor</b> — R1: FE handle</li><li><b>Trang không tồn tại / tên mơ hồ</b> — S1: AI hỏi lại</li><li><b>Câu hỏi mở: giới hạn 5/5 version</b> — đã chốt trong S5</li><li><b>Câu hỏi mở: Undo sau Apply changes</b> — bỏ</li><li><b>Câu hỏi mở: phạm vi Publish / trạng thái sau Deny</b> — bỏ</li><li><b>S5 cũ — Một prompt sửa cả Settings + Builder</b> — đã giải quyết bởi R2 (Apply changes chạy Save as version › Apply this theme › Save as version trang)</li><li><b>A1–A9 (logic & luồng tổng hợp)</b> — Đã nằm trong Final scope (R1–R3, S1)</li><li><b>B1 Request phải cho biết sẽ đổi gì</b> — S1: AI hiển thị các thay đổi trước Request</li><li><b>B2 Chỉ “Allow this time” / [Always allow]</b> — R2: bộ nút cố định, không có Always allow</li><li><b>B3 Một lần cho phép đổi nhiều trang</b> — S3 (tên trang + hyperlink), S6</li><li><b>B5 Draft hay Version</b> — R2: Save as draft / Apply changes</li><li><b>B6 Phụ thuộc kỹ thuật AI toàn cục</b> — Chuyển sang nhóm B (hỏi dev)</li><li><b>C1–C5 Bốn kịch bản</b> — Thay bằng S2–S5</li><li><b>D1–D9, D11 Thứ tự Settings → Builder, phương án A/B/C, thứ tự publish</b> — R2: Apply changes chạy Save as version › Apply this theme › Save as version trang; Builder hỏi Publish sau</li><li><b>D10, E8 Lỗi giữa chừng / lưu thất bại</b> — Gộp thành A10</li><li><b>B4, E7 Undo</b> — Chuyển thành câu hỏi mở số 4</li><li><b>E1 Prompt mới khi request còn chờ</b> — Viết lại thành A4 theo R3</li><li><b>E14 Nhắc publish</b> — Builder có request Publish; Theme settings Apply changes đã apply theme</li><li><b>F1 Builder đọc token từ Draft hay Active</b> — Apply changes apply theme trước khi lưu version trang; preview dùng In memory (FE)</li><li><b>F5 Lưu Version qua AI</b> — Phần 5/5 chuyển thành câu hỏi mở số 3; phần Undo thành câu hỏi số 4</li></ul></details></section>
+  <div class="tw"><table><colgroup><col style="width:64px"><col style="width:17%"><col><col style="width:128px"><col style="width:32%"></colgroup><thead><tr><th>#</th><th>Chủ đề</th><th>Nội dung / đề xuất</th><th>Loại</th><th class="me">Xác nhận / câu hỏi của bạn</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div>
+<div class="toast" id="toast"></div>
+<script id="notes-data" type="application/json">{}</script>
+<script>
+const SRC='<!doctype html>\n'+document.documentElement.outerHTML;
+const TAGS={team:['t-team','Logic team'],ok:['t-ok','Đã xác nhận'],prop:['t-prop','Đề xuất'],dec:['t-dec','Cần quyết định'],dev:['t-dev','Hỏi dev'],info:['t-info','Thông tin']};
+const G=[
+{g:'UI mission scope — còn phải handle',sub:'đã đối chiếu với Final scope',rows:[
+ ['U1','Cấu trúc (section)','Thêm / sắp xếp section có nằm trong scope, hay chỉ token, màu và text (S1)?','dec'],
+ ['U2','Sau Dismiss','R2 có nút Dismiss nhưng chưa định nghĩa phản hồi: đề xuất bỏ toàn bộ thay đổi In memory, AI báo không có gì được lưu, mọi thứ giữ nguyên.','prop'],
+ ['U3','Sau Deny (không publish)','Version của trang đã lưu nhưng chưa publish. Chat cần ghi rõ trạng thái này.','prop'],
+ ['U4','Request chưa trả lời','R3 chỉ khóa chat khi session đang chạy. Khi session đã xong nhưng request chưa được trả lời: giữ chat khóa đến khi merchant chọn một nút?','dec'],
+ ['U5','Đổi theme / version khi còn thay đổi In memory','Thay đổi In memory thuộc theme và version cũ: tự Dismiss, hay cảnh báo trước khi đổi?','dec'],
+ ['U6','Chỉnh tay trùng field AI đang sửa','Phần hiển thị thay đổi báo field bị trùng và bên nào được giữ.','prop'],
+ ['U7','Hiển thị danh sách thay đổi','S1 hiển thị thay đổi trước request: nhóm theo Theme settings và từng trang, có số lượng, mở ra xem chi tiết; text hiển thị cũ → mới, không chỉ ô màu.','prop'],
+ ['U8','Apply changes lỗi giữa chừng','Chuỗi Save as version › Apply this theme › Save as version trang dừng ở một bước: báo bước nào xong, bước nào lỗi, có nút thử lại phần còn lại.','prop'],
+ ['U9','Chuyển tab / đóng panel khi session đang chạy','Session tiếp tục chạy, chat khóa (R3); khi xong, request hiện khi merchant mở lại chat.','prop'],
+ ['U10','End chat khi request chưa trả lời','Cảnh báo trước khi kết thúc: thay đổi In memory sẽ mất.','prop'],
+ ['U11','Không có quyền / chưa chọn version','Khóa ô nhập, giải thích lý do.','prop'],
+ ['U12','Hết lượt','Khóa ô nhập; request đang chờ vẫn dùng được.','prop']]}
+];
+const KEY='finalized-ai-flow-v2';
+let NOTES={};
+try{NOTES=JSON.parse(document.getElementById('notes-data').textContent)||{};}catch(e){}
+try{const s=localStorage.getItem(KEY);if(s)NOTES=Object.assign(NOTES,JSON.parse(s));}catch(e){}
+if(!NOTES._v){const O=Object.assign({},NOTES),M=[['A1','A1'],['B1','A1'],['B2','A2'],['B3','A3'],['B4','A4'],['A2','A5'],['B5','A5'],['A3','A6'],['B6','A6'],['B7','A7'],['F1','A8'],['B8','A9']];['A1','A2','A3','B1','B2','B3','B4','B5','B6','B7','B8','F1'].forEach(k=>delete NOTES[k]);
+ M.forEach(([o,n])=>{const x=O[o];if(!x||(!x.d&&!x.t))return;const y=NOTES[n]=NOTES[n]||{};if(x.t)y.t=y.t?(y.t+'\n'+x.t):x.t;if(x.d&&!y.d)y.d=x.d;});NOTES._v=2;try{localStorage.setItem(KEY,JSON.stringify(NOTES));}catch(e){}}
+if((NOTES._v||0)<3){const O=Object.assign({},NOTES),S={C:'B',D:'C',E:'D',F:'E',G:'F'};Object.keys(O).forEach(k=>{const m=/^([C-G])(\d+)$/.exec(k);if(m){delete NOTES[k];}});Object.keys(O).forEach(k=>{const m=/^([C-G])(\d+)$/.exec(k);if(m)NOTES[S[m[1]]+(m[1]==='F'?(+m[2]-1):m[2])]=O[k];});NOTES._v=3;try{localStorage.setItem(KEY,JSON.stringify(NOTES));}catch(e){}}
+if((NOTES._v||0)<4){const M={A1:'U2',A2:'U3',A4:'U4',A5:'U5',A6:'U6',A7:'U7',A9:'U7',A10:'U8',A11:'U9',A12:'U10',A13:'U11',A14:'U12'};const O=Object.assign({},NOTES);Object.keys(O).forEach(k=>{if(/^[AB]\d+$/.test(k))delete NOTES[k];});Object.keys(M).forEach(k=>{const x=O[k];if(!x||(!x.d&&!x.t))return;const y=NOTES[M[k]]=NOTES[M[k]]||{};if(x.t)y.t=y.t?y.t+'\n'+x.t:x.t;if(x.d&&!y.d)y.d=x.d;});NOTES._v=4;try{localStorage.setItem(KEY,JSON.stringify(NOTES));}catch(e){}}
+G.forEach(g=>g.rows.forEach(r=>{if(r[4]&&!NOTES[r[0]])NOTES[r[0]]={d:'',t:r[4],pre:1};}));
+let filter='all';const OPEN=new Set();
+const NOTE_IC='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg>';
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function render(){
+ document.getElementById('tb').innerHTML=G.map(g=>{
+  const rows=g.rows.filter(r=>{const n=NOTES[r[0]]||{};if(filter==='open')return !n.d;if(filter==='q')return n.d==='q'||n.d==='change';return true;});
+  if(!rows.length)return'';
+  return `<tr class="grp"><td colspan="5">${g.g}${g.sub?`<small>${g.sub}</small>`:''}</td></tr>`+rows.map(r=>{const n=NOTES[r[0]]||{};const [c,l]=TAGS[r[3]];
+   return `<tr data-id="${r[0]}" class="${n.d==='ok'?'done':''}"><td class="n">${n.d==='ok'?'<span class="chk">✓</span>':''}${r[0]}</td><td class="t">${r[1]}</td><td class="c">${r[2]}</td><td class="k"><span class="tag ${c}">${l}</span></td>
+   <td class="me"><div class="dec">${[['ok','✓ Đồng ý'],['change','✎ Cần sửa'],['q','? Câu hỏi']].map(([v,t])=>`<button data-v="${v}" class="${n.d===v?'on':''}">${t}</button>`).join('')}<span class="nb ${n.t?'has':''} ${OPEN.has(r[0])?'open':''}" data-note title="${n.t?'Xem / sửa ghi chú':'Thêm ghi chú'}">${NOTE_IC}</span></div>${OPEN.has(r[0])?`<textarea placeholder="Nhập câu hỏi hoặc xác nhận…">${esc(n.t)}</textarea>`:''}</td></tr>`;}).join('');}).join('');
+ const all=G.reduce((a,g)=>a+g.rows.length,0),done=Object.values(NOTES).filter(n=>n&&typeof n==='object'&&n.d).length;
+ document.getElementById('cnt').textContent=`${done}/${all} đã xử lý`;document.getElementById('bar').style.width=(done/all*100)+'%';
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(NOTES));}catch(e){}}
+const tb=document.getElementById('tb');
+tb.addEventListener('click',e=>{const nb=e.target.closest('[data-note]');if(nb){const id=nb.closest('tr').dataset.id;OPEN.has(id)?OPEN.delete(id):OPEN.add(id);render();const ta=document.querySelector(`tr[data-id="${id}"] textarea`);if(ta){ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);}return;}const b=e.target.closest('.dec button');if(!b)return;const id=b.closest('tr').dataset.id;const n=NOTES[id]=NOTES[id]||{};n.d=n.d===b.dataset.v?'':b.dataset.v;save();render();});
+tb.addEventListener('input',e=>{if(e.target.tagName!=='TEXTAREA')return;const id=e.target.closest('tr').dataset.id;const n=NOTES[id]=NOTES[id]||{};n.t=e.target.value;save();const nb=e.target.closest('td').querySelector('.nb');nb.classList.toggle('has',!!n.t);});
+
+document.getElementById('filter').onclick=e=>{const b=e.target.closest('button');if(!b)return;filter=b.dataset.f;document.querySelectorAll('#filter button').forEach(x=>x.classList.toggle('on',x===b));render();};
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000);}
+document.getElementById('dlBtn').onclick=()=>{const json=JSON.stringify(NOTES).replace(/</g,'\\u003c');const out=SRC.replace(/(<script id="notes-data" type="application\/json">)[\s\S]*?(<\/script>)/,(m,a,b)=>a+json+b);
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/html'}));a.download='finalized-ai-flow.html';a.click();toast('Đã tải file kèm ghi chú');};
+document.getElementById('copyBtn').onclick=()=>{const L={ok:'Đồng ý',change:'Cần sửa',q:'Câu hỏi'};const lines=[];G.forEach(g=>g.rows.forEach(r=>{const n=NOTES[r[0]];if(n&&(n.d||n.t))lines.push(`- **${r[0]} ${r[1]}** — ${L[n.d]||'—'}${n.t?': '+n.t.replace(/\n/g,' '):''}`);}));
+ const txt=lines.join('\n')||'(chưa có ghi chú)';(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Đã copy ghi chú'),()=>{prompt('Copy:',txt);});};
+const fsEl=document.getElementById('fs');function fsLang(l){fsEl.className='fs l-'+l;document.querySelectorAll('#fsLang button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));try{localStorage.setItem(KEY+'-fslang',l);}catch(e){}}
+document.getElementById('fsLang').onclick=e=>{const b=e.target.closest('button');if(b)fsLang(b.dataset.l);};
+try{const l=localStorage.getItem(KEY+'-fslang');if(l)fsLang(l);}catch(e){}
+render();
+</script>
+</body>
+</html>

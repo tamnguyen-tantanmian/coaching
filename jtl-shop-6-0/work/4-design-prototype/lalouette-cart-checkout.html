@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’alouette — Cart &amp; Checkout (Figma Make source)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+<style>
+:root{--brand:#E85C24;--brand-t:#FDEEE6;--brand-l:#F5D3C1;--ink:#111827;--muted:#6B7280;--surface:#FFFFFF;--canvas:#FFFFFF;--subtle:#F3F4F6;--line:#E5E7EB;--line-strong:#D1D5DB;--sale:#E1352B;--success:#1F7A4D;--success-t:#E8F3ED;--warning:#B4541C;--warning-t:#FBEEE6;--danger:#B3261E;--danger-t:#FBEAE9;--shadow:0 1px 2px rgba(17,24,39,.06)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:Inter,system-ui,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--muted)}
+.h1{font-size:40px;line-height:1.15;font-weight:700;letter-spacing:-.02em;margin:0}
+.h2{font-size:32px;line-height:1.2;font-weight:700;letter-spacing:-.02em;margin:0}
+.h3{font-size:24px;line-height:1.3;font-weight:600;margin:0}
+.h4{font-size:18px;line-height:1.4;font-weight:600;margin:0}
+.bd{font-size:16px;line-height:1.6}
+.sm{font-size:14px;line-height:1.5}
+.cap{font-size:12px;line-height:1.4}
+.lab{font-size:14px;line-height:1.4;font-weight:600}
+.price-m{font-size:24px;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums}
+.price-s{font-size:16px;line-height:1.3;font-weight:600;font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.over{font-size:12px;line-height:1.4;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.plain{background:var(--surface)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:6px;font-size:16px;font-weight:600;line-height:1.2;border:1px solid transparent;cursor:pointer}
+.btn-m{height:44px}
+.btn-p{background:var(--ink);color:#FFFFFF}
+.btn-s{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
+.btn-d{background:var(--subtle);color:var(--muted);border-color:var(--line)}
+.inp{height:48px;border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:0 12px;font-size:16px;line-height:1.6;display:flex;align-items:center}
+.ph{color:var(--muted)}
+.fl{display:flex;flex-direction:column;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:1.4;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px}
+.rowb{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.divider{height:1px;background:var(--line)}
+.thumb{background:var(--subtle);display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-weight:600;flex-shrink:0}
+.sale{background:var(--sale);color:#FFFFFF;border-radius:3px}
+.strike{text-decoration:line-through;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Compact type mode (<1024px) — applied to mobile frames */
+.m .h1{font-size:32px}
+.m .h2{font-size:24px}
+.m .h3{font-size:18px}
+.m .h4{font-size:16px}
+
+body{background:#E9EBEE;margin:0;padding:48px 0 80px}
+.canvas{display:flex;flex-direction:column;align-items:center;gap:64px}
+.doc{width:1440px;background:#FFFFFF;border:1px solid var(--line);border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.doc h1{font-size:32px;line-height:1.2;font-weight:700;letter-spacing:-.02em;margin:0}
+.doc p{margin:0;color:var(--muted);font-size:15px;line-height:1.6;max-width:70ch}
+.doc code{background:var(--subtle);padding:2px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.frame-wrap{display:flex;flex-direction:column;gap:10px}
+.frame-label{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6B7280}
+.frame{background:var(--surface);overflow:hidden;border:1px solid #D7DBDF}
+.tok-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tok{display:flex;flex-direction:column;gap:6px}
+.tok .sw{height:56px;border-radius:6px;border:1px solid var(--line)}
+.tok b{font-size:13px;font-weight:600}
+.tok span{font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+.type-row{display:flex;align-items:baseline;gap:20px;padding:10px 0;border-bottom:1px solid var(--line)}
+.type-row .tname{width:110px;flex-shrink:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.type-row .tspec{margin-left:auto;font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
+
+
+/* ==========================================================================
+   PREVIEW SCALING — viewing aid only, NOT part of the design.
+   Scales whole frames down so they fit a narrow preview pane. The frames keep
+   their real dimensions (1440 / 390); only the on-screen zoom changes.
+   Figma Make: ignore this block. Use data-frame-width for the real size.
+   ========================================================================== */
+.canvas{max-width:100%}
+.frame-wrap{max-width:100%}
+@media (max-width:1560px){ .frame-wrap:not(.m-wrap){zoom:.88} }
+@media (max-width:1320px){ .frame-wrap:not(.m-wrap){zoom:.74} }
+@media (max-width:1120px){ .frame-wrap:not(.m-wrap){zoom:.62} }
+@media (max-width:960px) { .frame-wrap:not(.m-wrap){zoom:.52} }
+@media (max-width:800px) { .frame-wrap:not(.m-wrap){zoom:.43} }
+@media (max-width:660px) { .frame-wrap:not(.m-wrap){zoom:.35} }
+@media (max-width:540px) { .frame-wrap:not(.m-wrap){zoom:.28} }
+@media (max-width:440px) { .frame-wrap:not(.m-wrap){zoom:.24} .frame-wrap.m-wrap{zoom:.85} }
+@media (max-width:380px) { .frame-wrap.m-wrap{zoom:.72} }
+/* the doc header and frame labels stay readable at any zoom */
+.frame-label{zoom:1}
+@supports not (zoom:1){
+  .canvas{overflow-x:auto}
+}
+
+</style>
+</head>
+<body>
+
+<!--
+  ============================================================================
+  HOW TO READ THIS FILE  (for Figma Make)
+  ----------------------------------------------------------------------------
+  * Every <section class="frame"> is ONE ARTBOARD. Its data-frame-name is the
+    frame name to use; data-frame-width is the intended frame width in px.
+  * Colours are CSS custom properties on :root (--brand, --ink, --muted,
+    --surface, --subtle, --line, --line-strong, --sale, --success, --warning,
+    --danger). Map each one to a Figma colour variable of the same name.
+  * Type scale classes map 1:1 to text styles: h1 h2 h3 h4 bd sm cap lab
+    price-m price-s over. Face is Inter. Mobile frames carry class "m", which
+    drops every heading one step (Compact mode).
+  * Spacing uses only 4 / 8 / 16 / 24 / 32 / 48 / 64.
+  * Desktop content container is 1200px centred; 8-col column = 792px,
+    4-col column = 384px, gutter 24px.
+  * Frame 00 is a token sheet — build colour and text styles from it first.
+  * The PREVIEW SCALING block at the end of the stylesheet is a viewing aid so
+    the frames fit a narrow preview pane. It is not part of the design — read
+    every size from data-frame-width and the authored CSS, never from the zoom.
+  ============================================================================
+-->
+<div class="canvas">
+
+<div class="doc">
+  <h1>L’alouette — Cart &amp; Checkout</h1>
+  <p>Storefront purchase flow for JTL-Shop 6.0, drawn in the existing L’alouette design language (orange header chrome, navy footer, flat white page, ink primary buttons). Twelve frames: cart, a four-step checkout, and the order confirmation — desktop 1440 and mobile 390.</p>
+  <p><b>Viewing note:</b> frames scale down to fit a narrow window; widen the window (or open the file in a browser) to see them at full size. The scaling is display-only — the frames are still 1440 and 390.</p>
+  <p>Frame 00 below is a token sheet. Build colour variables and text styles from it before generating the screens, so every frame references the same set. Every other frame is a finished screen; sample data is consistent across all of them (order <code>LA-2026-018472</code>, total <code>€366.00</code>).</p>
+</div>
+
+<div class="frame-wrap">
+<div class="frame-label">00 · Design tokens — build styles from this first</div>
+<section class="frame" data-frame-name="00-Design-Tokens" data-frame-width="1440" style="width:1440px;padding:48px">
+<div style="display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px"><div class="h2">Colour</div><div class="tok-grid">
+<div class="tok"><div class="sw" style="background:#E85C24"></div><b>--brand</b><span>#E85C24</span><span style="font-family:Inter">Header chrome only</span></div>
+<div class="tok"><div class="sw" style="background:#111827"></div><b>--ink</b><span>#111827</span><span style="font-family:Inter">Text, footer, primary button</span></div>
+<div class="tok"><div class="sw" style="background:#6B7280"></div><b>--muted</b><span>#6B7280</span><span style="font-family:Inter">Secondary text</span></div>
+<div class="tok"><div class="sw" style="background:#FFFFFF"></div><b>--surface</b><span>#FFFFFF</span><span style="font-family:Inter">Page, inputs, cards</span></div>
+<div class="tok"><div class="sw" style="background:#F3F4F6"></div><b>--subtle</b><span>#F3F4F6</span><span style="font-family:Inter">Image blocks, active rows</span></div>
+<div class="tok"><div class="sw" style="background:#E5E7EB"></div><b>--line</b><span>#E5E7EB</span><span style="font-family:Inter">Dividers, input borders</span></div>
+<div class="tok"><div class="sw" style="background:#D1D5DB"></div><b>--line-strong</b><span>#D1D5DB</span><span style="font-family:Inter">Secondary button border</span></div>
+<div class="tok"><div class="sw" style="background:#E1352B"></div><b>--sale</b><span>#E1352B</span><span style="font-family:Inter">SALE badge, compare-at</span></div>
+<div class="tok"><div class="sw" style="background:#1F7A4D"></div><b>--success</b><span>#1F7A4D</span><span style="font-family:Inter">In stock, paid, delivered</span></div>
+<div class="tok"><div class="sw" style="background:#B4541C"></div><b>--warning</b><span>#B4541C</span><span style="font-family:Inter">Low stock, changed price</span></div>
+<div class="tok"><div class="sw" style="background:#B3261E"></div><b>--danger</b><span>#B3261E</span><span style="font-family:Inter">Errors, blocked submission</span></div>
+<div class="tok"><div class="sw" style="background:#FDEEE6"></div><b>--brand-t</b><span>#FDEEE6</span><span style="font-family:Inter">Info banner tint</span></div>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div class="h2">Type scale — Inter</div>
+<div class="type-row"><div class="tname">display</div><div style="font-size:56px;line-height:1.1;font-weight:700;letter-spacing:-.02em">Adventure starts here</div><div class="tspec">56 / 1.10 / 700 / -0.02em</div></div>
+<div class="type-row"><div class="tname">h1</div><div style="font-size:40px;line-height:1.15;font-weight:700;letter-spacing:-.02em">Shopping cart</div><div class="tspec">40 / 1.15 / 700 / -0.02em</div></div>
+<div class="type-row"><div class="tname">h2</div><div style="font-size:32px;line-height:1.2;font-weight:700;letter-spacing:-.02em">Delivery address</div><div class="tspec">32 / 1.20 / 700 / -0.02em</div></div>
+<div class="type-row"><div class="tname">h3</div><div style="font-size:24px;line-height:1.3;font-weight:600">Ridge 28 Daypack</div><div class="tspec">24 / 1.30 / 600</div></div>
+<div class="type-row"><div class="tname">h4</div><div style="font-size:18px;line-height:1.4;font-weight:600">Order summary</div><div class="tspec">18 / 1.40 / 600</div></div>
+<div class="type-row"><div class="tname">body</div><div style="font-size:16px;line-height:1.6">Delivered in 2–3 working days</div><div class="tspec">16 / 1.60 / 400</div></div>
+<div class="type-row"><div class="tname">body-sm</div><div style="font-size:14px;line-height:1.5">Colour: Black</div><div class="tspec">14 / 1.50 / 400</div></div>
+<div class="type-row"><div class="tname">caption</div><div style="font-size:12px;line-height:1.4">Incl. 19% VAT</div><div class="tspec">12 / 1.40 / 400</div></div>
+<div class="type-row"><div class="tname">label</div><div style="font-size:14px;line-height:1.4;font-weight:600">Email address</div><div class="tspec">14 / 1.40 / 600</div></div>
+<div class="type-row"><div class="tname">cta</div><div style="font-size:16px;line-height:1.2;font-weight:600">Proceed to checkout</div><div class="tspec">16 / 1.20 / 600</div></div>
+<div class="type-row"><div class="tname">price-m</div><div style="font-size:24px;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums">€366.00</div><div class="tspec">24 / 1.20 / 700 / tabular</div></div>
+<div class="type-row"><div class="tname">price-s</div><div style="font-size:16px;line-height:1.3;font-weight:600;font-variant-numeric:tabular-nums">€129.00</div><div class="tspec">16 / 1.30 / 600 / tabular</div></div>
+<div class="type-row"><div class="tname">overline</div><div style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase">SALE</div><div class="tspec">12 / 600 / +0.08em / uppercase</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px"><div class="h2">Components</div><div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div class="btn btn-p" style="width:240px">Primary — Proceed to checkout</div><div class="btn btn-s" style="width:180px">Secondary</div><div class="btn btn-d" style="width:180px">Disabled</div><span class="badge sale">Sale</span><span class="badge" style="background:var(--success-t);color:var(--success)">In stock</span><span class="badge" style="background:var(--warning-t);color:var(--warning)">Only 3 left</span><div class="inp" style="width:240px"><span class="ph">you@example.com</span></div><div class="thumb" style="width:80px;height:80px">RD</div></div><span class="cap muted">Buttons 52px (primary) / 44px (compact). Inputs 48px. Radius: button 6 · input 6 · badge 3 · card 8. One elevation level, used only on the mobile sticky bar.</span></div>
+</div></section></div>
+
+<!-- ===== 01 · Cart — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">01 · Cart — Desktop 1440</div>
+  <section class="frame" data-frame-name="Cart" data-frame-width="1440" style="width:1440px">
+<div style="min-height:1240px;display:flex;flex-direction:column">
+<div style="background:var(--ink);display:flex;align-items:center;justify-content:center;padding:8px 0;flex-shrink:0">
+  <span class="cap" style="color:#FFFFFF">Free shipping on orders over &euro;75.00 &middot; Shop now</span>
+</div>
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;gap:40px">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div class="lab" style="display:flex;gap:24px;color:#FFFFFF">
+      <span>All products</span><span>Backpacks</span><span>Bags</span><span>Accessories</span><span>Collections</span><span>Sale</span>
+    </div>
+    <div style="flex-grow:1"></div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="16" y1="16" x2="21" y2="21"></line></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg>
+      <div style="position:relative;display:flex">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3l2.4 11.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 7H6"></path></svg>
+        <div class="cap num" style="position:absolute;top:-6px;right:-8px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#FFFFFF;color:var(--brand);font-weight:700;display:flex;align-items:center;justify-content:center">4</div>
+      </div>
+      <span class="cap" style="color:#FFFFFF;letter-spacing:.06em">SEARCH &middot; ACCOUNT &middot; CART</span>
+    </div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:32px 0 48px">
+    <div style="width:1200px;display:flex;flex-direction:column;gap:0">
+      <div class="cap" style="display:flex;gap:8px;color:var(--muted)"><span>Home</span><span>/</span><span style="font-weight:600;color:var(--ink)">Shopping cart</span></div>
+      <h1 class="h1" style="margin:16px 0 8px">Shopping cart</h1>
+      <div class="sm muted" style="margin-bottom:32px">3 items &middot; 4 units</div>
+
+      <div style="display:flex;gap:24px;align-items:flex-start">
+
+        <div style="width:792px;display:flex;flex-direction:column;gap:24px">
+          <div class="card" style="padding:0;display:flex;flex-direction:column">
+
+            <div style="display:flex;gap:16px;padding:16px">
+              <div class="thumb" style="width:80px;height:80px">RD</div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div class="h3">Ridge 28 Daypack, ripstop shell</div>
+                  <div class="sm muted">Colour: Black</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <span class="badge sale">Sale</span>
+                  <span class="badge" style="background:var(--success-t);color:var(--success)">In stock</span>
+                  <span class="cap muted">Delivered in 2&ndash;3 working days</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:124px;background:var(--surface)">
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#6B7480" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                    <div class="lab num" style="flex-grow:1;text-align:center">1</div>
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div>
+                  </div>
+                  <a class="sm" href="#">Remove</a>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+                <div class="price-s">&euro;129.00</div>
+                <div class="cap strike">&euro;149.00</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex;gap:16px;padding:16px">
+              <div class="thumb" style="width:80px;height:80px">KT</div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div class="h3">Kestrel 45 Travel Backpack</div>
+                  <div class="sm muted">Colour: Green</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <span class="badge" style="background:var(--success-t);color:var(--success)">In stock</span>
+                  <span class="cap muted">Delivered in 2&ndash;3 working days</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:124px;background:var(--surface)">
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#6B7480" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                    <div class="lab num" style="flex-grow:1;text-align:center">1</div>
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div>
+                  </div>
+                  <a class="sm" href="#">Remove</a>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+                <div class="price-s">&euro;189.00</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex;gap:16px;padding:16px">
+              <div class="thumb" style="width:80px;height:80px">TF</div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div class="h3">Trail Fuel Bars, 12 &times; 50 g</div>
+                  <div class="sm muted">12 &times; 50 g</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <span class="badge" style="background:var(--warning-t);color:var(--warning)">Only 3 left</span>
+                  <span class="cap muted">Delivered in 2&ndash;3 working days</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:124px;background:var(--surface)">
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                    <div class="lab num" style="flex-grow:1;text-align:center">2</div>
+                    <div style="width:42px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div>
+                  </div>
+                  <a class="sm" href="#">Remove</a>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+                <div class="price-s">&euro;48.00</div>
+                <div class="cap muted num">&euro;40.00 / kg</div>
+              </div>
+            </div>
+
+          </div>
+
+          <a class="sm" href="#" style="display:flex;align-items:center;gap:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="14,5 7,12 14,19"></polyline></svg>
+            Continue shopping
+          </a>
+        </div>
+
+        <div style="width:384px;display:flex;flex-direction:column;gap:16px">
+          <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+            <div class="h4">Order summary</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+              <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+              <div class="rowb"><span class="sm muted">VAT 19% (included)</span><span class="sm muted num">&euro;27.89</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+            <div class="cap muted">Incl. 19% VAT. Free standard shipping over &euro;75.00.</div>
+            <div class="rowb" style="border:1px dashed var(--line);border-radius:6px;padding:12px">
+              <span class="sm">Add a discount code</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg>
+            </div>
+            <div class="btn btn-p">Proceed to checkout</div>
+          </div>
+
+          <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div class="over muted">We accept</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">PayPal</div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">VISA</div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">Mastercard</div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">Amex</div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">Invoice</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg>
+              <span class="sm">Free returns within 30 days</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<div style="background:var(--ink);display:flex;justify-content:center;padding:48px 0 32px">
+  <div style="width:1200px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;gap:24px">
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Shop</div><span class="sm" style="color:#D1D5DB">All products</span><span class="sm" style="color:#D1D5DB">Backpacks</span><span class="sm" style="color:#D1D5DB">Bags</span><span class="sm" style="color:#D1D5DB">Accessories</span><span class="sm" style="color:#D1D5DB">Sale</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Service</div><span class="sm" style="color:#D1D5DB">Contact</span><span class="sm" style="color:#D1D5DB">Shipping</span><span class="sm" style="color:#D1D5DB">Returns</span><span class="sm" style="color:#D1D5DB">Size guide</span><span class="sm" style="color:#D1D5DB">FAQ</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Company</div><span class="sm" style="color:#D1D5DB">About us</span><span class="sm" style="color:#D1D5DB">Careers</span><span class="sm" style="color:#D1D5DB">Sustainability</span><span class="sm" style="color:#D1D5DB">Press</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Contact</div><span class="sm" style="color:#D1D5DB">info@lalouette.de</span><span class="sm num" style="color:#D1D5DB">+49 30 1234 5678</span><span class="sm" style="color:#D1D5DB">Berlin, DE</span></div>
+    </div>
+    <div style="height:1px;background:#374151"></div>
+    <div style="display:flex;gap:24px"><span class="sm" style="color:#D1D5DB">Legal notice</span><span class="sm" style="color:#D1D5DB">Terms &amp; Conditions</span><span class="sm" style="color:#D1D5DB">Right of withdrawal</span><span class="sm" style="color:#D1D5DB">Privacy policy</span><span class="sm" style="color:#D1D5DB">Cookie policy</span><span class="sm" style="color:#D1D5DB">Unit pricing</span></div>
+    <span class="cap" style="color:#9CA3AF">&copy; 2026 L&rsquo;alouette. All rights reserved.</span>
+  </div>
+</div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 02 · Checkout Step 1 · Identify — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">02 · Checkout Step 1 · Identify — Desktop 1440</div>
+  <section class="frame" data-frame-name="Checkout-1-Identify" data-frame-width="1440" style="width:1440px">
+<div style="min-height:940px;display:flex;flex-direction:column">
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="sm" style="color:#FFFFFF">Need help?</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <span class="cap" style="color:#FFFFFF">Secure checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);display:flex;justify-content:center;padding:20px 0;flex-shrink:0">
+  <div style="width:720px;display:flex;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center">1</div><span class="lab">Identify</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">2</div><span class="lab muted">Delivery</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">3</div><span class="lab muted">Payment</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">4</div><span class="lab muted">Review</span></div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:48px 0 64px">
+    <div style="width:560px;display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <h2 class="h2">How would you like to continue?</h2>
+        <div class="bd muted">You can order without an account. Either way you&rsquo;ll get updates by email.</div>
+      </div>
+
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div class="h3">Continue as guest</div>
+          <div class="sm muted">Order without an account. You&rsquo;ll get your confirmation and delivery updates by email.</div>
+        </div>
+        <div class="fl">
+          <label class="lab">Email address</label>
+          <div class="inp"><span>anna.brandt@example.de</span></div>
+          <span class="cap muted">We&rsquo;ll send your order confirmation and delivery updates here.</span>
+        </div>
+        <div class="btn btn-p">Continue as guest</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+        <span class="cap muted">or</span>
+        <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      </div>
+
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+        <div class="h3">Sign in</div>
+        <div class="fl">
+          <label class="lab">Email address</label>
+          <div class="inp"><span class="ph">you@example.com</span></div>
+        </div>
+        <div class="fl">
+          <label class="lab">Password</label>
+          <div class="inp rowb"><span class="ph">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span><span class="sm" style="color:var(--ink)">Show</span></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><a class="sm" href="#">Forgot password?</a></div>
+        <div class="btn btn-p">Sign in</div>
+        <div style="display:flex;gap:12px">
+          <div class="btn btn-s btn-m" style="flex-grow:1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111418" stroke-width="1.75"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"></path></svg>
+            <span class="sm" style="font-weight:600">Continue with Google</span>
+          </div>
+          <div class="btn btn-s btn-m" style="flex-grow:1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111418" stroke-width="1.75" stroke-linejoin="round"><path d="M12 7c-2.5 0-4.5 2-4.5 5.2C7.5 16 9.5 20 12 20s4.5-4 4.5-7.8C16.5 9 14.5 7 12 7z"></path><path d="M12 7c0-2 1.3-3.6 3-4"></path></svg>
+            <span class="sm" style="font-weight:600">Continue with Apple</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:6px">
+        <span class="sm muted">New here?</span><a class="sm" href="#">Create an account</a>
+      </div>
+    </div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 03 · Checkout Step 2 · Address & Delivery — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">03 · Checkout Step 2 · Address & Delivery — Desktop 1440</div>
+  <section class="frame" data-frame-name="Checkout-2-Delivery" data-frame-width="1440" style="width:1440px">
+<div style="min-height:1300px;display:flex;flex-direction:column">
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="sm" style="color:#FFFFFF">Need help?</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <span class="cap" style="color:#FFFFFF">Secure checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);display:flex;justify-content:center;padding:20px 0;flex-shrink:0">
+  <div style="width:720px;display:flex;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Identify</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center">2</div><span class="lab">Delivery</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">3</div><span class="lab muted">Payment</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">4</div><span class="lab muted">Review</span></div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:32px 0 64px">
+    <div style="width:1200px;display:flex;gap:24px;align-items:flex-start">
+
+      <div style="width:792px;display:flex;flex-direction:column;gap:24px">
+
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+          <h2 class="h2">Delivery address</h2>
+          <div style="display:flex;gap:16px">
+            <div class="fl" style="flex-grow:1"><label class="lab">First name</label><div class="inp">Anna</div></div>
+            <div class="fl" style="flex-grow:1"><label class="lab">Last name</label><div class="inp">Brandt</div></div>
+          </div>
+          <div class="fl"><label class="lab">Company <span class="muted" style="font-weight:400">(optional)</span></label><div class="inp"><span class="ph">&mdash;</span></div></div>
+          <div style="display:flex;gap:16px">
+            <div class="fl" style="flex-grow:1"><label class="lab">Street and house number</label><div class="inp">Oranienstrasse 12</div></div>
+            <div class="fl" style="width:200px"><label class="lab">Address line 2 <span class="muted" style="font-weight:400">(optional)</span></label><div class="inp"><span class="ph">c/o, floor</span></div></div>
+          </div>
+          <div style="display:flex;gap:16px">
+            <div class="fl" style="width:160px"><label class="lab">Postcode</label><div class="inp num">10999</div></div>
+            <div class="fl" style="flex-grow:1"><label class="lab">City</label><div class="inp">Berlin</div></div>
+            <div class="fl" style="width:240px"><label class="lab">Country</label><div class="inp rowb"><span>Germany</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg></div></div>
+          </div>
+          <div class="fl"><label class="lab">Phone <span class="muted" style="font-weight:400">(optional)</span></label><div class="inp num">+49 30 1234567</div><span class="cap muted">Only for delivery questions.</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding-top:4px">
+            <div style="width:20px;height:20px;border-radius:4px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+            <span class="sm">Billing address is the same as delivery address</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+          <h2 class="h2">Delivery method</h2>
+
+          <div style="display:flex;gap:12px;background:var(--brand-t);border:1px solid var(--brand-l);border-radius:6px;padding:12px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span class="sm" style="font-weight:600">Delivery estimate updated for 10999 Berlin</span>
+              <span class="cap muted">Dates below are calculated for this address.</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:12px;align-items:center;border:2px solid var(--ink);border-radius:6px;padding:16px;background:var(--surface)">
+              <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink)"></div></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">Standard &middot; DHL</span>
+                <span class="bd" style="font-weight:600">Arrives Fri, 18 Sep &ndash; Tue, 22 Sep</span>
+              </div>
+              <span class="price-s">Free</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--surface)">
+              <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0"></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">Express &middot; DHL</span>
+                <span class="bd" style="font-weight:600">Arrives Thu, 17 Sep</span>
+              </div>
+              <span class="price-s">&euro;9.95</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--surface)">
+              <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0"></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">Pickup station</span>
+                <span class="bd" style="font-weight:600">Arrives Fri, 18 Sep &ndash; Tue, 22 Sep</span>
+                <a class="sm" href="#">Choose station</a>
+              </div>
+              <span class="price-s">Free</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:24px">
+          <div class="btn btn-p" style="width:280px">Continue to payment</div>
+          <a class="sm" href="#">Back to cart</a>
+        </div>
+      </div>
+
+      <div style="width:384px">
+          <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+            <div class="rowb"><div class="h4">Order summary</div><a class="sm" href="#">Edit cart</a></div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end"><span class="price-s">&euro;129.00</span><span class="cap strike">&euro;149.00</span></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+                <span class="price-s">&euro;189.00</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+                <span class="price-s">&euro;48.00</span>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+              <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+              <div class="rowb"><span class="sm muted">VAT 19% (included)</span><span class="sm muted num">&euro;27.89</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+            <div class="cap muted">Incl. 19% VAT and shipping.</div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 04 · Checkout Step 3 · Payment — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">04 · Checkout Step 3 · Payment — Desktop 1440</div>
+  <section class="frame" data-frame-name="Checkout-3-Payment" data-frame-width="1440" style="width:1440px">
+<div style="min-height:1200px;display:flex;flex-direction:column">
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="sm" style="color:#FFFFFF">Need help?</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <span class="cap" style="color:#FFFFFF">Secure checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);display:flex;justify-content:center;padding:20px 0;flex-shrink:0">
+  <div style="width:720px;display:flex;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Identify</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Delivery</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center">3</div><span class="lab">Payment</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:1px solid var(--line-strong);color:var(--muted);display:flex;align-items:center;justify-content:center">4</div><span class="lab muted">Review</span></div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:32px 0 64px">
+    <div style="width:1200px;display:flex;gap:24px;align-items:flex-start">
+
+      <div style="width:792px;display:flex;flex-direction:column;gap:24px">
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+          <h2 class="h2">Payment method</h2>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+
+            <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:16px">
+              <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">PayPal</span>
+                <span class="sm muted">You&rsquo;ll be redirected to PayPal to confirm.</span>
+              </div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">PayPal</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:6px;background:var(--surface)">
+              <div style="display:flex;gap:12px;align-items:flex-start;padding:16px">
+                <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink)"></div></div>
+                <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                  <span class="lab">Credit or debit card</span>
+                  <span class="sm muted">Visa, Mastercard, Amex.</span>
+                </div>
+                <div style="display:flex;gap:6px">
+                  <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">VISA</div>
+                  <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">MC</div>
+                  <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">AMEX</div>
+                </div>
+              </div>
+              <div style="padding:0 16px 16px 48px;display:flex;flex-direction:column;gap:16px">
+                <div class="fl"><label class="lab">Card number</label><div class="inp rowb"><span class="num">4242 4242 4242 4242</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="1.75"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div></div>
+                <div style="display:flex;gap:16px">
+                  <div class="fl" style="flex-grow:1"><label class="lab">Expiry date</label><div class="inp num">09 / 29</div></div>
+                  <div class="fl" style="flex-grow:1"><label class="lab">CVC</label><div class="inp num">&bull;&bull;&bull;</div></div>
+                </div>
+                <div class="fl"><label class="lab">Name on card</label><div class="inp">Anna Brandt</div></div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:16px">
+              <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">Purchase on account</span>
+                <span class="sm muted">Pay within 14 days of dispatch.</span>
+              </div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">Invoice</div>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:16px">
+              <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+              <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px">
+                <span class="lab">Prepayment</span>
+                <span class="sm muted">We&rsquo;ll ship once your bank transfer arrives.</span>
+              </div>
+              <div class="cap" style="border:1px solid var(--line);border-radius:4px;padding:5px 8px;font-weight:600">Transfer</div>
+            </div>
+
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:3px"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+            <span class="cap muted">Your payment details are handled by our payment provider. L&rsquo;alouette never sees your card number.</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:24px">
+          <div class="btn btn-p" style="width:280px">Review order</div>
+          <a class="sm" href="#">Back to delivery</a>
+        </div>
+      </div>
+
+      <div style="width:384px">
+          <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+            <div class="rowb"><div class="h4">Order summary</div><a class="sm" href="#">Edit cart</a></div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end"><span class="price-s">&euro;129.00</span><span class="cap strike">&euro;149.00</span></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+                <span class="price-s">&euro;189.00</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+                <span class="price-s">&euro;48.00</span>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+              <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+              <div class="rowb"><span class="sm muted">VAT 19% (included)</span><span class="sm muted num">&euro;27.89</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+            <div class="cap muted">Incl. 19% VAT and shipping.</div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 05 · Checkout Step 4 · Review & Place Order — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">05 · Checkout Step 4 · Review & Place Order — Desktop 1440</div>
+  <section class="frame" data-frame-name="Checkout-4-Review" data-frame-width="1440" style="width:1440px">
+<div style="min-height:1400px;display:flex;flex-direction:column">
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="sm" style="color:#FFFFFF">Need help?</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <span class="cap" style="color:#FFFFFF">Secure checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);display:flex;justify-content:center;padding:20px 0;flex-shrink:0">
+  <div style="width:720px;display:flex;align-items:center;gap:16px">
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Identify</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Delivery</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div><span class="lab">Payment</span></div>
+      <div style="flex-grow:1;height:1px;background:var(--line)"></div>
+      <div style="display:flex;align-items:center;gap:8px"><div class="lab num" style="width:28px;height:28px;border-radius:999px;border:2px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center">4</div><span class="lab">Review</span></div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:32px 0 64px">
+    <div style="width:1200px;display:flex;gap:24px;align-items:flex-start">
+
+      <div style="width:792px;display:flex;flex-direction:column;gap:24px">
+        <h2 class="h2">Review your order</h2>
+
+        <div style="display:flex;gap:16px">
+          <div class="card" style="flex-grow:1;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div class="rowb"><span class="over muted">Contact</span><a class="sm" href="#">Edit</a></div>
+            <span class="sm">anna.brandt@example.de</span>
+          </div>
+          <div class="card" style="flex-grow:1;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div class="rowb"><span class="over muted">Payment</span><a class="sm" href="#">Edit</a></div>
+            <span class="sm">Visa &bull;&bull;&bull;&bull; <span class="num">4242</span></span>
+          </div>
+        </div>
+
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div class="rowb"><span class="over muted">Delivery</span><a class="sm" href="#">Edit</a></div>
+          <span class="sm">Anna Brandt &middot; Oranienstrasse 12 &middot; <span class="num">10999</span> Berlin &middot; Germany</span>
+          <span class="sm">Standard &middot; DHL &mdash; <span style="font-weight:600">arrives Fri, 18 Sep &ndash; Tue, 22 Sep</span></span>
+        </div>
+
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div class="h4">3 items</div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+            <span class="price-s">&euro;129.00</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+            <span class="price-s">&euro;189.00</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+            <span class="price-s">&euro;48.00</span>
+          </div>
+          <div class="divider"></div>
+          <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+          <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+          <div class="rowb"><span class="sm muted">VAT 19% (included)</span><span class="sm muted num">&euro;27.89</span></div>
+          <div class="divider"></div>
+          <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+        </div>
+
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <div style="width:20px;height:20px;border-radius:4px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+            <span class="bd">I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Cancellation Policy</a>.</span>
+          </div>
+          <span class="cap muted">Right of withdrawal: you may cancel within 14 days of receiving the goods. Costs of return shipping are covered by L&rsquo;alouette.</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="btn btn-p" style="width:100%">Buy now &mdash; pay &euro;366.00</div>
+          <span class="cap muted" style="text-align:center">Your order is only confirmed once you see the confirmation page.</span>
+        </div>
+      </div>
+
+      <div style="width:384px;display:flex;flex-direction:column;gap:16px">
+          <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+            <div class="rowb"><div class="h4">Order summary</div><a class="sm" href="#">Edit cart</a></div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end"><span class="price-s">&euro;129.00</span><span class="cap strike">&euro;149.00</span></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+                <span class="price-s">&euro;189.00</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+                <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+                <span class="price-s">&euro;48.00</span>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+              <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+              <div class="rowb"><span class="sm muted">VAT 19% (included)</span><span class="sm muted num">&euro;27.89</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+            <div class="cap muted">Incl. 19% VAT and shipping.</div>
+          </div>
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div class="over muted">Button state &mdash; submitting</div>
+          <div class="btn btn-d" style="width:100%">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"></path></svg>
+            Placing your order&hellip;
+          </div>
+          <span class="cap muted">Shown while the ERP confirms the order. Disabled, not clickable.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 06 · Order Confirmation — Desktop 1440 ===== -->
+<div class="frame-wrap">
+  <div class="frame-label">06 · Order Confirmation — Desktop 1440</div>
+  <section class="frame" data-frame-name="Order-Confirmation" data-frame-width="1440" style="width:1440px">
+<div style="min-height:1200px;display:flex;flex-direction:column">
+<div style="height:64px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+  <div style="width:1200px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="sm" style="color:#FFFFFF">Need help?</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+        <span class="cap" style="color:#FFFFFF">Secure checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;justify-content:center;padding:64px 0">
+    <div style="width:792px;display:flex;flex-direction:column;gap:48px">
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+        <div style="width:64px;height:64px;border-radius:999px;background:var(--success-t);display:flex;align-items:center;justify-content:center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg>
+        </div>
+        <h1 class="h1">Thank you, Anna.</h1>
+        <div class="bd muted" style="max-width:520px">Your order is confirmed. We&rsquo;ve sent the details to anna.brandt@example.de.</div>
+      </div>
+
+      <div class="card" style="padding:16px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="over muted">Order number</span>
+          <span class="h3 num">LA-2026-018472</span>
+        </div>
+        <div class="btn btn-s btn-m" style="width:110px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111418" stroke-width="1.75" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M15 5H6a2 2 0 0 0-2 2v9"></path></svg>
+          <span class="sm" style="font-weight:600">Copy</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <h2 class="h2">What happens next</h2>
+        <div style="display:flex;gap:16px">
+          <div class="card" style="flex-grow:1;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div class="lab num" style="width:28px;height:28px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center">1</div>
+            <span class="sm" style="font-weight:600">We prepare your parcel</span>
+            <span class="cap muted">Usually within one working day.</span>
+          </div>
+          <div class="card" style="flex-grow:1;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div class="lab num" style="width:28px;height:28px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center">2</div>
+            <span class="sm" style="font-weight:600">You get a tracking link by email</span>
+            <span class="cap muted">As soon as DHL scans the parcel.</span>
+          </div>
+          <div class="card" style="flex-grow:1;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div class="lab num" style="width:28px;height:28px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center">3</div>
+            <span class="sm" style="font-weight:600">Delivery</span>
+            <span class="cap muted">Fri, 18 Sep &ndash; Tue, 22 Sep</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+        <div class="h4">Your order</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+            <span class="price-s">&euro;129.00</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+            <span class="price-s">&euro;189.00</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+            <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+            <span class="price-s">&euro;48.00</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:24px">
+          <div style="flex-grow:1;display:flex;flex-direction:column;gap:4px">
+            <span class="over muted">Delivery address</span>
+            <span class="sm">Anna Brandt<br>Oranienstrasse 12<br><span class="num">10999</span> Berlin, Germany</span>
+          </div>
+          <div style="flex-grow:1;display:flex;flex-direction:column;gap:4px">
+            <span class="over muted">Delivery method</span>
+            <span class="sm">Standard &middot; DHL</span>
+            <span class="over muted" style="margin-top:8px">Payment</span>
+            <span class="sm">Visa &bull;&bull;&bull;&bull; <span class="num">4242</span></span>
+          </div>
+          <div style="width:200px;display:flex;flex-direction:column;gap:8px">
+            <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+            <div class="rowb"><span class="sm">Shipping</span><span class="sm num">Free</span></div>
+            <div class="rowb"><span class="h4">Total</span><span class="price-s">&euro;366.00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #E9D3C2;background:var(--warning-t);border-radius:8px;padding:16px;display:flex;gap:16px;align-items:center">
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:4px">
+          <span class="h4">Save your order details</span>
+          <span class="sm">You ordered as a guest. Keep your order number &mdash; you&rsquo;ll need it together with your email to look up this order.</span>
+        </div>
+        <div class="btn btn-s btn-m" style="width:220px;flex-shrink:0"><span class="sm" style="font-weight:600">Create an account to track it</span></div>
+      </div>
+
+      <div style="display:flex;justify-content:center"><a class="sm" href="#">Continue shopping</a></div>
+    </div>
+  </div>
+<div style="background:var(--ink);display:flex;justify-content:center;padding:48px 0 32px">
+  <div style="width:1200px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;gap:24px">
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Shop</div><span class="sm" style="color:#D1D5DB">All products</span><span class="sm" style="color:#D1D5DB">Backpacks</span><span class="sm" style="color:#D1D5DB">Bags</span><span class="sm" style="color:#D1D5DB">Accessories</span><span class="sm" style="color:#D1D5DB">Sale</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Service</div><span class="sm" style="color:#D1D5DB">Contact</span><span class="sm" style="color:#D1D5DB">Shipping</span><span class="sm" style="color:#D1D5DB">Returns</span><span class="sm" style="color:#D1D5DB">Size guide</span><span class="sm" style="color:#D1D5DB">FAQ</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Company</div><span class="sm" style="color:#D1D5DB">About us</span><span class="sm" style="color:#D1D5DB">Careers</span><span class="sm" style="color:#D1D5DB">Sustainability</span><span class="sm" style="color:#D1D5DB">Press</span></div>
+      <div class="fl" style="width:282px"><div class="lab" style="color:#FFFFFF">Contact</div><span class="sm" style="color:#D1D5DB">info@lalouette.de</span><span class="sm num" style="color:#D1D5DB">+49 30 1234 5678</span><span class="sm" style="color:#D1D5DB">Berlin, DE</span></div>
+    </div>
+    <div style="height:1px;background:#374151"></div>
+    <div style="display:flex;gap:24px"><span class="sm" style="color:#D1D5DB">Legal notice</span><span class="sm" style="color:#D1D5DB">Terms &amp; Conditions</span><span class="sm" style="color:#D1D5DB">Right of withdrawal</span><span class="sm" style="color:#D1D5DB">Privacy policy</span><span class="sm" style="color:#D1D5DB">Cookie policy</span><span class="sm" style="color:#D1D5DB">Unit pricing</span></div>
+    <span class="cap" style="color:#9CA3AF">&copy; 2026 L&rsquo;alouette. All rights reserved.</span>
+  </div>
+</div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 07 · Cart — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">07 · Cart — Mobile 390</div>
+  <section class="frame m" data-frame-name="Cart-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:960px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="background:var(--ink);display:flex;align-items:center;justify-content:center;padding:7px 0;flex-shrink:0">
+  <span class="cap" style="color:#FFFFFF">Free shipping over &euro;75.00</span>
+</div>
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <div style="position:relative;display:flex">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3l2.4 11.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 7H6"></path></svg>
+    <div class="cap num" style="position:absolute;top:-6px;right:-8px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#FFFFFF;color:var(--brand);font-weight:700;display:flex;align-items:center;justify-content:center">4</div>
+  </div>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:16px;padding:16px">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <h1 class="h1">Shopping cart</h1>
+      <span class="sm muted">3 items &middot; 4 units</span>
+    </div>
+
+    <div class="card" style="padding:0;display:flex;flex-direction:column">
+      <div style="display:flex;gap:12px;padding:16px">
+        <div class="thumb" style="width:64px;height:64px;font-size:12px">RD</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+          <div class="rowb" style="align-items:flex-start"><span class="h3">Ridge 28 Daypack, ripstop shell</span><div style="display:flex;flex-direction:column;align-items:flex-end"><span class="price-s">&euro;129.00</span><span class="cap strike">&euro;149.00</span></div></div>
+          <span class="sm muted">Colour: Black</span>
+          <div style="display:flex;gap:6px"><span class="badge sale">Sale</span><span class="badge" style="background:var(--success-t);color:var(--success)">In stock</span></div>
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:112px"><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#6B7480" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div><div class="lab num" style="flex-grow:1;text-align:center">1</div><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div></div>
+            <a class="sm" href="#">Remove</a>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div style="display:flex;gap:12px;padding:16px">
+        <div class="thumb" style="width:64px;height:64px;font-size:12px">KT</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+          <div class="rowb" style="align-items:flex-start"><span class="h3">Kestrel 45 Travel Backpack</span><span class="price-s">&euro;189.00</span></div>
+          <span class="sm muted">Colour: Green</span>
+          <span class="badge" style="background:var(--success-t);color:var(--success);align-self:flex-start">In stock</span>
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:112px"><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#6B7480" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div><div class="lab num" style="flex-grow:1;text-align:center">1</div><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div></div>
+            <a class="sm" href="#">Remove</a>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div style="display:flex;gap:12px;padding:16px">
+        <div class="thumb" style="width:64px;height:64px;font-size:12px">TF</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:8px">
+          <div class="rowb" style="align-items:flex-start"><span class="h3">Trail Fuel Bars, 12 &times; 50 g</span><div style="display:flex;flex-direction:column;align-items:flex-end"><span class="price-s">&euro;48.00</span><span class="cap muted num">&euro;40.00 / kg</span></div></div>
+          <span class="sm muted">12 &times; 50 g</span>
+          <span class="badge" style="background:var(--warning-t);color:var(--warning);align-self:flex-start">Only 3 left</span>
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;height:44px;width:112px"><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div><div class="lab num" style="flex-grow:1;text-align:center">2</div><div style="width:36px;height:44px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#111418" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg></div></div>
+            <a class="sm" href="#">Remove</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="rowb" style="border:1px dashed var(--line);border-radius:6px;padding:12px">
+        <span class="sm">Add a discount code</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg>
+        <span class="sm">Free returns within 30 days</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border-top:1px solid var(--line);padding:12px 16px 20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -2px 8px rgba(17,20,24,.06)">
+    <div class="rowb">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="sm">Total</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,15 12,9 18,15"></polyline></svg>
+      </div>
+      <span class="price-m">&euro;366.00</span>
+    </div>
+    <div class="btn btn-p">Proceed to checkout</div>
+    <span class="cap muted" style="text-align:center">Incl. 19% VAT and shipping</span>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 08 · Checkout Step 1 · Identify — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">08 · Checkout Step 1 · Identify — Mobile 390</div>
+  <section class="frame m" data-frame-name="Checkout-1-Identify-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:900px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,5 8,12 15,19"></polyline></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+  <div class="rowb"><span class="lab">Step 1 of 4 &middot; Identify</span><span class="cap muted num">25%</span></div>
+  <div style="height:4px;border-radius:999px;background:var(--line);display:flex"><div style="width:25%;background:var(--ink);border-radius:999px"></div></div>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:16px;padding:16px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <h2 class="h2">How would you like to continue?</h2>
+      <span class="sm muted">You can order without an account.</span>
+    </div>
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="h3">Continue as guest</div>
+      <div class="fl"><label class="lab">Email address</label><div class="inp"><span>anna.brandt@example.de</span></div><span class="cap muted">Confirmation and delivery updates go here.</span></div>
+      <div class="btn btn-p">Continue as guest</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px"><div style="flex-grow:1;height:1px;background:var(--line)"></div><span class="cap muted">or</span><div style="flex-grow:1;height:1px;background:var(--line)"></div></div>
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="h3">Sign in</div>
+      <div class="fl"><label class="lab">Email address</label><div class="inp"><span class="ph">you@example.com</span></div></div>
+      <div class="fl"><label class="lab">Password</label><div class="inp rowb"><span class="ph">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span><span class="sm" style="color:var(--ink)">Show</span></div></div>
+      <div class="btn btn-p">Sign in</div>
+      <div class="btn btn-s btn-m"><span class="sm" style="font-weight:600">Continue with Apple</span></div>
+      <div class="btn btn-s btn-m"><span class="sm" style="font-weight:600">Continue with Google</span></div>
+      <div style="display:flex;justify-content:center"><a class="sm" href="#">Forgot password?</a></div>
+    </div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 09 · Checkout Step 2 · Address & Delivery — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">09 · Checkout Step 2 · Address & Delivery — Mobile 390</div>
+  <section class="frame m" data-frame-name="Checkout-2-Delivery-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:1180px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,5 8,12 15,19"></polyline></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+  <div class="rowb"><span class="lab">Step 2 of 4 &middot; Delivery</span><span class="cap muted num">50%</span></div>
+  <div style="height:4px;border-radius:999px;background:var(--line);display:flex"><div style="width:50%;background:var(--ink);border-radius:999px"></div></div>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:16px;padding:16px">
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <h2 class="h2">Delivery address</h2>
+      <div class="fl"><label class="lab">First name</label><div class="inp">Anna</div></div>
+      <div class="fl"><label class="lab">Last name</label><div class="inp">Brandt</div></div>
+      <div class="fl"><label class="lab">Street and house number</label><div class="inp">Oranienstrasse 12</div></div>
+      <div style="display:flex;gap:12px">
+        <div class="fl" style="width:120px"><label class="lab">Postcode</label><div class="inp num">10999</div></div>
+        <div class="fl" style="flex-grow:1"><label class="lab">City</label><div class="inp">Berlin</div></div>
+      </div>
+      <div class="fl"><label class="lab">Country</label><div class="inp rowb"><span>Germany</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding-top:4px">
+        <div style="width:20px;height:20px;border-radius:4px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+        <span class="sm">Billing address is the same</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;background:var(--brand-t);border:1px solid var(--brand-l);border-radius:6px;padding:12px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+      <span class="sm" style="font-weight:600">Delivery estimate updated for 10999 Berlin</span>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <h2 class="h2">Delivery method</h2>
+      <div style="display:flex;gap:12px;align-items:flex-start;border:2px solid var(--ink);border-radius:6px;padding:12px">
+        <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink)"></div></div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Standard &middot; DHL</span><span class="sm" style="font-weight:600">Fri, 18 Sep &ndash; Tue, 22 Sep</span></div>
+        <span class="price-s">Free</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:12px">
+        <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Express &middot; DHL</span><span class="sm" style="font-weight:600">Thu, 17 Sep</span></div>
+        <span class="price-s">&euro;9.95</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:12px">
+        <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Pickup station</span><span class="sm" style="font-weight:600">Fri, 18 Sep &ndash; Tue, 22 Sep</span><a class="sm" href="#">Choose station</a></div>
+        <span class="price-s">Free</span>
+      </div>
+    </div>
+
+    <div class="card rowb" style="padding:16px">
+      <span class="sm">Show order summary</span>
+      <div style="display:flex;align-items:center;gap:8px"><span class="price-s">&euro;366.00</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg></div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border-top:1px solid var(--line);padding:12px 16px 20px;box-shadow:0 -2px 8px rgba(17,20,24,.06)">
+    <div class="btn btn-p">Continue to payment</div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 10 · Checkout Step 3 · Payment — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">10 · Checkout Step 3 · Payment — Mobile 390</div>
+  <section class="frame m" data-frame-name="Checkout-3-Payment-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:1020px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,5 8,12 15,19"></polyline></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+  <div class="rowb"><span class="lab">Step 3 of 4 &middot; Payment</span><span class="cap muted num">75%</span></div>
+  <div style="height:4px;border-radius:999px;background:var(--line);display:flex"><div style="width:75%;background:var(--ink);border-radius:999px"></div></div>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:16px;padding:16px">
+    <h2 class="h2">Payment method</h2>
+
+    <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--surface)">
+      <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+      <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">PayPal</span><span class="sm muted">You&rsquo;ll be redirected to PayPal.</span></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:6px;background:var(--surface)">
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px">
+        <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink)"></div></div>
+        <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Credit or debit card</span><span class="sm muted">Visa, Mastercard, Amex.</span></div>
+      </div>
+      <div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:12px">
+        <div class="fl"><label class="lab">Card number</label><div class="inp num">4242 4242 4242 4242</div></div>
+        <div style="display:flex;gap:12px">
+          <div class="fl" style="flex-grow:1"><label class="lab">Expiry</label><div class="inp num">09 / 29</div></div>
+          <div class="fl" style="width:120px"><label class="lab">CVC</label><div class="inp num">&bull;&bull;&bull;</div></div>
+        </div>
+        <div class="fl"><label class="lab">Name on card</label><div class="inp">Anna Brandt</div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--surface)">
+      <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+      <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Purchase on account</span><span class="sm muted">Pay within 14 days of dispatch.</span></div>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--surface)">
+      <div style="width:20px;height:20px;border-radius:999px;border:1px solid var(--line);flex-shrink:0;margin-top:2px"></div>
+      <div style="flex-grow:1;display:flex;flex-direction:column;gap:2px"><span class="lab">Prepayment</span><span class="sm muted">We ship once your transfer arrives.</span></div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7480" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:3px"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+      <span class="cap muted">Your payment details are handled by our payment provider. L&rsquo;alouette never sees your card number.</span>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border-top:1px solid var(--line);padding:12px 16px 20px;box-shadow:0 -2px 8px rgba(17,20,24,.06)">
+    <div class="btn btn-p">Review order</div>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 11 · Checkout Step 4 · Review — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">11 · Checkout Step 4 · Review — Mobile 390</div>
+  <section class="frame m" data-frame-name="Checkout-4-Review-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:1220px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,5 8,12 15,19"></polyline></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+</div>
+<div style="background:var(--surface);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+  <div class="rowb"><span class="lab">Step 4 of 4 &middot; Review</span><span class="cap muted num">100%</span></div>
+  <div style="height:4px;border-radius:999px;background:var(--line);display:flex"><div style="width:100%;background:var(--ink);border-radius:999px"></div></div>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:16px;padding:16px">
+    <h2 class="h2">Review your order</h2>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="rowb"><span class="over muted">Contact</span><a class="sm" href="#">Edit</a></div>
+      <span class="sm">anna.brandt@example.de</span>
+      <div class="divider"></div>
+      <div class="rowb"><span class="over muted">Delivery</span><a class="sm" href="#">Edit</a></div>
+      <span class="sm">Anna Brandt<br>Oranienstrasse 12<br><span class="num">10999</span> Berlin, Germany</span>
+      <span class="sm">Standard &middot; DHL &mdash; <span style="font-weight:600">Fri, 18 Sep &ndash; Tue, 22 Sep</span></span>
+      <div class="divider"></div>
+      <div class="rowb"><span class="over muted">Payment</span><a class="sm" href="#">Edit</a></div>
+      <span class="sm">Visa &bull;&bull;&bull;&bull; <span class="num">4242</span></span>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="h4">3 items</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="thumb" style="width:48px;height:48px;font-size:12px">RD</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Ridge 28 Daypack, ripstop shell</span><span class="cap muted">Black &middot; Qty 1</span></div>
+        <span class="price-s">&euro;129.00</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="thumb" style="width:48px;height:48px;font-size:12px">KT</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Kestrel 45 Travel Backpack</span><span class="cap muted">Qty 1</span></div>
+        <span class="price-s">&euro;189.00</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="thumb" style="width:48px;height:48px;font-size:12px">TF</div>
+        <div style="flex-grow:1;display:flex;flex-direction:column"><span class="sm" style="font-weight:600">Trail Fuel Bars, 12 &times; 50 g</span><span class="cap muted">Qty 2 &middot; &euro;40.00 / kg</span></div>
+        <span class="price-s">&euro;48.00</span>
+      </div>
+      <div class="divider"></div>
+      <div class="rowb"><span class="sm">Subtotal</span><span class="sm num">&euro;366.00</span></div>
+      <div class="rowb"><span class="sm">Shipping</span><span class="sm num">Free</span></div>
+      <div class="rowb"><span class="sm muted">VAT 19% (incl.)</span><span class="sm muted num">&euro;27.89</span></div>
+      <div class="divider"></div>
+      <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div style="width:20px;height:20px;border-radius:4px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+        <span class="sm">I have read and accept the <a href="#">Terms and Conditions</a> and the <a href="#">Cancellation Policy</a>.</span>
+      </div>
+      <span class="cap muted">Right of withdrawal: you may cancel within 14 days of receiving the goods.</span>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border-top:1px solid var(--line);padding:12px 16px 20px;display:flex;flex-direction:column;gap:8px;box-shadow:0 -2px 8px rgba(17,20,24,.06)">
+    <div class="btn btn-p">Buy now &mdash; pay &euro;366.00</div>
+    <span class="cap muted" style="text-align:center">Your order is only confirmed once you see the confirmation page.</span>
+  </div>
+</div>
+  </section>
+</div>
+
+<!-- ===== 12 · Order Confirmation — Mobile 390 ===== -->
+<div class="frame-wrap m-wrap">
+  <div class="frame-label">12 · Order Confirmation — Mobile 390</div>
+  <section class="frame m" data-frame-name="Order-Confirmation-Mobile" data-frame-width="390" style="width:390px">
+<div style="min-height:1120px;display:flex;flex-direction:column;background:var(--canvas)">
+<div style="height:56px;background:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,5 8,12 15,19"></polyline></svg>
+  <div style="font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;color:#FFFFFF">L&rsquo;alouette</div>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+</div>
+  <div style="flex-grow:1;display:flex;flex-direction:column;gap:24px;padding:32px 16px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+      <div style="width:56px;height:56px;border-radius:999px;background:var(--success-t);display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1F7A4D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,13 9,18 20,6"></polyline></svg></div>
+      <h1 class="h1">Thank you, Anna.</h1>
+      <span class="sm muted">Your order is confirmed. We&rsquo;ve sent the details to anna.brandt@example.de.</span>
+    </div>
+
+    <div class="card rowb" style="padding:16px">
+      <div style="display:flex;flex-direction:column;gap:2px"><span class="over muted">Order number</span><span class="h3 num">LA-2026-018472</span></div>
+      <div class="btn btn-s btn-m" style="width:88px"><span class="sm" style="font-weight:600">Copy</span></div>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+      <div class="h4">What happens next</div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><div class="lab num" style="width:24px;height:24px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div><span class="sm">We prepare your parcel, usually within one working day.</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><div class="lab num" style="width:24px;height:24px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div><span class="sm">You get a tracking link by email.</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><div class="lab num" style="width:24px;height:24px;border-radius:999px;background:var(--canvas);display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div><span class="sm">Delivery Fri, 18 Sep &ndash; Tue, 22 Sep.</span></div>
+    </div>
+
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="h4">Your order</div>
+      <div class="rowb"><span class="sm">Ridge 28 Daypack, ripstop shell &times; 1</span><span class="price-s">&euro;129.00</span></div>
+      <div class="rowb"><span class="sm">Kestrel 45 Travel Backpack &times; 1</span><span class="price-s">&euro;189.00</span></div>
+      <div class="rowb"><span class="sm">Trail Fuel Bars &times; 2</span><span class="price-s">&euro;48.00</span></div>
+      <div class="divider"></div>
+      <div class="rowb"><span class="sm">Shipping &middot; Standard, DHL</span><span class="sm num">Free</span></div>
+      <div class="rowb"><span class="h4">Total</span><span class="price-m">&euro;366.00</span></div>
+    </div>
+
+    <div style="border:1px solid #E9D3C2;background:var(--warning-t);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px">
+      <span class="h4">Save your order details</span>
+      <span class="sm">You ordered as a guest. Keep your order number &mdash; you&rsquo;ll need it with your email to look up this order.</span>
+      <div class="btn btn-s btn-m"><span class="sm" style="font-weight:600">Create an account to track it</span></div>
+    </div>
+
+    <div style="display:flex;justify-content:center"><a class="sm" href="#">Continue shopping</a></div>
+  </div>
+</div>
+  </section>
+</div>
+
+</div>
+</body>
+</html>

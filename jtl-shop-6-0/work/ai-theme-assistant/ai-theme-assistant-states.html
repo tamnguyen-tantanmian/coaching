@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theme Assistant – AI Panel States</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:#2722F8; --p-600:#1C18C9; --p-50:#EEEDFF; --p-100:#DCDBFE;
+  --s:#E5E7EB; --h:#FB581F; --h-50:#FFF1EB; --h-100:#FFDCCB;
+  --ink:#111827; --ink-2:#374151; --muted:#6B7280; --line:#E5E7EB; --bg:#F9FAFB; --page:#F3F4F6;
+  --ok:#059669; --ok-50:#ECFDF5; --err:#DC2626; --err-50:#FEF2F2; --warn:#B45309; --warn-50:#FFFBEB;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--page);font-size:14px;line-height:1.45}
+.wrap{max-width:1440px;margin:0 auto;padding:32px 24px 80px}
+h1{font-size:28px;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:20px;margin:56px 0 4px}
+h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:32px 0 12px}
+.lead{color:var(--muted);max-width:820px;margin:0}
+.stats{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:140px}
+.stat b{font-size:24px;display:block}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* ---------- panel (shared by prototype & frames) ---------- */
+.pn{width:100%;height:640px;background:#fff;border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;position:relative;font-size:13px}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+.ph-t{display:flex;gap:9px;align-items:center;min-width:0;flex:1;margin-right:8px}.ph-t>div{min-width:0}
+.ph-t b{display:block;font-size:13px}
+.ph-t small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:28px;height:28px;border-radius:8px;background:var(--p);color:#fff;display:grid;place-items:center;flex:none}
+.av.sm{width:22px;height:22px;border-radius:6px}
+.av.busy{background:linear-gradient(120deg,var(--p),var(--h),var(--p));background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.ia{display:flex;gap:2px}
+.ib{width:28px;height:28px;border-radius:7px;border:0;background:none;display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.ib:hover{background:var(--bg);color:var(--ink)}
+.ib.on{background:var(--p-50);color:var(--p)}
+.ctx{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--bg);font-size:11px;color:var(--muted);align-items:center;flex-wrap:wrap}
+.ctx .c{background:#fff;border:1px solid var(--line);border-radius:99px;padding:2px 8px;color:var(--ink-2)}
+.thr{flex:1;overflow:auto;padding:14px 12px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.u{align-self:flex-end;max-width:85%;background:var(--p);color:#fff;padding:8px 11px;border-radius:12px 12px 3px 12px}
+.u .chip{background:rgba(255,255,255,.18);border-color:transparent;color:#fff}
+.a{display:flex;gap:8px;align-items:flex-start}
+.a .bd{flex:1;min-width:0}
+.a .tx{color:var(--ink-2)}
+.a .meta{display:flex;gap:2px;margin-top:4px}
+.a .meta .ib{width:24px;height:24px}
+.cur::after{content:"";display:inline-block;width:6px;height:13px;background:var(--p);margin-left:2px;vertical-align:-2px;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.dots{display:inline-flex;gap:4px;padding:6px 0}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--p);animation:dt 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dt{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.steps{font-size:12px;color:var(--muted);margin-top:4px;display:flex;flex-direction:column;gap:3px}
+.steps span::before{content:"✓ ";color:var(--ok)}
+.steps span.now::before{content:"◌ ";color:var(--p)}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:2px 8px 2px 4px;font-size:11px;color:var(--ink-2)}
+.chip .sw{width:12px;height:12px;border-radius:50%}
+.chip.h{border-color:var(--h);background:var(--h-50);color:#9A2D06}
+.chip img,.chip .thumb{width:16px;height:16px;border-radius:3px;display:flex;overflow:hidden}
+.thumb i{flex:1}
+.sug{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.sug button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 11px;cursor:pointer;color:var(--ink)}
+.sug button:hover{border-color:var(--p);color:var(--p)}
+.sug button.h{border-color:var(--h-100);background:var(--h-50)}
+.empty{margin:auto 0;text-align:center;padding:10px}
+.empty .av{width:44px;height:44px;border-radius:12px;margin:0 auto 12px}
+.empty b{display:block;font-size:15px;margin-bottom:4px}
+.empty p{color:var(--muted);font-size:12px;margin:0 0 16px}
+
+/* proposal card */
+.prop{border:1px solid var(--line);border-radius:12px;margin-top:8px;overflow:hidden;background:#fff}
+.prop-h{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);font-size:12px;font-weight:600}
+.bdg{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--bg);color:var(--muted)}
+.prop.pending{border-color:var(--p-100)}
+.prop.pending .bdg{background:var(--p-50);color:var(--p)}
+.prop.preview{border-color:var(--h);box-shadow:0 0 0 3px var(--h-50)}
+.prop.preview .bdg{background:var(--h);color:#fff}
+.prop.applied .bdg{background:var(--ok-50);color:var(--ok)}
+.prop.discarded{opacity:.6}
+.prop.discarded .chg{text-decoration:line-through}
+.prop.stale{border-color:#FCD34D}
+.prop.stale .bdg{background:var(--warn-50);color:var(--warn)}
+.chg{display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:12px;border-bottom:1px solid #F3F4F6}
+.chg:last-child{border-bottom:0}
+.chg .lb{flex:1;color:var(--ink-2)}
+.chg .new{font-size:9px;font-weight:700;color:var(--h);border:1px solid var(--h-100);border-radius:4px;padding:0 4px;margin-left:4px}
+.sw2{display:inline-flex;align-items:center;gap:4px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+.sw2 i{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.08)}
+.arr{color:#9CA3AF}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #9CA3AF;display:grid;place-items:center;flex:none}
+.cb.on{background:var(--p);border-color:var(--p);color:#fff}
+.prop-f{display:flex;gap:6px;padding:8px 10px;background:var(--bg);align-items:center;flex-wrap:wrap}
+.prop-f .note{font-size:11px;color:var(--muted);margin-right:auto}
+.b{font:inherit;font-size:12px;font-weight:500;border-radius:7px;padding:5px 10px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.b.pr{background:var(--p);border-color:var(--p);color:#fff}
+.b.pr:hover{background:var(--p-600)}
+.b.hl{border-color:var(--h);color:#B13A0C;background:var(--h-50)}
+.b.gh{border-color:transparent;background:none;color:var(--muted)}
+.b:disabled{opacity:.45;cursor:not-allowed}
+
+/* callouts */
+.call{border-radius:10px;padding:9px 10px;font-size:12px;display:flex;gap:8px;margin-top:8px}
+.call.warn{background:var(--warn-50);color:#78350F;border:1px solid #FDE68A}
+.call.err{background:var(--err-50);color:#7F1D1D;border:1px solid #FECACA}
+.call.info{background:var(--bg);color:var(--ink-2);border:1px solid var(--line)}
+.call.ok{background:var(--ok-50);color:#064E3B;border:1px solid #A7F3D0}
+.call b{display:block}
+.ratio{display:flex;gap:6px;margin-top:6px}
+.ratio span{border-radius:5px;padding:3px 7px;font-size:11px;font-weight:600}
+.opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.opts button{font:inherit;text-align:left;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.opts button:hover{border-color:var(--p)}
+.opts button small{color:var(--muted);display:block}
+
+/* tray + composer */
+.tray{margin:0 12px;border:1px solid var(--h);background:var(--h-50);border-radius:10px 10px 0 0;border-bottom:0;padding:7px 10px;display:flex;align-items:center;gap:8px;font-size:12px}
+.tray .dot{width:8px;height:8px;border-radius:50%;background:var(--h);animation:dt 1.2s infinite}
+.tray span{margin-right:auto;color:#7C2D12;font-weight:500}
+.tray.pend{border-color:var(--p-100);background:var(--p-50)}
+.tray.pend .dot{background:var(--p);animation:none}
+.tray.pend span{color:var(--p)}
+.cw{padding:0 12px 10px}
+.cmp{border:1px solid #D1D5DB;border-radius:12px;padding:8px 8px 6px 10px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.tray+.cw .cmp{border-top-left-radius:0;border-top-right-radius:0}
+.cmp.f{border-color:var(--p);box-shadow:0 0 0 3px var(--p-50)}
+.cmp.dis{background:var(--bg);border-style:dashed}
+.cmp .chips{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.cmp .chips:empty{display:none}
+.cmp textarea,.cmp .ta{width:100%;border:0;outline:0;resize:none;font:inherit;font-size:13px;min-height:38px;color:var(--ink);background:transparent;padding:0}
+.cmp .ta.ph{color:#9CA3AF}
+.cmp-b{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.cmp-b .tl{display:flex;gap:2px;align-items:center}
+.cmp-b .scope{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 6px;margin-left:4px}
+.send{width:30px;height:30px;border-radius:8px;border:0;display:grid;place-items:center;background:var(--s);color:#9CA3AF;cursor:pointer}
+.send.on{background:var(--p);color:#fff}
+.send.stop{background:var(--ink);color:#fff}
+.hint{font-size:10.5px;color:#9CA3AF;text-align:center;margin-top:6px}
+.kbd{font-family:ui-monospace,Menlo,monospace;font-size:10px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:#fff;color:var(--muted)}
+.jump{position:absolute;left:50%;transform:translateX(-50%);bottom:132px;background:#fff;border:1px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.08);border-radius:99px;padding:4px 10px;font-size:11px;display:flex;gap:4px;align-items:center}
+.hist .row{padding:10px 12px;border-bottom:1px solid #F3F4F6;font-size:12px;cursor:pointer}
+.hist .row:hover{background:var(--bg)}
+.hist .row b{display:block;font-weight:500}
+.hist .row small{color:var(--muted)}
+.hist .row .tg{font-size:10px;border-radius:99px;padding:1px 6px;margin-left:6px}
+.search{margin:10px 12px;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:#9CA3AF;font-size:12px}
+.rail{width:56px;height:640px;background:#fff;border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:8px}
+.rail .pip{position:relative}
+.rail .pip::after{content:"2";position:absolute;top:-4px;right:-6px;background:var(--h);color:#fff;font-size:9px;font-weight:700;border-radius:99px;padding:0 4px;border:2px solid #fff}
+.ro{background:var(--bg);text-align:center;padding:10px;font-size:12px;color:var(--muted);border-radius:10px;border:1px dashed #D1D5DB}
+.skel{height:10px;border-radius:5px;background:linear-gradient(90deg,#F3F4F6,#E5E7EB,#F3F4F6);background-size:200% 100%;animation:sh 1.2s linear infinite;margin:6px 0}
+.upl{height:4px;border-radius:2px;background:var(--s);overflow:hidden;margin-top:4px}
+.upl i{display:block;height:100%;width:60%;background:var(--p)}
+
+
+/* ---------- full editor screen ---------- */
+.fitbox{position:relative;overflow:hidden;border-radius:12px;border:1px solid #D1D5DB;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.fitbox>.scr{position:absolute;left:0;top:0;transform-origin:0 0}
+.scr{width:1440px;height:900px;background:#fff;position:relative;overflow:hidden;font-size:14px;color:var(--ink);
+  --pv-primary:#6366F1;--pv-secondary:#111827;--pv-highlight:transparent;--pv-h1:28px;--pv-footer-ink:#fff}
+.scr .top{height:56px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--line);gap:14px}
+.scr .logo{font-weight:800;font-size:20px;letter-spacing:-.04em}
+.scr .org{font-weight:500;display:flex;gap:6px;align-items:center}
+.scr .me{margin-left:auto;width:36px;height:36px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:500;font-size:13px}
+.scr .crumb{height:36px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid var(--line);font-size:13px;gap:10px;color:var(--ink-2)}
+.scr .shop{background:var(--bg);padding:12px 16px 0;display:flex;gap:14px}
+.scr .shop .ava{width:40px;height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;display:grid;place-items:center}
+.scr .shop h5{margin:0;font-size:22px;display:flex;gap:10px;align-items:center}
+.scr .saved{font-size:11px;font-weight:600;color:#047857;background:var(--ok-50);border:1px solid #A7F3D0;border-radius:99px;padding:1px 8px}
+.scr .saved.dirty{color:var(--warn);background:var(--warn-50);border-color:#FDE68A}
+.scr .shop small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.scr .shop .ra{margin-left:auto;display:flex;gap:8px;align-items:flex-start}
+.scr .btn2{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 12px;font-size:13px;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.scr .btn2.pr{background:var(--p);border-color:var(--p);color:#fff}
+.scr .btn2.dk{background:var(--ink);border-color:var(--ink);color:#fff}
+.scr .btn2.off{background:#9CA3AF;border-color:#9CA3AF;color:#fff}
+.scr .btn2.lt{background:var(--p-100);border-color:var(--p-100);color:#fff}
+.scr .tabs{display:flex;gap:26px;padding:12px 16px 0;background:var(--bg);border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+.scr .tabs span{padding-bottom:10px}
+.scr .tabs .on{color:var(--ink);border-bottom:2px solid var(--p)}
+.scr .tool{height:58px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid var(--line)}
+.scr .sel{border:1px solid var(--line);border-radius:7px;padding:7px 12px;font-size:13px;min-width:200px;display:flex;justify-content:space-between;gap:8px}
+.scr .dev{display:flex;gap:2px;background:var(--bg);border-radius:7px;padding:3px}
+.scr .dev span{width:30px;height:26px;border-radius:5px;display:grid;place-items:center;color:var(--muted);font-size:11px}
+.scr .dev span.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.scr .ver{margin-left:auto;display:flex;align-items:center;gap:8px}
+.scr .act{font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--p-50);color:var(--p)}
+.scr .act.pub{background:var(--ok-50);color:var(--ok)}
+.scr .cols{display:grid;grid-template-columns:260px 1fr 330px;height:calc(900px - 56px - 36px - 70px - 44px - 58px)}
+.scr .lc{border-right:1px solid var(--line);padding:14px}
+.scr .lc h6{margin:0 0 12px;font-size:11px;color:var(--muted);letter-spacing:.06em;font-weight:600}
+.scr .th{display:flex;align-items:center;gap:10px;padding:8px 4px}
+.scr .th .rd{width:16px;height:16px;border-radius:50%;border:1.5px solid #D1D5DB}
+.scr .th .rd.on{border:5px solid var(--ink)}
+.scr .th .pair{display:flex;width:44px;height:30px;border-radius:7px;overflow:hidden}
+.scr .th .pair i{flex:1}
+.scr .th b{display:block;font-weight:500}
+.scr .th small{font-size:11px;color:var(--muted)}
+.scr .cv{background:var(--page);padding:18px 24px;position:relative;overflow:hidden}
+.scr .banner{display:none;position:absolute;left:24px;right:24px;top:18px;background:var(--h);color:#fff;font-size:12px;font-weight:600;padding:7px 12px;align-items:center;justify-content:space-between;border-radius:8px 8px 0 0;z-index:2}
+.scr.previewing .banner{display:flex}
+.scr.previewing .site{outline:3px solid var(--h);outline-offset:0;margin-top:33px}
+.scr .rc{border-left:1px solid var(--line);overflow:hidden}
+.scr .rc .rh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:600}
+.scr .rc .dft{font-size:11px;font-weight:600;color:var(--p);background:var(--p-50);border-radius:99px;padding:1px 8px}
+.scr .grp{padding:12px 14px;border-bottom:1px solid var(--line)}
+.scr .grp>b{display:flex;justify-content:space-between;font-weight:600;margin-bottom:8px}
+.scr .fld{margin-bottom:10px}
+.scr .fld label{display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:5px;color:var(--ink-2)}
+.scr .fld .in{border:1px solid var(--line);border-radius:7px;padding:7px 10px;display:flex;align-items:center;gap:8px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+.scr .fld .in i{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.scr .fld .in.sans{font-family:inherit;justify-content:space-between}
+.scr .fld .tg{font-size:10px;font-weight:600;border-radius:99px;padding:0 6px;font-family:Inter,sans-serif}
+.scr .fld.pv .in{border-color:var(--h);background:var(--h-50)}
+.scr .fld.pv .tg{background:var(--h);color:#fff}
+.scr .fld.ap .in{border-color:#6EE7B7;background:var(--ok-50)}
+.scr .fld.ap .tg{background:var(--ok-50);color:var(--ok);border:1px solid #A7F3D0}
+.scr .fld.cf .in{border-color:#FCD34D;background:var(--warn-50)}
+.scr .fld.cf .tg{background:var(--warn-50);color:var(--warn);border:1px solid #FDE68A}
+.scr .fld .old{text-decoration:line-through;color:#9CA3AF;font-size:11px}
+/* storefront */
+.site{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;transition:all .25s}
+.site nav{background:var(--pv-primary);color:#fff;font-size:11px;padding:10px 40px;display:flex;gap:16px;align-items:center;transition:background .3s}
+.site nav b{margin-right:auto}
+.site .hero{padding:36px 80px 40px}
+.site .hero .card{border:1px solid #D1D5DB;border-radius:6px;padding:18px;position:relative}
+.site .hero h4{margin:0 0 6px;font-size:var(--pv-h1);transition:font-size .3s;letter-spacing:-.01em}
+.site .hero p{margin:0 0 12px;font-size:11px;color:var(--muted)}
+.site .btn{background:var(--pv-primary);color:#fff;border:0;border-radius:4px;font-size:11px;padding:7px 12px;transition:background .3s}
+.site .sale{position:absolute;top:12px;right:12px;background:var(--pv-highlight);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;display:none}
+.scr.has-hl .site .sale{display:block}
+.site footer{background:var(--pv-secondary);color:var(--pv-footer-ink);padding:22px 60px 40px;font-size:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;transition:all .3s;line-height:1.9}
+.site footer b{display:block;margin-bottom:4px;font-size:11px}
+/* floating assistant */
+.fl{position:absolute;left:16px;bottom:16px;z-index:10}
+.fl .pn{width:380px;height:560px;box-shadow:0 18px 40px rgba(17,24,39,.18),0 2px 8px rgba(17,24,39,.08);border-color:#D1D5DB}
+.fab{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:7px 16px 7px 7px;font:inherit;font-weight:600;font-size:13px;cursor:pointer;box-shadow:0 10px 24px rgba(17,24,39,.25);position:relative}
+.fab .av{width:30px;height:30px;border-radius:50%}
+.fab .kbd{background:#374151;border-color:#4B5563;color:#D1D5DB}
+.fab .fb{position:absolute;top:-6px;right:-6px;background:var(--h);color:#fff;font-size:10px;font-weight:700;border-radius:99px;padding:1px 6px;border:2px solid #fff}
+.peek{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(17,24,39,.14);padding:10px 12px;width:300px;margin-bottom:10px;font-size:12.5px;position:relative}
+.peek b{display:block;margin-bottom:2px}
+.peek .row{display:flex;gap:6px;margin-top:8px}
+.peek::after{content:"";position:absolute;left:22px;bottom:-6px;width:10px;height:10px;background:#fff;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+/* inventory */
+.st{display:grid;grid-template-columns:1fr 290px;gap:24px;align-items:start;margin-bottom:36px}
+@media(max-width:1000px){.st{grid-template-columns:1fr}}
+.st .fitbox{cursor:zoom-in}
+.st .fitbox .scr{pointer-events:none}
+.st .fitbox .thr{justify-content:flex-end}
+.st .fitbox .thr .empty{margin:auto 0}
+.st .cap .id{font-size:11px;font-weight:700;color:var(--p);letter-spacing:.04em}
+.st .cap b{display:block;font-size:16px;margin:2px 0 6px}
+.st .cap p{margin:0;font-size:13px;color:var(--ink-2)}
+.st .cap .tr{font-size:12px;color:var(--ink-2);margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.st .cap .tr::before{content:"Trigger · ";color:var(--muted)}
+.lb-ov{position:fixed;inset:0;background:rgba(17,24,39,.7);display:none;place-items:center;z-index:100;cursor:zoom-out}
+.lb-ov.on{display:grid}
+.lb-ov .scr{pointer-events:none}
+.lb-ov .thr{justify-content:flex-end}
+.lb-ov .thr .empty{margin:auto 0}
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:16px}
+.notes div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink-2)}
+.notes b{display:block;color:var(--ink);margin-bottom:2px}
+.ctrl{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.ctrl select,.ctrl button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 8px;color:var(--ink)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px;margin-top:16px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td .t{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin:2px 4px 2px 0;font-size:11.5px}
+td.n{font-weight:700;color:var(--p);text-align:right;width:60px}
+tfoot td{font-weight:700;background:var(--p-50);color:var(--p)}
+.flows{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.flow{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.flow .fh{display:flex;align-items:center;gap:10px}
+.flow .fn{width:24px;height:24px;border-radius:7px;background:var(--p);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+.flow .fh b{font-size:15px}
+.flow .pri{margin-left:auto;font-size:11px;font-weight:600;border-radius:99px;padding:2px 9px}
+.pri.must{background:var(--p-50);color:var(--p)}.pri.should{background:var(--h-50);color:#B13A0C}.pri.later{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.flow p{margin:4px 0 10px 34px;font-size:13px;color:var(--muted)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 6px 34px}
+.stp{font-size:12.5px;border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:4px 9px}
+.ar{color:#9CA3AF}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Theme assistant — floating AI chat</h1>
+  <p class="lead">The AI chat floats over the Theme Setup screen in the bottom-left corner. It isn't part of the theme list, canvas or inspector, so it stays available while you work and can be minimized to a button.</p>
+  <h2>Core flows</h2>
+  <p class="lead">Seven flows the assistant needs. Each one becomes several screens later; for now these set the scope. Must = needed for the first release.</p>
+  <div class="flows"><div class="flow"><div class="fh"><span class="fn">1</span><b>Ask → Preview → Apply</b><span class="pri must">Must</span></div><p>The main path. Every other flow comes back to it.</p><div class="chain"><span class="stp">Ask AI button</span><span class="ar">→</span><span class="stp">Empty + suggestions</span><span class="ar">→</span><span class="stp">Prompt / upload image</span><span class="ar">→</span><span class="stp">Thinking</span><span class="ar">→</span><span class="stp">Proposal card</span><span class="ar">→</span><span class="stp">Preview on canvas</span><span class="ar">→</span><span class="stp">Applied + Undo</span></div></div><div class="flow"><div class="fh"><span class="fn">2</span><b>Refine a proposal</b><span class="pri must">Must</span></div><p>The user adjusts the AI's answer instead of accepting or rejecting all of it.</p><div class="chain"><span class="stp">Proposal card</span><span class="ar">→</span><span class="stp">Untick changes (partial)</span><span class="ar">→</span><span class="stp">or Discard</span><span class="ar">→</span><span class="stp">Follow-up prompt</span><span class="ar">→</span><span class="stp">New proposal</span></div></div><div class="flow"><div class="fh"><span class="fn">3</span><b>AI asks before acting</b><span class="pri must">Must</span></div><p>For ambiguous requests or ones the assistant can't do.</p><div class="chain"><span class="stp">Vague prompt</span><span class="ar">→</span><span class="stp">Clarifying question</span><span class="ar">→</span><span class="stp">Pick an option</span><span class="ar">→</span><span class="stp">Proposal</span></div><div class="chain"><span class="stp">Out-of-scope prompt</span><span class="ar">→</span><span class="stp">Explain + link to the right place</span></div></div><div class="flow"><div class="fh"><span class="fn">4</span><b>Guardrails before Apply</b><span class="pri should">Should</span></div><p>Protects the shop from bad results without blocking the merchant.</p><div class="chain"><span class="stp">Proposal</span><span class="ar">→</span><span class="stp">Contrast warning</span><span class="ar">→</span><span class="stp">Apply suggested fix</span><span class="ar">→</span><span class="stp">or Apply anyway</span></div><div class="chain"><span class="stp">Theme edited by hand</span><span class="ar">→</span><span class="stp">Outdated proposal</span><span class="ar">→</span><span class="stp">Regenerate</span></div></div><div class="flow"><div class="fh"><span class="fn">5</span><b>Work in the background</b><span class="pri should">Should</span></div><p>Floating panel can be minimized while the AI keeps working.</p><div class="chain"><span class="stp">Prompt sent</span><span class="ar">→</span><span class="stp">Minimize</span><span class="ar">→</span><span class="stp">Button: working</span><span class="ar">→</span><span class="stp">Bubble: answer ready</span><span class="ar">→</span><span class="stp">Preview / Open chat</span></div></div><div class="flow"><div class="fh"><span class="fn">6</span><b>Recover from failure</b><span class="pri must">Must</span></div><p>One pattern for all errors: keep the message, explain, offer one next step.</p><div class="chain"><span class="stp">Error</span><span class="ar">→</span><span class="stp">Retry</span></div><div class="chain"><span class="stp">Stopped</span><span class="ar">→</span><span class="stp">Continue</span></div><div class="chain"><span class="stp">Bad image</span><span class="ar">→</span><span class="stp">Re-upload</span></div><div class="chain"><span class="stp">Rate limit</span><span class="ar">→</span><span class="stp">Wait (proposals still usable)</span></div></div><div class="flow"><div class="fh"><span class="fn">7</span><b>Come back later</b><span class="pri later">Later</span></div><p>Return to earlier chats for this theme.</p><div class="chain"><span class="stp">History list</span><span class="ar">→</span><span class="stp">Open past chat</span><span class="ar">→</span><span class="stp">Proposal status (applied / not / discarded)</span></div></div></div>
+
+  <h2>Interactive prototype</h2>
+  <p class="lead">Try <b>"Apply my brand colors"</b>, then Preview → Apply → Undo. Minimize with the chevron and reopen with the button. ■ stops a reply that's still thinking.</p>
+  <div class="fitbox" id="liveBox" style="margin-top:16px"></div>
+  <div class="ctrl"><button id="reset">Reset</button><label>Simulate: <select id="sim"><option value="ok">Normal</option><option value="err">Network error</option><option value="rate">Rate limit</option></select></label><input type="file" id="file" accept="image/png,image/jpeg" hidden></div>
+
+  <h2>State inventory</h2>
+  <p class="lead">Each state is shown on the full screen. Click a frame to see it at full size.</p>
+  <div id="inv"></div>
+
+  <h2>Component variants to build</h2>
+  <p class="lead">The states above are built from these components. Build these variants first; the state frames are then just combinations of them.</p>
+  <table id="comp"></table>
+</div>
+<div class="lb-ov" id="lb"></div>
+
+<script>
+/* ---------------- icons ---------------- */
+const ic=(d,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const I={
+ spark:ic('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',15),
+ send:ic('<path d="M12 19V5M5 12l7-7 7 7"/>'),
+ stop:ic('<rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/>'),
+ hist:ic('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>'),
+ plus:ic('<path d="M12 5v14M5 12h14"/>'),
+ coll:ic('<path d="M5 12h14"/>'),
+ clip:ic('<path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"/>'),
+ check:ic('<path d="M5 12l5 5L20 7"/>',12),
+ undo:ic('<path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>',14),
+ eye:ic('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',14),
+ x:ic('<path d="M18 6L6 18M6 6l12 12"/>',14),
+ warn:ic('<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/>'),
+ retry:ic('<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',14),
+ up:ic('<path d="M7 10v11M15 5.9L14 10h5.8a2 2 0 0 1 2 2.3l-1.4 7A2 2 0 0 1 18.4 21H7V10l4-8a3 3 0 0 1 4 3.9z"/>',13),
+ down:ic('<path d="M17 14V3M9 18.1L10 14H4.2a2 2 0 0 1-2-2.3l1.4-7A2 2 0 0 1 5.6 3H17v11l-4 8a3 3 0 0 1-4-3.9z"/>',13),
+ copy:ic('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',13),
+ lock:ic('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',14),
+ down2:ic('<path d="M12 5v14M5 12l7 7 7-7"/>',12),
+ palette:ic('<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.2" fill="currentColor"/><circle cx="12" cy="7" r="1.2" fill="currentColor"/><circle cx="16" cy="10" r="1.2" fill="currentColor"/>',16),
+};
+
+/* ---------------- building blocks ---------------- */
+const head=(o={})=>`<div class="ph"><div class="ph-t"><span class="av ${o.busy?'busy':''}">${I.spark}</span><div><b>${o.title||'Theme assistant'}</b><small>${o.sub||'Proposes changes · you decide what applies'}</small></div></div>
+ <div class="ia"><button class="ib ${o.hist?'on':''}" data-act="hist" title="History">${I.hist}</button><button class="ib" data-act="new" title="New chat">${I.plus}</button><button class="ib" data-act="coll" title="Minimize">${I.coll}</button></div></div>`;
+const ctx=(o={})=>`<div class="ctx">Editing <span class="c">${o.theme||'Indigo'}</span><span class="c">${o.ver||'Version 1'}</span><span class="c">${o.page||'Home'}</span>${o.extra||''}</div>`;
+const user=(t,chips='')=>`<div class="u">${chips?`<div style="margin-bottom:5px;display:flex;gap:4px;flex-wrap:wrap">${chips}</div>`:''}${t}</div>`;
+const ai=(body,o={})=>`<div class="a"><span class="av sm ${o.busy?'busy':''}">${I.spark}</span><div class="bd">${body}${o.meta?`<div class="meta"><button class="ib" title="Copy">${I.copy}</button><button class="ib ${o.up?'on':''}" title="Helpful">${I.up}</button><button class="ib ${o.dn?'on':''}" title="Not helpful">${I.down}</button></div>`:''}</div></div>`;
+const sw=(c)=>c?`<span class="sw2"><i style="background:${c}"></i>${c.replace('#','')}</span>`:`<span class="sw2" style="font-style:italic">none</span>`;
+const val=(v)=>`<span class="sw2">${v}</span>`;
+const BRAND=[{k:'primary',lb:'Primary',from:'#6366F1',to:'#2722F8'},{k:'secondary',lb:'Secondary',from:'#111827',to:'#E5E7EB'},{k:'highlight',lb:'Highlight',from:null,to:'#FB581F',isNew:true}];
+const chgRow=(c,st,i)=>`<div class="chg">${st==='partial'?`<span class="cb ${c.off?'':'on'}" data-act="tog" data-i="${i}">${c.off?'':I.check}</span>`:''}<span class="lb">${c.lb}${c.isNew?'<span class="new">NEW</span>':''}</span>${c.kind==='val'?val(c.from):sw(c.from)}<span class="arr">→</span>${c.kind==='val'?val(c.to):sw(c.to)}</div>`;
+function prop(st,changes=BRAND,o={}){
+ const L={pending:'Not applied',preview:'Previewing',applied:'Applied',discarded:'Discarded',stale:'Outdated',partial:'Not applied'};
+ let f='';
+ if(st==='pending'||st==='partial'){const n=changes.filter(c=>!c.off).length;f=`<button class="b hl" data-act="preview">${I.eye}Preview</button><button class="b gh" data-act="discard">Discard</button><button class="b pr" data-act="apply" style="margin-left:auto" ${n?'':'disabled'}>Apply${st==='partial'?` ${n} of ${changes.length}`:''}</button>`;}
+ if(st==='preview')f=`<span class="note">Shown on canvas</span><button class="b" data-act="unpreview">Stop preview</button><button class="b pr" data-act="apply">Apply</button>`;
+ if(st==='applied')f=`<span class="note">${I.check} Saved to Version 1 draft</span><button class="b" data-act="undo">${I.undo}Undo</button>`;
+ if(st==='discarded')f=`<span class="note">Nothing was changed</span><button class="b gh" data-act="restore">Restore</button>`;
+ if(st==='stale')f=`<span class="note">Primary was edited by hand after this was proposed</span><button class="b" data-act="regen">${I.retry}Regenerate</button><button class="b gh">Apply anyway</button>`;
+ return `<div class="prop ${st}"><div class="prop-h"><span>${o.title||`Proposal · ${changes.length} change${changes.length>1?'s':''}`}</span><span class="bdg">${L[st]}</span></div>${changes.map((c,i)=>chgRow(c,st,i)).join('')}<div class="prop-f">${f}</div></div>`;
+}
+const tray=(mode,n=3)=>mode==='preview'
+ ?`<div class="tray"><i class="dot"></i><span>Previewing ${n} changes</span><button class="b gh" data-act="unpreview" style="padding:2px 6px">Stop</button><button class="b pr" data-act="apply" style="padding:3px 8px">Apply all</button></div>`
+ :`<div class="tray pend"><i class="dot"></i><span>${n} changes not applied</span><button class="b gh" data-act="discard" style="padding:2px 6px">Discard</button><button class="b pr" data-act="apply" style="padding:3px 8px">Apply</button></div>`;
+const brandThumb=`<span class="thumb"><i style="background:#2722F8"></i><i style="background:#E5E7EB"></i><i style="background:#FB581F"></i></span>`;
+const chipImg=(name='brand-colors.png',up)=>`<span class="chip">${brandThumb}${name}${up?'':` <span style="color:#9CA3AF;cursor:pointer" data-act="rmchip">${I.x}</span>`}</span>`;
+function comp(o={}){
+ const s=o.state||'idle';
+ const send= s==='sending'?`<button class="send stop" data-act="stop" title="Stop">${I.stop}</button>`:`<button class="send ${o.text&&s!=='disabled'?'on':''}" data-act="send" ${s==='disabled'?'disabled':''}>${I.send}</button>`;
+ const ta = o.live?`<textarea id="ta" rows="2" placeholder="${o.ph||'Describe a change, e.g. “softer corners”'}" ${s==='disabled'||s==='sending'?'disabled':''}>${o.text||''}</textarea>`
+   :`<div class="ta ${o.text?'':'ph'}">${o.text?o.text+(o.caret?'<span class="cur"></span>':''):(o.ph||'Describe a change, e.g. “softer corners”')}</div>`;
+ return `${o.tray||''}<div class="cw"><div class="cmp ${o.focus?'f':''} ${s==='disabled'?'dis':''}"><div class="chips">${o.chips||''}</div>${ta}
+ <div class="cmp-b"><div class="tl"><button class="ib" data-act="attach" title="Upload image (JPG, PNG)">${I.clip}</button></div>${send}</div></div>
+ <div class="hint">${o.hint||'Upload JPG or PNG · Nothing applies until you press <b>Apply</b>'}</div></div>`;
+}
+const panel=(h,thr,c,extra='')=>`${h}${thr}${extra}${c}`;
+const T=(inner,style='')=>`<div class="thr" style="${style}">${inner}</div>`;
+const emptyBody=`<div class="empty"><span class="av">${I.spark}</span><b>What should change?</b><p>Describe it in your own words or upload a brand image (JPG, PNG). You'll see a preview before anything is applied.</p>
+<div class="sug"><button class="h" data-sug="brand">${'🎨'.replace('🎨','')}Apply my brand colors</button><button data-sug="red">Make the primary button red</button><button data-sug="heading">Bigger heading text</button><button data-sug="dark">Suggest a dark variant</button></div></div>`;
+
+
+/* ---------------- full screen ---------------- */
+const BASE={primary:'#6366F1',secondary:'#111827',highlight:null,h1:'28px'};
+const BRANDT={primary:'#2722F8',secondary:'#E5E7EB',highlight:'#FB581F',h1:'28px'};
+function lum(h){const n=parseInt(h.slice(1),16),c=[n>>16,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function vars(t){return `--pv-primary:${t.primary};--pv-secondary:${t.secondary};--pv-highlight:${t.highlight||'transparent'};--pv-h1:${t.h1};--pv-footer-ink:${lum(t.secondary)>.5?'#111827':'#fff'}`;}
+const hex=c=>c?c.replace('#',''):'—';
+function inspector(t,o={}){
+ const ch=o.changed||[], m=o.mode, from=o.from||BASE;
+ const cls=k=>o.conflict===k?'cf':(ch.includes(k)?(m==='preview'?'pv':m==='applied'?'ap':''):'');
+ const tag=k=>o.conflict===k?'<span class="tg">Edited manually</span>':(ch.includes(k)?(m==='preview'?'<span class="tg">AI preview</span>':m==='applied'?'<span class="tg">Changed by AI</span>':''):'');
+ const colorF=(k,lb,v)=>`<div class="fld ${cls(k)}"><label>${lb} ${tag(k)}</label><div class="in"><i style="background:${v||'#fff'}"></i># ${hex(v)}${ch.includes(k)&&m==='preview'&&from[k]?`<span class="old" style="margin-left:auto">${hex(from[k])}</span>`:''}</div></div>`;
+ const showHl=t.highlight||ch.includes('highlight');
+ return `<div class="rh">Indigo ${o.ver||'Version 1'}<span class="dft">Default</span></div>
+ <div class="grp"><b>Colors <span>⌃</span></b>${colorF('primary','Primary',t.primary)}${colorF('secondary','Secondary',t.secondary)}${colorF('bg','Background','#FFFFFF')}${colorF('text','Text','#111827')}${showHl?colorF('highlight','Highlight',t.highlight):''}</div>
+ <div class="grp"><b>Font family <span>⌃</span></b><div class="fld ${cls('h1')}"><label>Main heading ${tag('h1')}</label><div class="in sans">Inter · ${t.h1}<span>⌄</span></div></div><div class="fld"><label>Sub heading</label><div class="in sans">Inter<span>⌄</span></div></div></div>`;
+}
+const SITE=`<div class="site"><nav><b>◉ Store Name</b><span>All Products</span><span>Backpacks</span><span>Bags</span><span>Accessories</span><span>Collection</span><span>Deals</span></nav>
+ <div class="hero"><div class="card"><span class="sale">SALE −20%</span><h4>Bright things, thoughtfully made.</h4><p>A demo storefront showing off the Aurora theme running on shadcn primitives with fully resolved runtime tokens.</p><button class="btn">Browse the collection</button></div></div>
+ <footer><div><b>Shop</b>All products<br>Backpacks<br>Bags<br>Accessories<br>Sale</div><div><b>Service</b>Contact<br>Shipping &amp; delivery<br>Returns<br>FAQ</div><div><b>Company</b>About us<br>Sustainability<br>Careers</div><div><b>Contact</b>Aurora Store GmbH<br>Bergstraße 45<br>80331 München, DE</div></footer></div>`;
+function screen(o={}){
+ const t=o.tokens||BASE, mode=o.mode, dirty=o.dirty||mode==='applied', ro=o.readonly;
+ const float=o.fab!=null?`<div class="fl">${o.fab}</div>`:`<div class="fl" ${o.liveId?`id="${o.liveId}"`:''}><div class="pn">${o.panel||''}</div></div>`;
+ return `<div class="scr ${mode==='preview'?'previewing':''} ${t.highlight?'has-hl':''}" style="${vars(t)}" ${o.id?`id="${o.id}"`:''}>
+ <div class="top"><span class="logo">JTL</span><span style="color:#D1D5DB">/</span><span class="org">Coduct (manh pham) ⇕</span><span class="me">TN</span></div>
+ <div class="crumb">⌂ <span style="color:#9CA3AF">›</span> sleepy</div>
+ <div class="shop"><span class="ava">◯</span><div><h5>sleepy <span class="saved ${dirty?'dirty':''}" data-r="saved">${dirty?'Unsaved changes':'Gespeichert'}</span></h5><small>Shop administration · https://sleepy-agqrdxscmv.dev.jtl-shop-hosting.com · Last publish Aug 06, 2026, 04:42 PM</small></div>
+  <div class="ra"><span class="btn2">◍ American English ⌄</span><span class="btn2">↗ View store</span><span class="btn2 pr">◍ Publish</span></div></div>
+ <div class="tabs"><span class="on">Theme Setup</span><span>Analytics &amp; SEO</span><span>Shop Shell</span><span>Settings</span><span>Domains</span></div>
+ <div class="tool"><span class="sel">◐ Theme setting <span>⇕</span></span><span class="sel">▤ Home <span>⇕</span></span><span class="dev"><span class="on">▭</span><span>▯</span><span>▯</span></span>
+  <span class="ver"><span class="sel" style="min-width:260px">◷ ${ro?'Version 2 <span class="act pub">Published</span>':'Version 1 <span class="act">Active</span>'} <span>⇕</span></span><span class="btn2 ${dirty&&!ro?'dk':'off'}" data-r="save">Save ⌄</span><span class="btn2 lt">▣ Apply this theme</span></span></div>
+ <div class="cols">
+  <div class="lc"><h6>THEMES</h6><div class="th"><span class="rd on"></span><span class="pair"><i style="background:#6366F1"></i><i style="background:#111827"></i></span><div><b>Indigo</b><small>Default</small></div></div><div class="th"><span class="rd"></span><span class="pair"><i style="background:#F26B3A"></i><i style="background:#111827"></i></span><div><b>Tangerine</b><small>Default</small></div></div></div>
+  <div class="cv"><div class="banner"><span>● Previewing AI proposal — nothing is saved yet</span><span data-r="bannerAct">${mode==='preview'?bannerBtns:''}</span></div>${SITE}</div>
+  <div class="rc" data-r="insp">${inspector(t,{...o,ver:ro?'Version 2':'Version 1'})}</div>
+ </div>${float}</div>`;
+}
+const bannerBtns=`<button class="b" style="padding:2px 8px;font-size:11px" data-act="unpreview">Exit</button> <button class="b" style="padding:2px 8px;font-size:11px;background:#fff;color:#B13A0C;border-color:#fff" data-act="apply">Apply</button>`;
+const fab=(o={})=>`${o.peek||''}<button class="fab" data-act="expand"><span class="av ${o.busy?'busy':''}">${I.spark}</span>${o.label||'Ask AI'} <span class="kbd">⌘J</span>${o.badge?`<span class="fb">${o.badge}</span>`:''}</button>`;
+function fit(box,s){const el=box.firstElementChild;const k=box.clientWidth/1440;el.style.transform=`scale(${k})`;box.style.height=(900*k)+'px';}
+function fitAll(){document.querySelectorAll('.fitbox').forEach(b=>fit(b));}
+
+/* ---------------- states ---------------- */
+const U_BRAND=user('Use these brand colors: left to right is primary, secondary, highlight.',chipImg('brand-colors.png',true));
+const A_BRAND_TX=`<div class="tx">I read 3 colors from <b>brand-colors.png</b> and mapped them to your theme tokens. Highlight is a new token, used for sale badges and focus.</div>`;
+const CH=['primary','secondary','highlight'];
+const histPanel=()=>panel(head({hist:1,title:'Chat history',sub:'Indigo · 4 chats'}),`<div class="search">Search chats…</div><div class="thr hist" style="padding:0;gap:0;justify-content:flex-start">
+    <div class="row"><b>Brand colors from image<span class="tg" style="background:var(--ok-50);color:var(--ok)">Applied</span></b><small>Today, 10:42 · 3 changes</small></div>
+    <div class="row"><b>Rounder card corners<span class="tg" style="background:var(--p-50);color:var(--p)">Not applied</span></b><small>Yesterday · 1 change</small></div>
+    <div class="row"><b>Make it pop more<span class="tg" style="background:var(--bg);color:var(--muted)">Discarded</span></b><small>Oct 2 · 2 changes</small></div>
+    <div class="row"><b>Heading sizes for mobile<span class="tg" style="background:var(--ok-50);color:var(--ok)">Applied</span></b><small>Sep 28 · 4 changes</small></div></div>`,`<div class="cw" style="padding-top:10px"><button class="b pr" data-act="new" style="width:100%;justify-content:center">${I.plus}New chat</button></div>`);
+const STATES=[
+ {g:'A · Entry & composing',items:[
+  {n:'Empty — first run',d:'The floating panel opens over the bottom-left of the screen. Suggestions can come from the current theme.',t:'Click "Ask AI" / ⌘J / New chat',
+   p:()=>panel(head(),ctx()+T(emptyBody),comp())},
+  {n:'Composer focused',d:'Focus ring in primary; the suggestions stay visible.',t:'Click into the input',
+   p:()=>panel(head(),ctx()+T(emptyBody),comp({focus:1,caret:1}))},
+  {n:'Typing — send enabled',d:'The send button turns primary. Shift+⏎ adds a new line, and the input grows up to 6 lines.',t:'First character typed',
+   p:()=>panel(head(),ctx()+T(emptyBody),comp({focus:1,text:'Make corners a bit rounder on cards',caret:1}))},
+  {n:'Image uploading',d:'Progress shows on the chip and send waits until the upload finishes. JPG and PNG only. Separate states: wrong file type, file too large.',t:'Upload / drag-drop / paste image',
+   p:()=>panel(head(),ctx()+T(emptyBody),comp({focus:1,chips:`<span class="chip" style="flex-direction:column;align-items:stretch;padding:4px 8px;min-width:150px"><span style="display:flex;gap:5px;align-items:center">${brandThumb}brand-colors.png <span style="margin-left:auto;color:#9CA3AF">60%</span></span><span class="upl"><i></i></span></span>`,text:'Use these as my brand colors',state:'disabled'}))},
+ ]},
+ {g:'B · Agent working',items:[
+  {n:'Thinking',d:'The avatar shimmers and the step list explains what is happening. Send turns into Stop, and the input is locked.',t:'Message sent',
+   p:()=>panel(head({busy:1,sub:'Working…'}),ctx()+T(U_BRAND+ai(`<div class="dots"><i></i><i></i><i></i></div><div class="steps"><span>Read image</span><span class="now">Matching colors to theme tokens</span></div>`,{busy:1})),comp({state:'sending'}))},
+  {n:'Streaming answer',d:'Text streams in with a caret. A skeleton marks where the proposal card will appear, so the layout doesn\'t jump.',t:'First token received',
+   p:()=>panel(head({busy:1,sub:'Writing…'}),ctx()+T(U_BRAND+ai(`<div class="tx">I read 3 colors from <b>brand-colors.png</b> and mapped them to your<span class="cur"></span></div><div class="prop" style="padding:10px"><div class="skel" style="width:50%"></div><div class="skel"></div><div class="skel" style="width:80%"></div></div>`,{busy:1})),comp({state:'sending'}))},
+  {n:'Stopped by user',d:'Partial text stays visible with a "Stopped" label. Offer Continue / Regenerate.',t:'Click Stop',
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(`<div class="tx" style="color:var(--muted)">I read 3 colors from brand-colors.png and mapped them to your…</div><div class="call info"><div><b>Stopped</b>No changes were proposed.<div style="margin-top:6px;display:flex;gap:6px"><button class="b">Continue</button><button class="b gh">${I.retry}Regenerate</button></div></div></div>`)),comp())},
+ ]},
+ {g:'C · Proposals (core loop)',items:[
+  {n:'Proposal — not applied',d:'Before → after for each token, with a NEW tag on added tokens. The tray above the composer is a reminder; canvas and inspector are unchanged.',t:'Answer complete',
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(A_BRAND_TX+prop('pending'),{meta:1})),comp({tray:tray('pend')}))},
+  {n:'Previewing on canvas',d:'Orange banner and outline on the canvas. Inspector fields show "AI preview" with the old value. Nothing is saved.',t:'Click Preview',s:{tokens:BRANDT,mode:'preview',changed:CH},
+   p:()=>panel(head(),ctx({extra:'<span class="c" style="border-color:var(--h);color:#B13A0C">● Preview on</span>'})+T(U_BRAND+ai(A_BRAND_TX+prop('preview'),{meta:1})),comp({tray:tray('preview')}))},
+  {n:'Partial selection',d:'Changes can be ticked on or off one by one; the Apply label counts them. Preview follows the ticks.',t:'Uncheck a change row',s:{tokens:{...BRANDT,secondary:'#111827'},mode:'preview',changed:['primary','highlight']},
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(A_BRAND_TX+prop('partial',[BRAND[0],{...BRAND[1],off:1},BRAND[2]]),{meta:1})),comp({tray:tray('pend',2)}))},
+  {n:'Applied',d:'Inspector fields are tagged "Changed by AI"; the header shows Unsaved changes and Save becomes active. Undo stays on the card.',t:'Click Apply',s:{tokens:BRANDT,mode:'applied',changed:CH},
+   p:()=>panel(head(),ctx({ver:'Version 1 · unsaved'})+T(U_BRAND+ai(A_BRAND_TX+prop('applied'),{meta:1})),comp({ph:'Anything else?'}))},
+  {n:'Discarded',d:'The card dims and its rows are struck through; Restore brings it back. Screen unchanged.',t:'Click Discard',
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(A_BRAND_TX+prop('discarded'),{meta:1})),comp({ph:'Tell me what to do differently…'}))},
+  {n:'Outdated proposal',d:'Primary was edited by hand in the inspector after the AI proposed it. The field is marked; the card offers Regenerate or Apply anyway.',t:'Inspector edit while a proposal is open',s:{tokens:{...BASE,primary:'#4F46E5'},conflict:'primary',dirty:1},
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(A_BRAND_TX+prop('stale'))),comp())},
+ ]},
+ {g:'D · Agent asks & guards',items:[
+  {n:'Clarifying question',d:'When a request is ambiguous, the AI asks instead of guessing. One click on an option answers it.',t:'Ambiguous request',
+   p:()=>panel(head(),ctx()+T(user('Make it pop more')+ai(`<div class="tx">Which part should stand out more?</div><div class="opts"><button>${I.palette}<span>Buttons & links<small>Stronger primary, higher contrast</small></span></button><button>${I.palette}<span>Headings<small>Larger size, heavier weight</small></span></button><button>${I.palette}<span>Sale & badges<small>Use highlight color</small></span></button></div>`)),comp({ph:'Or type your answer…'}))},
+  {n:'Accessibility warning',d:'Contrast is checked before Apply. The AI shows the ratio and offers a fix as its own proposal.',t:'Proposal fails WCAG AA',
+   p:()=>panel(head(),ctx()+T(ai(`<div class="call warn">${I.warn}<div><b>Highlight fails AA for small text</b>White on #FB581F is 3.2 : 1 (needs 4.5). Fine for large text and badges ≥ 18px.<div class="ratio"><span style="background:#FB581F;color:#fff">Aa 3.2</span><span style="background:#D9420C;color:#fff">Aa 4.6 ✓</span></div></div></div>`+prop('pending',[{lb:'Highlight (text use)',from:'#FB581F',to:'#D9420C'}],{title:'Suggested fix · 1 change'}))),comp({tray:tray('pend',1)}))},
+  {n:'Out of scope',d:'The assistant can only change theme styles. Say so and link to the place where it can be done.',t:'Layout / content request',
+   p:()=>panel(head(),ctx()+T(user('Move the newsletter section above the footer')+ai(`<div class="call info"><div><b>I can only change theme styles</b>Section order is set in Shop Shell → Page layout.<div style="margin-top:6px;display:flex;gap:6px"><button class="b">Open Shop Shell</button><button class="b gh">Style the newsletter instead</button></div></div></div>`,{meta:1})),comp())},
+ ]},
+ {g:'E · System & navigation',items:[
+  {n:'Request failed',d:'Inline error with Retry. The user\'s message is kept.',t:'Network / server error',
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(`<div class="call err">${I.warn}<div><b>Couldn't reach the assistant</b>Your message is saved.<div style="margin-top:6px"><button class="b">${I.retry}Retry</button></div></div></div>`)),comp())},
+  {n:'Rate limit reached',d:'Countdown; the composer is disabled but open proposals can still be applied.',t:'Quota exceeded',
+   p:()=>panel(head(),ctx()+T(U_BRAND+ai(A_BRAND_TX+prop('pending'))+`<div class="call warn">${I.warn}<div><b>Message limit reached</b>You can send again in 12 min. Open proposals still work.</div></div>`),comp({state:'disabled',ph:'Available again in 12:00',tray:tray('pend'),hint:'Limit resets hourly'}))},
+  {n:'Read-only version',d:'The version is published or locked. Chat history can still be read; nothing can be applied.',t:'Published version / role without edit rights',s:{readonly:1},
+   p:()=>panel(head(),ctx({ver:'Version 2 · Published',extra:`<span class="c" style="display:inline-flex;gap:3px;align-items:center">${I.lock}Read-only</span>`})+T(`<div class="empty"><span class="av" style="background:var(--s);color:var(--muted)">${I.lock}</span><b>This version is published</b><p>Duplicate it as a draft to make changes with the assistant.</p><button class="b pr" style="margin:0 auto">Duplicate as draft</button></div>`),comp({state:'disabled',ph:'Assistant unavailable on published versions'}))},
+  {n:'Chat history',d:'Past chats for this theme, each tagged with what happened to its proposals. Searchable. Needs loading and empty variants too.',t:'Click history icon',
+   p:histPanel},
+  {n:'Long thread + feedback',d:'Scrolled up: a "Jump to latest" pill appears, and old proposals collapse. Answers can be rated with thumbs up or down.',t:'Scroll up / rate answer',
+   p:()=>panel(head(),ctx()+`<div class="thr" style="justify-content:flex-start">${user('Bigger heading text')+ai(`<div class="tx">Main heading 28 → 36px, Sub heading 20 → 24px.</div><div class="prop applied"><div class="prop-h"><span>2 changes</span><span class="bdg">Applied</span></div></div>`,{meta:1,up:1})+user('Also a bit tighter letter spacing')+ai(`<div class="tx">Tightened headings to −1.5%.</div>`+prop('pending',[{lb:'Heading tracking',from:'0%',to:'−1.5%',kind:'val'}]))}</div><div class="jump">${I.down2} Jump to latest</div>`,comp({tray:tray('pend',1)}))},
+ ]},
+ {g:'F · Floating behaviour',items:[
+  {n:'Minimized',d:'Minimizing collapses the panel into a small "Ask AI" button bottom-left, freeing the screen. ⌘J or a click reopens the chat where it was.',t:'Click minimize (chevron)',
+   f:()=>fab()},
+  {n:'Minimized — working',d:'The AI keeps working after the panel is minimized. The button shimmers and shows the current step.',t:'Minimize while a reply is generating',
+   f:()=>fab({busy:1,label:'Matching colors…'})},
+  {n:'Minimized — answer ready',d:'A short preview bubble appears above the button, which shows a badge with the number of changes.',t:'Reply finished while minimized',
+   f:()=>fab({badge:3,peek:`<div class="peek"><b>3 changes ready</b>Brand colors mapped to Primary, Secondary and a new Highlight token.<div class="row"><button class="b hl">${I.eye}Preview</button><button class="b">Open chat</button></div></div>`})},
+ ]},
+ {g:'G · Edge cases',items:[
+  {n:'No change needed',d:'The request already matches the theme. Confirm with the current values instead of proposing an empty card.',t:'Request matches current tokens',
+   p:()=>panel(head(),ctx()+T(user('Make the text color dark')+ai(`<div class="call ok">${I.check}<div><b>Already set</b>Text is <span class="sw2"><i style="background:#111827"></i>111827</span> — contrast 17.7 : 1 on white.</div></div>`,{meta:1})),comp())},
+  {n:'Couldn\'t read image',d:'Wrong file type or no colors detected. Offer re-upload, or ask for hex codes in the prompt.',t:'Bad image',
+   p:()=>panel(head(),ctx()+T(user('Use these colors',chipImg('photo_2391.heic',true))+ai(`<div class="call err">${I.warn}<div><b>Couldn't read this image</b>Only JPG and PNG are supported. Upload again or type the hex codes.<div style="margin-top:6px;display:flex;gap:6px"><button class="b">Upload again</button><button class="b gh">Paste hex</button></div></div></div>`)),comp())},
+ ]},
+];
+
+/* ---------------- render inventory ---------------- */
+let k=0,total=0;
+document.getElementById('inv').innerHTML=STATES.map(g=>{total+=g.items.length;return `<h3>${g.g} · ${g.items.length}</h3>${g.items.map(s=>{const id='S'+String(++k).padStart(2,'0');return `<div class="st"><div class="fitbox" data-id="${id}">${screen({...(s.s||{}),panel:s.p?s.p():'',fab:s.f?s.f():null})}</div><div class="cap"><span class="id">${id}</span><b>${s.n}</b><p>${s.d}</p><div class="tr">${s.t}</div></div></div>`}).join('')}`}).join('');
+
+/* ---------------- component matrix ---------------- */
+const COMP=[
+ ['Floating shell','Expanded panel · Minimized button · Button working · Button with badge · Preview bubble',5],
+ ['Panel header','Default · Busy (shimmer) · History mode',3],
+ ['Context bar','Default · Unsaved · Preview on · Read-only',4],
+ ['User message','Text · Text + image',2],
+ ['AI message','Thinking (steps) · Streaming · Complete · Stopped · Hover (copy / 👍 / 👎) · Rated',6],
+ ['Proposal card','Not applied · Partial · Previewing · Applied · Discarded · Outdated · Collapsed (history)',7],
+ ['Change row','Color · Value (size/font) · New token · Checked · Unchecked',5],
+ ['Callout','Info · Warning (contrast) · Error · Success',4],
+ ['Choice chips (clarify)','Default · Hover · Selected',3],
+ ['Pending tray','Not applied · Previewing',2],
+ ['Composer','Empty · Focused · Typing · With image · Sending (Stop) · Disabled',6],
+ ['Image chip','Uploading · Ready · Error (type / size)',3],
+ ['Suggestion chip','Default · Hover · Highlighted (contextual)',3],
+ ['History row','Applied · Not applied · Discarded · Loading skeleton · Empty list',5],
+ ['Inspector field marker','AI preview · Changed by AI · Edited manually (conflict)',3],
+ ['Canvas overlays','Preview banner · Preview outline',2],
+ ['Screen header','Saved · Unsaved changes (Save active)',2],
+];
+const ct=COMP.reduce((a,c)=>a+c[2],0);
+document.getElementById('comp').innerHTML=`<thead><tr><th>Component</th><th>Variants</th><th style="text-align:right">#</th></tr></thead><tbody>${COMP.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1].split(' · ').map(v=>`<span class="t">${v}</span>`).join('')}</td><td class="n">${c[2]}</td></tr>`).join('')}</tbody><tfoot><tr><td>Total</td><td>${COMP.length} components</td><td class="n">${ct}</td></tr></tfoot>`;
+
+/* lightbox */
+const lb=document.getElementById('lb');
+document.getElementById('inv').addEventListener('click',e=>{const b=e.target.closest('.fitbox');if(!b)return;const kx=Math.min((innerWidth-40)/1440,(innerHeight-40)/900);lb.innerHTML=`<div style="width:${1440*kx}px;height:${900*kx}px;position:relative;border-radius:10px;overflow:hidden">${b.innerHTML}</div>`;const sc=lb.querySelector('.scr');sc.style.transform=`scale(${kx})`;sc.style.transformOrigin='0 0';sc.style.position='absolute';lb.classList.add('on');});
+lb.onclick=()=>lb.classList.remove('on');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on');if((e.metaKey||e.ctrlKey)&&e.key==='j'){e.preventDefault();act(S.collapsed?'expand':'coll');}});
+
+/* ---------------- live prototype ---------------- */
+const liveBox=document.getElementById('liveBox');
+liveBox.innerHTML=screen({id:'app',liveId:'live'});
+const app=document.getElementById('app'), live=document.getElementById('live');
+let S, timers=[];
+const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
+function clearT(){timers.forEach(clearTimeout);timers=[];}
+function reset(){clearT();S={msgs:[],status:'idle',text:'',chips:[],applied:{...BASE},collapsed:false,view:'chat'};applyCanvas(BASE,null);draw();}
+function applyCanvas(t,mode,changed){
+ vars(t).split(';').forEach(d=>{const [k,v]=d.split(':');app.style.setProperty(k,v);});
+ app.classList.toggle('has-hl',!!t.highlight);
+ app.classList.toggle('previewing',mode==='preview');
+ const dirty=JSON.stringify(S?S.applied:BASE)!==JSON.stringify(BASE);
+ const ch=changed||[], m=mode||(dirty?'applied':null);
+ const appliedCh=Object.keys(BASE).filter(k=>S&&S.applied[k]!==BASE[k]);
+ app.querySelector('[data-r=insp]').innerHTML=inspector(t,{mode:m,changed:mode==='preview'?ch:appliedCh,from:S?S.applied:BASE});
+ const sv=app.querySelector('[data-r=saved]');sv.textContent=dirty?'Unsaved changes':'Gespeichert';sv.classList.toggle('dirty',dirty);
+ const sb=app.querySelector('[data-r=save]');sb.classList.toggle('dk',dirty);sb.classList.toggle('off',!dirty);
+ app.querySelector('[data-r=bannerAct]').innerHTML=mode==='preview'?bannerBtns:'';
+}
+function plan(text){
+ const t=text.toLowerCase();
+ if(t.includes('brand')||S.chips.length)return{tx:A_BRAND_TX,changes:BRAND.map(c=>({...c,from:S.applied[c.k]}))};
+ if(t.includes('red'))return{tx:`<div class="tx">Primary drives every button and the navigation bar. Here's a red that passes AA on white (5.9 : 1).</div>`,changes:[{k:'primary',lb:'Primary',from:S.applied.primary,to:'#DC2626'}]};
+ if(t.includes('heading')||t.includes('bigger'))return{tx:`<div class="tx">Main heading goes up one step on the type scale.</div>`,changes:[{k:'h1',lb:'Main heading size',from:S.applied.h1,to:'36px',kind:'val'}]};
+ if(t.includes('dark'))return{clarify:true};
+ return{scope:true};
+}
+function send(){
+ const text=(S.text||'').trim();
+ if(!text||S.status==='sending')return;
+ S.msgs.push({who:'u',html:user(text,S.chips.map(c=>chipImg(c.name,true)).join(''))});
+ const p=plan(text); S.text=''; S.chips=[]; S.status='sending';
+ const id='m'+Date.now(); S.msgs.push({who:'a',id,think:true}); draw();
+ const sim=document.getElementById('sim').value;
+ later(()=>{const m=S.msgs.find(x=>x.id===id);m.step=1;draw();},700);
+ later(()=>{
+  const m=S.msgs.find(x=>x.id===id); m.think=false;
+  if(sim==='err'){m.html=`<div class="call err">${I.warn}<div><b>Couldn't reach the assistant</b>Your message is saved.<div style="margin-top:6px"><button class="b" data-act="retry">${I.retry}Retry</button></div></div></div>`;S.status='idle';S.retry=text;draw();return;}
+  if(sim==='rate'){m.html=`<div class="call warn">${I.warn}<div><b>Message limit reached</b>You can send again in 12 min.</div></div>`;S.status='limit';draw();return;}
+  if(p.clarify){m.html=`<div class="tx">Should the dark variant be a new theme or a dark mode of Indigo?</div><div class="opts"><button data-q="Bigger heading text">${I.palette}<span>Dark mode of Indigo<small>Same brand, inverted surfaces</small></span></button><button data-q="Apply my brand colors">${I.palette}<span>Start from my brand colors<small>New theme</small></span></button></div>`;m.meta=1;S.status='idle';draw();return;}
+  if(p.scope){m.html=`<div class="call info"><div><b>I can only change theme styles</b>Colors, fonts, sizes, radius and spacing. Layout lives in Shop Shell.<div style="margin-top:6px;display:flex;gap:6px"><button class="b">Open Shop Shell</button><button class="b gh" data-q="Apply my brand colors">Try brand colors</button></div></div></div>`;m.meta=1;S.status='idle';draw();return;}
+  const full=p.tx.replace(/<[^>]+>/g,''); let i=0; m.stream='';
+  const tick=()=>{i+=3;m.stream=full.slice(0,i);draw();if(i<full.length)later(tick,22);else{m.stream=null;m.html=p.tx;m.prop={st:'pending',changes:p.changes};m.meta=1;S.active=id;S.status='idle';draw();}};
+  tick();
+ },1500);
+}
+const activeProp=()=>S.msgs.find(m=>m.id===S.active)?.prop;
+function target(pr){const t={...S.applied};pr.changes.filter(c=>!c.off).forEach(c=>t[c.k]=c.to);return t;}
+const keys=pr=>pr.changes.filter(c=>!c.off).map(c=>c.k);
+function act(a,el){
+ const pr=activeProp();
+ switch(a){
+  case 'send':send();break;
+  case 'stop':clearT();{const m=S.msgs[S.msgs.length-1];m.think=false;m.stream=null;m.html=`<div class="call info"><div><b>Stopped</b>No changes were proposed.</div></div>`;}S.status='idle';draw();break;
+  case 'retry':S.msgs.splice(-2,2);S.text=S.retry;document.getElementById('sim').value='ok';send();break;
+  case 'preview':if(!pr)break;pr.st='preview';applyCanvas(target(pr),'preview',keys(pr));draw();break;
+  case 'unpreview':if(!pr)break;pr.st='pending';applyCanvas(S.applied);draw();break;
+  case 'apply':if(!pr)break;S.before={...S.applied};S.applied=target(pr);pr.st='applied';pr.changes=pr.changes.filter(c=>!c.off);applyCanvas(S.applied);draw();break;
+  case 'discard':if(!pr)break;pr.st='discarded';applyCanvas(S.applied);draw();break;
+  case 'restore':if(!pr)break;pr.st='pending';draw();break;
+  case 'undo':if(!pr)break;S.applied=S.before;pr.st='pending';applyCanvas(S.applied);draw();break;
+  case 'tog':if(!pr)break;{const c=pr.changes[+el.dataset.i];c.off=!c.off;pr.st=pr.changes.every(x=>!x.off)?'pending':'partial';}draw();break;
+  case 'attach':document.getElementById('file').click();break;
+  case 'rmchip':S.chips=[];draw();break;
+  case 'new':{const keep=S.applied;reset();S.applied=keep;applyCanvas(keep);draw();}break;
+  case 'coll':S.collapsed=true;draw();break;
+  case 'expand':S.collapsed=false;S.view='chat';draw();break;
+  case 'hist':S.view=S.view==='hist'?'chat':'hist';draw();break;
+ }
+}
+function draw(){
+ if(S.collapsed){const pr=activeProp();const n=pr&&(pr.st==='pending'||pr.st==='partial'||pr.st==='preview')?pr.changes.filter(c=>!c.off).length:0;
+  live.innerHTML=fab({busy:S.status==='sending',label:S.status==='sending'?'Working…':'Ask AI',badge:n||null});return;}
+ if(S.view==='hist'){live.innerHTML=`<div class="pn">${histPanel()}</div>`;return;}
+ const busy=S.status==='sending';
+ const thr=!S.msgs.length?emptyBody:S.msgs.map(m=>{
+  if(m.who==='u')return m.html;
+  if(m.think)return ai(`<div class="dots"><i></i><i></i><i></i></div><div class="steps"><span class="${m.step?'':'now'}">Reading request</span>${m.step?'<span class="now">Matching to theme tokens</span>':''}</div>`,{busy:1});
+  if(m.stream!=null)return ai(`<div class="tx">${m.stream}<span class="cur"></span></div><div class="prop" style="padding:10px"><div class="skel" style="width:50%"></div><div class="skel"></div></div>`,{busy:1});
+  return ai((m.html||'')+(m.prop?prop(m.prop.st,m.prop.changes):''),{meta:m.meta});
+ }).join('');
+ const pr=activeProp(); let tr='';
+ if(pr&&(pr.st==='pending'||pr.st==='partial'))tr=tray('pend',pr.changes.filter(c=>!c.off).length);
+ if(pr&&pr.st==='preview')tr=tray('preview',pr.changes.filter(c=>!c.off).length);
+ const dirty=JSON.stringify(S.applied)!==JSON.stringify(BASE);
+ live.innerHTML=`<div class="pn">${head({busy,sub:busy?'Working…':undefined})+ctx({ver:dirty?'Version 1 · unsaved':'Version 1',extra:pr&&pr.st==='preview'?'<span class="c" style="border-color:var(--h);color:#B13A0C">● Preview on</span>':''})}<div class="thr" id="thr">${thr}</div>${comp({live:1,text:S.text,chips:S.chips.map(c=>chipImg(c.name)).join(''),state:busy?'sending':(S.status==='limit'?'disabled':'idle'),tray:tr,ph:S.status==='limit'?'Available again in 12:00':undefined})}</div>`;
+ const th=document.getElementById('thr'); th.scrollTop=th.scrollHeight;
+ const t2=document.getElementById('ta');
+ if(t2){t2.addEventListener('input',()=>{S.text=t2.value;live.querySelector('.send').classList.toggle('on',!!t2.value.trim());});
+  t2.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+  t2.addEventListener('focus',()=>t2.closest('.cmp').classList.add('f'));t2.addEventListener('blur',()=>t2.closest('.cmp').classList.remove('f'));}
+}
+app.addEventListener('click',e=>{
+ const s=e.target.closest('[data-sug]'); if(s){const m={brand:'Apply my brand colors',red:'Make the primary button red',heading:'Bigger heading text',dark:'Suggest a dark variant'};if(s.dataset.sug==='brand')S.chips=[{name:'brand-colors.png'}];S.text=m[s.dataset.sug];draw();document.getElementById('ta')?.focus();return;}
+ const q=e.target.closest('[data-q]'); if(q){S.text=q.dataset.q;send();return;}
+ const a=e.target.closest('[data-act]'); if(a)act(a.dataset.act,a);
+});
+document.getElementById('file').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+ if(!/^image\/(png|jpeg)$/.test(f.type)){S.msgs.push({who:'a',html:`<div class="call err">${I.warn}<div><b>Only JPG and PNG are supported</b>${f.name} can't be used.</div></div>`});draw();return;}
+ S.chips=[{name:f.name}];if(!S.text)S.text='Use these as my brand colors: left to right is primary, secondary, highlight';draw();};
+document.getElementById('reset').onclick=reset;
+reset();fitAll();addEventListener('resize',fitAll);
+</script>
+</body>
+</html>

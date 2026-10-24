@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>End-user Login / Register Flow</title>
+<style>
+  :root { --bg:#f7f7f8; --card:#fff; --text:#1d1d1f; --muted:#6b6b73; --border:#e3e3e8; --open:#FFE8A3; --openStroke:#C99A00; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif; background:var(--bg); color:var(--text); }
+  header { padding:24px 32px 8px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:13px; margin:0; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; padding:12px 32px; font-size:12px; color:var(--muted); }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .sw { width:14px; height:14px; border-radius:3px; border:1px solid var(--border); background:#fff; }
+  .sw.open { background:var(--open); border-color:var(--openStroke); }
+  .sw.a { background:#E3F0FF; border-color:#3B82F6; }
+  .sw.b { background:#FDE7E7; border-color:#E05252; }
+  .wrap { padding:8px 32px 32px; display:grid; gap:20px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; overflow:auto; }
+  .card h2 { font-size:14px; margin:0 0 12px; }
+  .qs { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .q { border-left:4px solid var(--openStroke); background:#FFF9E6; padding:12px 14px; border-radius:6px; font-size:13px; line-height:1.5; }
+  .q b { display:block; margin-bottom:4px; }
+  .q ul { margin:6px 0 0; padding-left:18px; }
+  .src { font-size:12px; color:var(--muted); margin-top:8px; }
+  @media (max-width:600px){ header,.legend,.wrap{ padding-left:16px; padding-right:16px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>End-user Login / Register — multi-shop tenant</h1>
+  <p class="sub">User flow from the thread: Anh Truong, Kiet Huynh, Manh Pham (cc Richard Poll) · JTL-Shop 6.0 storefront</p>
+</header>
+<div class="legend">
+  <span><i class="sw open"></i>Open question (needs decision)</span>
+  <span><i class="sw a"></i>Option A — one account per tenant (Kiet's proposal)</span>
+  <span><i class="sw b"></i>Option B — one account per shop</span>
+</div>
+<div class="wrap">
+  <div class="card">
+    <h2>User flow</h2>
+    <pre class="mermaid">
+flowchart LR
+  start(["End user lands on Shop B<br/>(already has account on Shop A, same tenant)"]) --> entry["Clicks Login / Register"]
+  entry --> emailStep["Login or Register screen<br/>Enter email → Continue"]
+  emailStep --> scope{"Account scope?<br/>OPEN Q1"}
+
+  scope -->|"Option A: tenant-wide"| exists{"Email exists<br/>on tenant?"}
+  exists -->|"Yes (registered on Shop A)"| login["Login screen<br/>Enter password"]
+  exists -->|"No"| register["Register screen"]
+
+  scope -->|"Option B: per shop"| existsShop{"Email exists<br/>on Shop B?"}
+  existsShop -->|"Yes"| login
+  existsShop -->|"No — even if on Shop A"| registerAgain["Register again on Shop B<br/>(2nd account)"]
+
+  register --> fields{"Adopt Shop 5<br/>register fields?<br/>OPEN Q2"}
+  registerAgain --> fields
+  fields --> created["Account created"]
+  created --> loggedIn(["Logged in on Shop B"])
+  login --> loggedIn
+
+  loggedIn --> checkout["Checkout → create order"]
+  checkout --> erp(["Customer info + shop ID<br/>sent to ERP"])
+
+  classDef open fill:#FFE8A3,stroke:#C99A00,stroke-width:2px
+  classDef optA fill:#E3F0FF,stroke:#3B82F6
+  classDef optB fill:#FDE7E7,stroke:#E05252
+  class scope,fields open
+  class exists,register optA
+  class existsShop,registerAgain optB
+    </pre>
+  </div>
+
+  <div class="card">
+    <h2>Open questions</h2>
+    <div class="qs">
+      <div class="q">
+        <b>Q1 · Account scope across shops on the same tenant</b>
+        End user doesn't know Shop A and Shop B belong to the same company/tenant.
+        <ul>
+          <li><b>Option A:</b> one account per tenant. Email-first screen detects the existing account → login (like "Login with JTL ID").</li>
+          <li><b>Option B:</b> one account per shop. User registers twice; order sends customer info + shop ID to ERP.</li>
+        </ul>
+        <div class="src">Kiet: "If not, they will need to register 2 times on two different shops. Is this the expected behavior?" — unanswered</div>
+      </div>
+      <div class="q">
+        <b>Q2 · Register fields</b>
+        Do we adopt all Shop 5 required fields?
+        <ul>
+          <li>Name: first name*, last name*</li>
+          <li>Billing address: street*, house no.*, country*, postcode*, location*</li>
+          <li>Contact: e-mail*, telephone (optional), date of birth (optional)</li>
+          <li>Password*, repeat password*</li>
+        </ul>
+        <div class="src">Unanswered in thread</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad:true, theme:'base', flowchart:{ curve:'basis', htmlLabels:true },
+    themeVariables:{ fontFamily:'-apple-system,Inter,sans-serif', fontSize:'13px', primaryColor:'#ffffff', primaryBorderColor:'#9a9aa3', lineColor:'#7a7a85' } });
+</script>
+</body>
+</html>
