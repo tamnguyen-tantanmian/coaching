@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starter design system: components</title>
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="components.css"></head>
+<body><main class="container stack">
+<h1>Starter design system</h1>
+<p>Every component, with the states it has. Open this page to see what the AI is allowed to use.</p>
+<h2>Buttons</h2>
+<p><a class="btn" href="#">Primary</a> <a class="btn btn--secondary" href="#">Secondary</a> <button class="btn" disabled>Disabled</button></p>
+<h2>Field</h2>
+<div class="field"><label class="label" for="a">Email</label><input class="input" id="a" type="email"><span class="help">We only use it for your delivery updates.</span></div>
+<div class="field field--error"><label class="label" for="b">Email</label><input class="input" id="b" type="email" aria-describedby="be" aria-invalid="true"><span class="error" id="be">Enter an email address.</span></div>
+<h2>Radio cards</h2>
+<label class="radio-card"><input type="radio" name="r"><span><span class="radio-card__title">Option one</span><span class="radio-card__detail">Detail line</span></span></label>
+<label class="radio-card"><input type="radio" name="r" checked><span><span class="radio-card__title">Option two (selected)</span><span class="radio-card__detail">Detail line</span></span></label>
+<h2>Card, badge, alerts</h2>
+<div class="card"><p>A card holds one idea.</p><span class="badge">New</span></div>
+<div class="alert">Information message.</div>
+<div class="alert alert--error" role="alert">Error message that says what to do.</div>
+<h2>Step indicator</h2>
+<ol class="steps"><li class="done">Day</li><li aria-current="step">Meals</li><li>Confirm</li></ol>
+</main></body></html>

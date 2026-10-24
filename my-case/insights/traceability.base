@@ -1,0 +1,81 @@
+filters:
+  and:
+    - file.inFolder("insights")
+    - '!file.inFolder("insights/_templates")'
+views:
+  - type: table
+    name: "Opportunities"
+    filters:
+      and:
+        - type == "opportunity"
+    order:
+      - file.name
+      - title
+      - rank
+      - impact
+      - confidence
+      - rank_reason
+      - evidence
+  - type: table
+    name: "Hypotheses"
+    filters:
+      and:
+        - type == "hypothesis"
+    order:
+      - file.name
+      - title
+      - serves
+      - metric
+  - type: table
+    name: "Decisions"
+    filters:
+      and:
+        - type == "decision"
+    order:
+      - file.name
+      - title
+      - tests
+      - follows
+      - pulls_against
+      - state
+      - owner
+      - decided_on
+  - type: table
+    name: "Evidence"
+    filters:
+      and:
+        - type == "evidence"
+    order:
+      - file.name
+      - title
+      - tests
+      - measures
+      - participants
+      - result
+  - type: table
+    name: "Metrics"
+    filters:
+      and:
+        - type == "metric"
+    order:
+      - file.name
+      - title
+      - status
+      - baseline
+      - target
+      - result
+      - verdict
+      - measured_by
+  - type: table
+    name: "Findings"
+    filters:
+      and:
+        - type == "finding"
+    order:
+      - file.name
+      - title
+      - severity
+      - principle
+      - found_in
+      - affects
+      - resolution

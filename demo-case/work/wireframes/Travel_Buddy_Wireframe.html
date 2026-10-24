@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Buddy — Interactive Wireframe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 24px 16px 40px;
+    gap: 16px;
+  }
+
+  /* --- Flow navigator --- */
+  #flow-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+  }
+  .flow-btn {
+    background: #333;
+    color: #ccc;
+    border: 1px solid #555;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .flow-btn:hover, .flow-btn.active { background: #555; color: #fff; border-color: #888; }
+
+  /* --- Phone frame --- */
+  #phone {
+    width: 375px;
+    height: 780px;
+    background: #fff;
+    border-radius: 44px;
+    border: 3px solid #444;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    flex-shrink: 0;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 44px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    flex-shrink: 0;
+  }
+  .status-bar span { font-size: 11px; }
+
+  /* Screen container */
+  .screen {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+
+  /* Scrollable content area */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .scroll-area::-webkit-scrollbar { display: none; }
+
+  /* --- Typography --- */
+  .h1 { font-size: 26px; font-weight: 700; color: #111; line-height: 1.2; }
+  .h2 { font-size: 20px; font-weight: 700; color: #111; }
+  .h3 { font-size: 16px; font-weight: 600; color: #111; }
+  .body { font-size: 14px; color: #555; line-height: 1.5; }
+  .caption { font-size: 11px; color: #999; }
+  .label { font-size: 12px; font-weight: 600; color: #888; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* --- Spacing utilities --- */
+  .pad { padding: 20px; }
+  .pad-h { padding: 0 20px; }
+  .gap-4 { gap: 4px; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .gap-16 { gap: 16px; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .flex { display: flex; }
+  .flex-col { display: flex; flex-direction: column; }
+  .align-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .justify-center { justify-content: center; }
+  .flex-1 { flex: 1; }
+  .w-full { width: 100%; }
+
+  /* --- Components --- */
+  .btn-primary {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    background: #f2f2f2;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    background: none;
+    color: #888;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  .chip {
+    border: 1.5px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: #444;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+    white-space: nowrap;
+  }
+  .chip.selected { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
+  .chip:hover:not(.selected) { border-color: #888; }
+
+  .card {
+    background: #f8f8f8;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .card:hover { background: #f0f0f0; }
+
+  .img-box {
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 11px;
+    text-align: center;
+    position: relative;
+  }
+  .img-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 8px,
+      rgba(0,0,0,0.04) 8px, rgba(0,0,0,0.04) 9px
+    );
+  }
+
+  .avatar {
+    background: #d8d8d8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #999;
+    flex-shrink: 0;
+  }
+
+  .tag {
+    background: #f0f0f0;
+    color: #555;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tag.green { background: #e8f5e8; color: #2d7a2d; }
+  .tag.yellow { background: #fff8e0; color: #8a6a00; }
+  .tag.red { background: #fce8e8; color: #8a2020; }
+
+  .divider { height: 1px; background: #ebebeb; margin: 0 20px; }
+  .divider-full { height: 8px; background: #f5f5f5; }
+
+  .input-field {
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #333;
+    width: 100%;
+    background: #fafafa;
+  }
+
+  .badge {
+    background: #e0e0e0;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #555;
+    font-weight: 600;
+  }
+
+  /* Top nav bar */
+  .top-bar {
+    height: 52px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Bottom navigation */
+  .bottom-nav {
+    height: 80px;
+    border-top: 1px solid #ebebeb;
+    display: flex;
+    flex-shrink: 0;
+    background: #fff;
+    padding-bottom: 16px;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    background: #d8d8d8;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .nav-item.active .nav-icon { background: #1a1a1a; }
+  .nav-item .nav-label { font-size: 10px; color: #999; font-weight: 500; }
+  .nav-item.active .nav-label { color: #1a1a1a; font-weight: 700; }
+
+  /* Progress dots */
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d8d8d8;
+  }
+  .dot.active { background: #1a1a1a; width: 18px; border-radius: 3px; }
+
+  /* Profile badge */
+  .verified-badge {
+    width: 16px;
+    height: 16px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: #fff;
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Map placeholder */
+  .map-bg {
+    background: #e8e8e8;
+    background-image:
+      linear-gradient(#d8d8d8 1px, transparent 1px),
+      linear-gradient(90deg, #d8d8d8 1px, transparent 1px);
+    background-size: 32px 32px;
+    position: relative;
+  }
+
+  /* Chat bubble */
+  .bubble {
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .bubble.them { background: #f0f0f0; color: #222; border-bottom-left-radius: 4px; }
+  .bubble.me { background: #1a1a1a; color: #fff; border-bottom-right-radius: 4px; margin-left: auto; }
+
+  /* Timeline */
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 16px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 8px;
+    bottom: -8px;
+    width: 1px;
+    background: #e0e0e0;
+  }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #999;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  /* Annotation label */
+  .annotation {
+    font-size: 10px;
+    color: #bbb;
+    font-style: italic;
+    border-left: 2px solid #ddd;
+    padding-left: 8px;
+    margin-top: 4px;
+  }
+
+  /* Shortlist row */
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .list-row:hover { background: #fafafa; }
+  .drag-handle {
+    color: #ccc;
+    font-size: 14px;
+    cursor: grab;
+  }
+
+  /* Section header */
+  .section-header {
+    padding: 16px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Onboarding hero */
+  .hero {
+    height: 200px;
+    background: #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hero-icon {
+    width: 64px;
+    height: 64px;
+    background: #d0d0d0;
+    border-radius: 20px;
+  }
+
+  /* Scrollable chip row */
+  .chip-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 20px;
+    scrollbar-width: none;
+  }
+  .chip-scroll::-webkit-scrollbar { display: none; }
+
+  /* Map pin */
+  .map-pin {
+    width: 28px;
+    height: 28px;
+    background: #1a1a1a;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    position: absolute;
+    cursor: pointer;
+  }
+  .map-pin-inner {
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    transform: rotate(45deg);
+  }
+  .map-pin.gray { background: #aaa; }
+
+  /* Journal card */
+  .journal-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+  }
+</style>
+</head>
+<body>
+
+<!-- Flow navigator -->
+<div id="flow-nav">
+  <button class="flow-btn" onclick="goTo('s-welcome')">① Welcome</button>
+  <button class="flow-btn" onclick="goTo('s-ob1')">② Style</button>
+  <button class="flow-btn" onclick="goTo('s-ob2')">③ Interests</button>
+  <button class="flow-btn" onclick="goTo('s-ob3')">④ City</button>
+  <button class="flow-btn" onclick="goTo('s-preview')">⑤ Preview</button>
+  <button class="flow-btn" onclick="goTo('s-discover')">⑥ Discover</button>
+  <button class="flow-btn" onclick="goTo('s-tip')">⑦ Tip Detail</button>
+  <button class="flow-btn" onclick="goTo('s-plan')">⑧ Plan</button>
+  <button class="flow-btn" onclick="goTo('s-map')">⑨ Map View</button>
+  <button class="flow-btn" onclick="goTo('s-connect')">⑩ Connect</button>
+  <button class="flow-btn" onclick="goTo('s-profile')">⑪ Profile</button>
+  <button class="flow-btn" onclick="goTo('s-chat')">⑫ Chat</button>
+  <button class="flow-btn" onclick="goTo('s-journal')">⑬ Journal</button>
+  <button class="flow-btn" onclick="goTo('s-memory')">⑭ Memory</button>
+  <button class="flow-btn" onclick="goTo('s-share')">⑮ Share</button>
+</div>
+
+<!-- Phone -->
+<div id="phone">
+
+  <!-- ─────────────────────────────────────────────
+       S1: WELCOME
+  ───────────────────────────────────────────── -->
+  <div id="s-welcome" class="screen active">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="hero" style="height:260px; flex-shrink:0;">
+      <div class="hero-icon"></div>
+      <div style="margin-top:8px; font-size:11px; color:#bbb;">App wordmark</div>
+    </div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-16">
+        <div class="flex-col gap-8 mt-12">
+          <div class="h1">Discover places<br>worth going to.</div>
+          <div class="body">Peer tips, local connections, and a journal that builds itself — all in one place.</div>
+        </div>
+        <div class="flex-col gap-8 mt-12">
+          <button class="btn-primary" onclick="goTo('s-ob1')">Get started</button>
+          <button class="btn-ghost" onclick="goTo('s-discover')">Browse without an account</button>
+        </div>
+        <div class="annotation">A4 — No-account browsing: user reaches Discover without signing up</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S2: ONBOARDING — TRAVEL STYLE
+  ───────────────────────────────────────────── -->
+  <div id="s-ob1" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding: 16px 20px 0; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="progress-dots">
+          <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <button class="btn-ghost" onclick="goTo('s-preview')">Skip</button>
+      </div>
+    </div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-16">
+        <div class="flex-col gap-8 mt-8">
+          <div class="label">Step 1 of 3</div>
+          <div class="h2">How do you usually travel?</div>
+          <div class="body">This shapes the tips and connections you'll see.</div>
+        </div>
+        <div class="flex-col gap-8 mt-8">
+          <button class="chip selected w-full" style="text-align:left; padding:14px 16px; border-radius:12px;">
+            <div class="h3">Mix — it changes every trip</div>
+            <div class="body mt-4">Sometimes relaxed, sometimes exploratory</div>
+          </button>
+          <button class="chip w-full" style="text-align:left; padding:14px 16px; border-radius:12px;">
+            <div class="h3">Relaxer</div>
+            <div class="body mt-4">Comfort, good food, minimal stress</div>
+          </button>
+          <button class="chip w-full" style="text-align:left; padding:14px 16px; border-radius:12px;">
+            <div class="h3">Explorer</div>
+            <div class="body mt-4">Unknown places, avoiding tourist crowds</div>
+          </button>
+          <button class="chip w-full" style="text-align:left; padding:14px 16px; border-radius:12px;">
+            <div class="h3">Cultural immersion</div>
+            <div class="body mt-4">Understanding how locals actually live</div>
+          </button>
+        </div>
+        <div class="annotation">A5 — Lightweight onboarding: travel style only, no lengthy form</div>
+        <button class="btn-primary" onclick="goTo('s-ob2')">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S3: ONBOARDING — INTERESTS
+  ───────────────────────────────────────────── -->
+  <div id="s-ob2" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding: 16px 20px 0; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="progress-dots">
+          <div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+        </div>
+        <button class="btn-ghost" onclick="goTo('s-preview')">Skip</button>
+      </div>
+    </div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-16">
+        <div class="flex-col gap-8 mt-8">
+          <div class="label">Step 2 of 3</div>
+          <div class="h2">What do you love doing?</div>
+          <div class="body">Pick as many as you like. This helps match you with locals who share your interests.</div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+          <span class="chip selected">Street food</span>
+          <span class="chip selected">Local markets</span>
+          <span class="chip">Photography</span>
+          <span class="chip">Hiking</span>
+          <span class="chip selected">Neighbourhood walks</span>
+          <span class="chip">Art & culture</span>
+          <span class="chip">Nightlife</span>
+          <span class="chip">Cafes</span>
+          <span class="chip">Language learning</span>
+          <span class="chip">Nature</span>
+          <span class="chip">Architecture</span>
+          <span class="chip">Live music</span>
+        </div>
+        <div class="annotation">C2 — Interest matching: shown here feeds into Connect profile automatically</div>
+        <button class="btn-primary" onclick="goTo('s-ob3')">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S4: ONBOARDING — HOME CITY
+  ───────────────────────────────────────────── -->
+  <div id="s-ob3" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding: 16px 20px 0; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="progress-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+        </div>
+        <button class="btn-ghost" onclick="goTo('s-preview')">Skip</button>
+      </div>
+    </div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-16">
+        <div class="flex-col gap-8 mt-8">
+          <div class="label">Step 3 of 3</div>
+          <div class="h2">Where are you based?</div>
+          <div class="body">So locals know where you're from — and you can guide others in your city too.</div>
+        </div>
+        <div style="margin-top:8px;">
+          <input class="input-field" type="text" placeholder="Search your city..." value="Kuala Lumpur, Malaysia" />
+        </div>
+        <div class="flex-col gap-8">
+          <div class="flex align-center gap-8" style="padding: 14px 16px; background:#f8f8f8; border-radius:12px;">
+            <div style="width:32px;height:32px;background:#e0e0e0;border-radius:8px; flex-shrink:0;"></div>
+            <div>
+              <div class="h3">Kuala Lumpur</div>
+              <div class="caption">Malaysia</div>
+            </div>
+          </div>
+          <div class="flex align-center gap-8" style="padding: 14px 16px; background:#f8f8f8; border-radius:12px;">
+            <div style="width:32px;height:32px;background:#e0e0e0;border-radius:8px; flex-shrink:0;"></div>
+            <div>
+              <div class="h3">Kuala Terengganu</div>
+              <div class="caption">Malaysia</div>
+            </div>
+          </div>
+        </div>
+        <div class="annotation">A5 — Only 3 questions total: style, interests, home city. Done.</div>
+        <button class="btn-primary" onclick="goTo('s-preview')">See what's waiting for you →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S5: VALUE PREVIEW
+  ───────────────────────────────────────────── -->
+  <div id="s-preview" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-8">
+        <div class="label mt-8">Ready for you</div>
+        <div class="h2">Here's what locals<br>recommend nearby</div>
+        <div class="annotation">A2 — Value-first: user sees real content before completing profile</div>
+
+        <!-- Preview card -->
+        <div class="card mt-8" onclick="goTo('s-discover')">
+          <div class="img-box" style="height:160px;">
+            <span>Photo placeholder</span>
+          </div>
+          <div style="padding:14px; display:flex;flex-direction:column;gap:6px;">
+            <div class="flex align-center gap-8">
+              <span class="tag green">Local tip</span>
+              <span class="tag">Street food</span>
+            </div>
+            <div class="h3">Jalan Alor Night Market</div>
+            <div class="body">Mostly visited by locals. Best on weekday evenings — skip the weekend crowd. Cheap and worth it.</div>
+            <div class="flex align-center gap-8 mt-4">
+              <div class="avatar" style="width:20px;height:20px;"></div>
+              <div class="caption">Contributed by a local resident · Kuala Lumpur</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" onclick="goTo('s-discover')">
+          <div style="padding:14px; display:flex;flex-direction:column;gap:4px;">
+            <div class="flex align-center gap-8">
+              <span class="tag">Neighbourhood walk</span>
+              <span class="tag yellow">⚠ Gets crowded weekends</span>
+            </div>
+            <div class="h3 mt-4">Chow Kit Walking Route</div>
+            <div class="body">Old market district, raw and real. Go before 9am. Bring cash only.</div>
+          </div>
+        </div>
+
+        <button class="btn-primary mt-8" onclick="goTo('s-discover')">Open Travel Buddy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S6: DISCOVER (Dashboard)
+  ───────────────────────────────────────────── -->
+  <div id="s-discover" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding:14px 20px 10px; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="h2">Discover</div>
+        <div class="avatar" style="width:32px;height:32px;"></div>
+      </div>
+      <!-- Filter chips -->
+      <div class="chip-scroll mt-8" style="margin:0 -20px; padding:0 20px;">
+        <span class="chip selected">For you</span>
+        <span class="chip">Street food</span>
+        <span class="chip">Neighbourhood</span>
+        <span class="chip">Cafes</span>
+        <span class="chip">Markets</span>
+        <span class="chip">Hidden spots</span>
+      </div>
+      <div class="annotation mt-4">D2 — Style-matched feed: "For you" tab shows tips from similar traveler types</div>
+    </div>
+    <div class="scroll-area">
+      <!-- Tip cards -->
+      <div style="padding:8px 20px; display:flex;flex-direction:column;gap:12px;">
+
+        <div class="card" onclick="goTo('s-tip')">
+          <div class="img-box" style="height:140px;"></div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px;">
+            <div class="flex align-center justify-between">
+              <div class="flex gap-6">
+                <span class="tag green">Local tip</span>
+                <span class="tag">Street food</span>
+              </div>
+              <span class="tag yellow">⚠ Busy weekends</span>
+            </div>
+            <div class="h3">Jalan Alor Night Market</div>
+            <div class="body" style="font-size:13px;">Best on weekday evenings. Skip the tourist end, go deeper in.</div>
+            <div class="flex align-center justify-between mt-4">
+              <div class="flex align-center gap-6">
+                <div class="avatar" style="width:20px;height:20px;"></div>
+                <span class="caption">Local · KL</span>
+              </div>
+              <button onclick="event.stopPropagation(); goTo('s-plan')" style="background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;">+ Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" onclick="goTo('s-tip')">
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px;">
+            <div class="flex gap-6">
+              <span class="tag">Photography</span>
+              <span class="tag green">Local tip</span>
+            </div>
+            <div class="h3">Brickfields Blue Mosaic Lane</div>
+            <div class="body" style="font-size:13px;">Almost nobody knows this. 2-min walk from KL Sentral. Best light 6–8am.</div>
+            <div class="flex align-center justify-between mt-4">
+              <div class="flex align-center gap-6">
+                <div class="avatar" style="width:20px;height:20px;"></div>
+                <span class="caption">Traveler · Mix style</span>
+              </div>
+              <button onclick="event.stopPropagation(); goTo('s-plan')" style="background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;">+ Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" onclick="goTo('s-tip')">
+          <div class="img-box" style="height:100px;"></div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px;">
+            <div class="flex gap-6 align-center">
+              <span class="tag">Neighbourhood</span>
+              <span class="tag red">🎥 Video tip</span>
+            </div>
+            <div class="h3">Chow Kit Old Market District</div>
+            <div class="body" style="font-size:13px;">Raw and real. Go before 9am, bring cash. Not for the faint-hearted.</div>
+            <div class="flex align-center justify-between mt-4">
+              <div class="flex align-center gap-6">
+                <div class="avatar" style="width:20px;height:20px;"></div>
+                <span class="caption">Local · KL</span>
+              </div>
+              <button onclick="event.stopPropagation(); goTo('s-plan')" style="background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;">+ Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding-bottom:8px;">
+          <div class="annotation">D1 — Peer-sourced feed: no ads, no paid placement, contributors visible on every tip</div>
+        </div>
+      </div>
+    </div>
+    <!-- Bottom nav -->
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="goTo('s-discover')">
+        <div class="nav-icon">🔍</div><span class="nav-label">Discover</span>
+      </button>
+      <button class="nav-item" onclick="goTo('s-plan')">
+        <div class="nav-icon">📋</div><span class="nav-label">Plan</span>
+      </button>
+      <button class="nav-item" onclick="goTo('s-connect')">
+        <div class="nav-icon">👥</div><span class="nav-label">Connect</span>
+      </button>
+      <button class="nav-item" onclick="goTo('s-journal')">
+        <div class="nav-icon">📖</div><span class="nav-label">Journal</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S7: TIP DETAIL
+  ───────────────────────────────────────────── -->
+  <div id="s-tip" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <button class="back-btn" onclick="goTo('s-discover')">← Discover</button>
+      <button onclick="goTo('s-plan')" style="background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;">+ Save to plan</button>
+    </div>
+    <div class="scroll-area">
+      <div class="img-box" style="height:200px; flex-shrink:0;"></div>
+      <div class="pad flex-col gap-12">
+        <div>
+          <div class="flex gap-8 align-center mt-4">
+            <span class="tag green">Local tip</span>
+            <span class="tag">Street food</span>
+            <span class="tag yellow">⚠ Busy weekends</span>
+          </div>
+          <div class="h1 mt-8">Jalan Alor Night Market</div>
+          <div class="annotation mt-4">D3 — Crowd signal: shown when a spot is over-visited on certain days</div>
+        </div>
+
+        <div class="body">Best on weekday evenings — skip the tourist end, go deeper into the alley. Mostly visited by locals. Cheap and worth it. Go around 8pm when the food is freshest.</div>
+
+        <!-- Safety context -->
+        <div style="background:#f5f5f5; border-radius:12px; padding:12px;">
+          <div class="label">Safety context</div>
+          <div class="body mt-4">Well-lit, busy area. Safe for solo travelers. Watch your bags in crowds. Cash only.</div>
+          <div class="annotation mt-4">D5 — Safety context: recent traveler notes, not generic warnings</div>
+        </div>
+
+        <!-- Contributor -->
+        <div class="divider"></div>
+        <div class="flex align-center gap-12">
+          <div class="avatar" style="width:44px;height:44px;"></div>
+          <div>
+            <div class="flex align-center">
+              <div class="h3">Ahmad R.</div>
+              <div class="verified-badge">✓</div>
+            </div>
+            <div class="caption">Local resident · Kuala Lumpur · Verified</div>
+          </div>
+          <button onclick="goTo('s-profile')" style="margin-left:auto;background:#f0f0f0;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;">Connect</button>
+        </div>
+
+        <!-- Similar tips -->
+        <div class="divider-full" style="margin:4px -20px;"></div>
+        <div class="section-header" style="padding:0;">
+          <div class="h3">More from locals nearby</div>
+        </div>
+        <div class="card">
+          <div style="padding:12px;">
+            <div class="h3">Imbi Market</div>
+            <div class="body mt-4" style="font-size:13px;">Old-school market. Locals only. Saturday mornings best.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S8: PLAN — SHORTLIST
+  ───────────────────────────────────────────── -->
+  <div id="s-plan" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding:14px 20px 10px; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="h2">Kuala Lumpur</div>
+        <div class="flex gap-8">
+          <button onclick="goTo('s-map')" style="background:#f0f0f0;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;">🗺 Map</button>
+          <span class="badge" style="background:#1a1a1a;color:#fff;padding:6px 10px;">Offline ✓</span>
+        </div>
+      </div>
+      <div class="flex gap-8 mt-8">
+        <span class="caption">5 saved · 3 days</span>
+        <span class="caption">·</span>
+        <button onclick="goTo('s-plan')" style="background:none;border:none;color:#555;font-size:12px;cursor:pointer;">+ Invite collaborator</button>
+      </div>
+      <div class="annotation mt-4">P1 — Living shortlist: drag to reorder, no fixed day assignments · P4 — Offline badge confirms data is cached · P5 — Invite collaborator link</div>
+    </div>
+    <div class="scroll-area">
+
+      <!-- Day group -->
+      <div class="section-header">
+        <div class="label">Day 1 · Tue 15 Jul</div>
+        <button style="background:none;border:none;color:#999;font-size:12px;cursor:pointer;">+ Add</button>
+      </div>
+
+      <div class="list-row">
+        <span class="drag-handle">⠿</span>
+        <div class="img-box" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+        <div class="flex-col flex-1 gap-2">
+          <div class="h3" style="font-size:14px;">Jalan Alor Night Market</div>
+          <div class="caption">Street food · Local tip · Evening</div>
+          <span class="tag yellow" style="width:fit-content; font-size:10px;">⚠ Busy weekends</span>
+        </div>
+        <div style="color:#ccc; font-size:18px; cursor:pointer;">···</div>
+      </div>
+
+      <div class="list-row">
+        <span class="drag-handle">⠿</span>
+        <div class="img-box" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+        <div class="flex-col flex-1 gap-2">
+          <div class="h3" style="font-size:14px;">Brickfields Blue Mosaic Lane</div>
+          <div class="caption">Photography · Morning · 6–8am</div>
+        </div>
+        <div style="color:#ccc; font-size:18px; cursor:pointer;">···</div>
+      </div>
+
+      <div class="section-header mt-8">
+        <div class="label">Day 2 · Wed 16 Jul</div>
+        <button style="background:none;border:none;color:#999;font-size:12px;cursor:pointer;">+ Add</button>
+      </div>
+
+      <div class="list-row">
+        <span class="drag-handle">⠿</span>
+        <div class="img-box" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+        <div class="flex-col flex-1 gap-2">
+          <div class="h3" style="font-size:14px;">Chow Kit Old Market</div>
+          <div class="caption">Neighbourhood · Before 9am</div>
+          <span class="tag green" style="width:fit-content; font-size:10px;">Local tip</span>
+        </div>
+        <div style="color:#ccc; font-size:18px; cursor:pointer;">···</div>
+      </div>
+
+      <div class="list-row" style="border:1.5px dashed #e0e0e0; margin:10px 20px; border-radius:12px; justify-content:center;">
+        <button onclick="goTo('s-discover')" style="background:none;border:none;color:#999;font-size:13px;cursor:pointer;">+ Discover more tips</button>
+      </div>
+
+      <div style="padding:8px 20px 16px;">
+        <div class="annotation">P3 — "Discover more tips" sends user back to the feed to save more to this plan</div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('s-discover')"><div class="nav-icon">🔍</div><span class="nav-label">Discover</span></button>
+      <button class="nav-item active" onclick="goTo('s-plan')"><div class="nav-icon">📋</div><span class="nav-label">Plan</span></button>
+      <button class="nav-item" onclick="goTo('s-connect')"><div class="nav-icon">👥</div><span class="nav-label">Connect</span></button>
+      <button class="nav-item" onclick="goTo('s-journal')"><div class="nav-icon">📖</div><span class="nav-label">Journal</span></button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S9: PLAN — MAP VIEW
+  ───────────────────────────────────────────── -->
+  <div id="s-map" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <button class="back-btn" onclick="goTo('s-plan')">← Shortlist</button>
+      <span class="badge">Offline ✓</span>
+    </div>
+    <!-- Full map -->
+    <div class="map-bg flex-1" style="position:relative; min-height:0;">
+      <!-- Pins -->
+      <div class="map-pin" style="left:120px; top:140px;" onclick="goTo('s-tip')">
+        <div class="map-pin-inner"></div>
+      </div>
+      <div class="map-pin" style="left:200px; top:200px;" onclick="goTo('s-tip')">
+        <div class="map-pin-inner"></div>
+      </div>
+      <div class="map-pin gray" style="left:80px; top:250px;">
+        <div class="map-pin-inner" style="background:#fff;"></div>
+      </div>
+      <div class="map-pin gray" style="left:240px; top:110px;">
+        <div class="map-pin-inner" style="background:#fff;"></div>
+      </div>
+      <div style="position:absolute; top:12px; left:12px; right:12px;">
+        <input class="input-field" style="background:rgba(255,255,255,0.95);" placeholder="Search saved places..." />
+      </div>
+      <div style="position:absolute; bottom:100px; left:0; right:0; padding:0 16px;">
+        <div style="background:rgba(255,255,255,0.97); border-radius:16px; padding:14px; box-shadow: 0 4px 20px rgba(0,0,0,0.12);">
+          <div class="flex align-center gap-12">
+            <div class="img-box" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;"></div>
+            <div class="flex-col gap-2 flex-1">
+              <div class="h3" style="font-size:14px;">Jalan Alor Night Market</div>
+              <div class="caption">Street food · Day 1 · Evening</div>
+              <span class="tag yellow" style="width:fit-content;font-size:10px;">⚠ Busy weekends</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
+        <div class="annotation">P2 — Map view: tap a pin to see tip detail. Dark = saved, gray = unsaved nearby tips</div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('s-discover')"><div class="nav-icon">🔍</div><span class="nav-label">Discover</span></button>
+      <button class="nav-item active" onclick="goTo('s-plan')"><div class="nav-icon">📋</div><span class="nav-label">Plan</span></button>
+      <button class="nav-item" onclick="goTo('s-connect')"><div class="nav-icon">👥</div><span class="nav-label">Connect</span></button>
+      <button class="nav-item" onclick="goTo('s-journal')"><div class="nav-icon">📖</div><span class="nav-label">Journal</span></button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S10: CONNECT — BROWSE
+  ───────────────────────────────────────────── -->
+  <div id="s-connect" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding:14px 20px 10px; flex-shrink:0;">
+      <div class="h2">Connect</div>
+      <div class="body mt-4">Meet locals and travelers in Kuala Lumpur</div>
+      <div class="chip-scroll mt-8" style="margin:0 -20px; padding:0 20px;">
+        <span class="chip selected">Locals here</span>
+        <span class="chip">Travelers nearby</span>
+        <span class="chip">Available now</span>
+      </div>
+      <div class="annotation mt-4">C2, C8 — Tabs filter by local vs traveler and availability status</div>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:8px 20px; display:flex; flex-direction:column; gap:12px;">
+
+        <div class="card" onclick="goTo('s-profile')">
+          <div style="padding:14px;display:flex;gap:12px;align-items:center;">
+            <div class="avatar" style="width:52px;height:52px; position:relative;">
+              <div style="position:absolute;bottom:0;right:0;width:12px;height:12px;background:#4caf50;border-radius:50%;border:2px solid #fff;"></div>
+            </div>
+            <div class="flex-col gap-4 flex-1">
+              <div class="flex align-center gap-4">
+                <div class="h3">Ahmad R.</div>
+                <div class="verified-badge">✓</div>
+                <span class="tag green" style="font-size:10px;">Available</span>
+              </div>
+              <div class="caption">Local · Kuala Lumpur · Speaks EN, MY</div>
+              <div class="flex gap-4 flex-wrap">
+                <span class="tag">Street food</span>
+                <span class="tag">Local markets</span>
+                <span class="tag">Photography</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0 14px 14px;">
+            <div class="body" style="font-size:13px;">"Happy to show you the real KL — not what's on Google Maps."</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="goTo('s-profile')">
+          <div style="padding:14px;display:flex;gap:12px;align-items:center;">
+            <div class="avatar" style="width:52px;height:52px;"></div>
+            <div class="flex-col gap-4 flex-1">
+              <div class="flex align-center gap-4">
+                <div class="h3">Siti N.</div>
+                <div class="verified-badge">✓</div>
+              </div>
+              <div class="caption">Local · Kuala Lumpur · Speaks EN, MY, CN</div>
+              <div class="flex gap-4 flex-wrap">
+                <span class="tag">Cafes</span>
+                <span class="tag">Art & culture</span>
+                <span class="tag">Architecture</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" onclick="goTo('s-profile')">
+          <div style="padding:14px;display:flex;gap:12px;align-items:center;">
+            <div class="avatar" style="width:52px;height:52px;"></div>
+            <div class="flex-col gap-4 flex-1">
+              <div class="flex align-center gap-4">
+                <div class="h3">Marco V.</div>
+                <div class="verified-badge">✓</div>
+                <span class="tag" style="font-size:10px;">Traveler</span>
+              </div>
+              <div class="caption">From Barcelona · Visiting KL · Mix traveler</div>
+              <div class="flex gap-4 flex-wrap">
+                <span class="tag">Neighbourhood walks</span>
+                <span class="tag">Local markets</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annotation">C1 — Verified badge on all profiles · C3 — No cost, no booking — this is an exchange · C9 — Traveler-to-traveler tab available</div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('s-discover')"><div class="nav-icon">🔍</div><span class="nav-label">Discover</span></button>
+      <button class="nav-item" onclick="goTo('s-plan')"><div class="nav-icon">📋</div><span class="nav-label">Plan</span></button>
+      <button class="nav-item active" onclick="goTo('s-connect')"><div class="nav-icon">👥</div><span class="nav-label">Connect</span></button>
+      <button class="nav-item" onclick="goTo('s-journal')"><div class="nav-icon">📖</div><span class="nav-label">Journal</span></button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S11: CONNECT — PROFILE DETAIL
+  ───────────────────────────────────────────── -->
+  <div id="s-profile" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <button class="back-btn" onclick="goTo('s-connect')">← Connect</button>
+      <button style="background:none;border:none;color:#999;font-size:18px;cursor:pointer;">⋯</button>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:20px; display:flex; flex-direction:column; gap:16px;">
+        <!-- Profile header -->
+        <div class="flex gap-14 align-center">
+          <div class="avatar" style="width:72px;height:72px;"></div>
+          <div class="flex-col gap-4">
+            <div class="flex align-center gap-6">
+              <div class="h2">Ahmad R.</div>
+              <div class="verified-badge" style="width:20px;height:20px;font-size:11px;">✓</div>
+            </div>
+            <div class="body">Local resident · Kuala Lumpur</div>
+            <div class="flex align-center gap-6 mt-2">
+              <span class="tag green">Available this week</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust signals -->
+        <div style="background:#f5f5f5; border-radius:12px; padding:14px; display:flex; gap:20px; justify-content:space-around; text-align:center;">
+          <div><div class="h3">14</div><div class="caption">connections</div></div>
+          <div style="width:1px;background:#e0e0e0;"></div>
+          <div><div class="h3">4.8</div><div class="caption">avg rating</div></div>
+          <div style="width:1px;background:#e0e0e0;"></div>
+          <div><div class="h3">12</div><div class="caption">tips shared</div></div>
+        </div>
+        <div class="annotation">C1 — Trust signals: verified identity + ratings history displayed prominently</div>
+
+        <!-- About -->
+        <div>
+          <div class="label">About</div>
+          <div class="body mt-8">"I've lived in KL my whole life. Happy to show you the real city — the spots locals actually go to, not what's on Google Maps. I guide travelers; when I travel, others do the same for me."</div>
+          <div class="annotation mt-4">C3 — Reciprocal framing: explicitly non-transactional, community exchange</div>
+        </div>
+
+        <!-- Interests match -->
+        <div>
+          <div class="label">Interests · 3 in common with you</div>
+          <div class="flex gap-8 flex-wrap mt-8">
+            <span class="chip selected" style="font-size:12px; padding:6px 12px;">Street food</span>
+            <span class="chip selected" style="font-size:12px; padding:6px 12px;">Local markets</span>
+            <span class="chip selected" style="font-size:12px; padding:6px 12px;">Photography</span>
+            <span class="chip" style="font-size:12px; padding:6px 12px;">Architecture</span>
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div>
+          <div class="label">Speaks</div>
+          <div class="flex gap-8 mt-8">
+            <span class="tag">English</span><span class="tag">Malay</span><span class="tag">Mandarin</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Actions -->
+        <button class="btn-primary" onclick="goTo('s-chat')">Send a message</button>
+        <button class="btn-secondary" onclick="goTo('s-connect')">Report or block</button>
+        <div class="annotation">C4 — Message opens only after user initiates · C5 — Report/block always accessible</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S12: CONNECT — CHAT
+  ───────────────────────────────────────────── -->
+  <div id="s-chat" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <div class="flex align-center gap-10">
+        <button class="back-btn" onclick="goTo('s-profile')">←</button>
+        <div class="avatar" style="width:32px;height:32px;"></div>
+        <div>
+          <div class="h3" style="font-size:14px;">Ahmad R.</div>
+          <div class="caption" style="color:#4caf50;">Online</div>
+        </div>
+      </div>
+      <div class="verified-badge">✓</div>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:16px 20px; display:flex; flex-direction:column; gap:10px;">
+
+        <div style="text-align:center; padding:8px 0;">
+          <div class="caption">Matched on shared interests: Street food, Local markets</div>
+        </div>
+
+        <div class="bubble them">Hey! I saw you're visiting KL this week. Happy to show you around the local food scene if you're interested?</div>
+
+        <div class="bubble me">That would be amazing! I'm most interested in places locals actually eat — not the tourist spots.</div>
+
+        <div class="bubble them">Perfect. Weekday evenings are best. Jalan Alor is good but go deeper in, past the tourist section. I can meet you at the entrance.</div>
+
+        <div class="bubble me">Tuesday evening works for me! Around 8pm?</div>
+
+        <div class="bubble them" style="background:#f0f0f0;">Sounds good. See you then! 🤝</div>
+
+        <div class="annotation" style="text-align:center;">C4 — In-app messaging: context set by shared interests, no cold outreach</div>
+      </div>
+    </div>
+    <div style="padding:12px 16px; border-top:1px solid #ebebeb; display:flex; gap:8px; flex-shrink:0;">
+      <input class="input-field" style="flex:1;" placeholder="Type a message..." />
+      <button style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:0 16px;font-size:20px;cursor:pointer;">↑</button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S13: JOURNAL — TIMELINE
+  ───────────────────────────────────────────── -->
+  <div id="s-journal" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div style="padding:14px 20px 10px; flex-shrink:0;">
+      <div class="flex justify-between align-center">
+        <div class="h2">Journal</div>
+        <div class="flex gap-8">
+          <button onclick="goTo('s-memory')" style="background:#f0f0f0;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;">✦ Layout</button>
+          <button onclick="goTo('s-share')" style="background:#f0f0f0;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;">Share</button>
+        </div>
+      </div>
+      <div class="caption mt-4">KL Trip · Jul 15–18 · Auto-capturing 🔴</div>
+      <div class="annotation mt-4">J1 — Auto-capture indicator: recording in background, no action needed</div>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:8px 0 16px;">
+
+        <!-- Day heading -->
+        <div style="padding:8px 20px;">
+          <div class="label">Tuesday · 15 Jul</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="flex-col gap-4 flex-1">
+            <div class="caption">9:14 AM · Auto-captured</div>
+            <div class="h3" style="font-size:14px;">Arrived at Kuala Lumpur Sentral</div>
+            <div class="body" style="font-size:13px;">Location logged automatically</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1a1a1a;"></div>
+          <div class="flex-col gap-4 flex-1">
+            <div class="caption">11:30 AM · You added a note</div>
+            <div class="h3" style="font-size:14px;">Brickfields Blue Mosaic Lane</div>
+            <div class="img-box" style="height:120px;border-radius:10px;margin-top:6px;"></div>
+            <div class="body" style="font-size:13px;">Found this totally by accident. The light here is incredible at this time of day.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="flex-col gap-4 flex-1">
+            <div class="caption">2:45 PM · Auto-captured</div>
+            <div class="h3" style="font-size:14px;">Chow Kit Market area</div>
+            <div class="body" style="font-size:13px;">You spent 1h 20min here</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1a1a1a;"></div>
+          <div class="flex-col gap-4 flex-1">
+            <div class="caption">8:02 PM · Connected with Ahmad R.</div>
+            <div class="h3" style="font-size:14px;">Met Ahmad at Jalan Alor</div>
+            <div class="body" style="font-size:13px;">He took us to the section no tourist ever finds. Best meal of the trip so far.</div>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div style="padding:16px 20px 8px;">
+          <div class="label">Wednesday · 16 Jul</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="flex-col gap-4 flex-1">
+            <div class="caption">8:22 AM · Auto-captured</div>
+            <div class="h3" style="font-size:14px;">Imbi Market</div>
+            <div class="body" style="font-size:13px;">Old-school Saturday market. You stayed 45 min.</div>
+          </div>
+        </div>
+
+        <div style="padding:0 20px 16px;">
+          <div class="annotation">J1+J5 — Auto-capture logs locations and times automatically. Context layer (who, what, why) connects to plans and connections made during the trip.</div>
+        </div>
+
+        <!-- Add note CTA -->
+        <div style="margin:0 20px; border:1.5px dashed #e0e0e0; border-radius:12px; padding:14px; text-align:center; cursor:pointer;">
+          <div class="body" style="color:#aaa;">+ Add a note for right now</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('s-discover')"><div class="nav-icon">🔍</div><span class="nav-label">Discover</span></button>
+      <button class="nav-item" onclick="goTo('s-plan')"><div class="nav-icon">📋</div><span class="nav-label">Plan</span></button>
+      <button class="nav-item" onclick="goTo('s-connect')"><div class="nav-icon">👥</div><span class="nav-label">Connect</span></button>
+      <button class="nav-item active" onclick="goTo('s-journal')"><div class="nav-icon">📖</div><span class="nav-label">Journal</span></button>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S14: JOURNAL — MEMORY LAYOUT
+  ───────────────────────────────────────────── -->
+  <div id="s-memory" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <button class="back-btn" onclick="goTo('s-journal')">← Timeline</button>
+      <button onclick="goTo('s-share')" style="background:#1a1a1a;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;">Share</button>
+    </div>
+    <div class="scroll-area">
+      <div style="padding:16px 20px; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <div class="h1">KL Trip</div>
+          <div class="body mt-4">15–18 July · Kuala Lumpur · 4 days · 12 places</div>
+          <div class="annotation mt-4">J2 — Auto-generated layout: journal assembles itself from captured moments</div>
+        </div>
+
+        <!-- Cover image -->
+        <div class="img-box" style="height:180px; border-radius:16px;">
+          <span>Auto-selected cover photo</span>
+        </div>
+
+        <!-- 2-up grid -->
+        <div class="flex gap-10">
+          <div class="img-box flex-1" style="height:110px;border-radius:12px;"></div>
+          <div class="img-box flex-1" style="height:110px;border-radius:12px;"></div>
+        </div>
+
+        <!-- Highlight moment -->
+        <div class="journal-card">
+          <div style="padding:14px; display:flex;flex-direction:column;gap:6px;">
+            <div class="label">Highlight moment</div>
+            <div class="h3 mt-4">Evening at Jalan Alor</div>
+            <div class="body">"He took us to the section no tourist ever finds. Best meal of the trip so far."</div>
+            <div class="flex align-center gap-8 mt-8">
+              <div class="avatar" style="width:24px;height:24px;"></div>
+              <div class="caption">Met Ahmad R. · Local contact · Kuala Lumpur</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;background:#f8f8f8;border-radius:12px;padding:12px;text-align:center;">
+            <div class="h3">12</div><div class="caption">places visited</div>
+          </div>
+          <div style="flex:1;background:#f8f8f8;border-radius:12px;padding:12px;text-align:center;">
+            <div class="h3">1</div><div class="caption">local connection</div>
+          </div>
+          <div style="flex:1;background:#f8f8f8;border-radius:12px;padding:12px;text-align:center;">
+            <div class="h3">38</div><div class="caption">photos</div>
+          </div>
+        </div>
+
+        <!-- Map trace placeholder -->
+        <div class="map-bg" style="height:120px;border-radius:12px;position:relative;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <span class="caption">Route traced across trip</span>
+          </div>
+        </div>
+
+        <div class="annotation">J5 — Contextual memory: photos linked to places, connections, and tip contributors automatically</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────
+       S15: JOURNAL — SHARE SETTINGS
+  ───────────────────────────────────────────── -->
+  <div id="s-share" class="screen">
+    <div class="status-bar"><span>9:41</span><span>●●● WiFi 🔋</span></div>
+    <div class="top-bar">
+      <button class="back-btn" onclick="goTo('s-memory')">← Memory</button>
+    </div>
+    <div class="scroll-area">
+      <div class="pad flex-col gap-16">
+        <div>
+          <div class="h2">Share this trip</div>
+          <div class="body mt-4">Your journal is private by default. Choose who can see it.</div>
+          <div class="annotation mt-4">J3 — Private-first: sharing requires an active choice, nothing posts automatically</div>
+        </div>
+
+        <!-- Privacy toggle -->
+        <div style="background:#f5f5f5;border-radius:14px;overflow:hidden;">
+          <div class="list-row" style="border:none;">
+            <div class="flex-col flex-1 gap-2">
+              <div class="h3">Private (default)</div>
+              <div class="body">Only you can see this journal</div>
+            </div>
+            <div style="width:20px;height:20px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">✓</div>
+          </div>
+          <div class="divider" style="margin:0;"></div>
+          <div class="list-row" style="border:none;">
+            <div class="flex-col flex-1 gap-2">
+              <div class="h3">Specific people</div>
+              <div class="body">Share a link with selected contacts only</div>
+            </div>
+            <div style="width:20px;height:20px;background:#e0e0e0;border-radius:50%;"></div>
+          </div>
+          <div class="divider" style="margin:0;"></div>
+          <div class="list-row" style="border:none;">
+            <div class="flex-col flex-1 gap-2">
+              <div class="h3">Public</div>
+              <div class="body">Anyone with the link can view it</div>
+            </div>
+            <div style="width:20px;height:20px;background:#e0e0e0;border-radius:50%;"></div>
+          </div>
+        </div>
+        <div class="annotation">J4 — Selective sharing: named contacts only, no social media broadcasting required</div>
+
+        <!-- Share with -->
+        <div>
+          <div class="label">Share with specific people</div>
+          <div style="border:1.5px dashed #ddd;border-radius:12px;padding:12px; margin-top:10px; display:flex; flex-direction:column; gap:10px;">
+            <div class="flex align-center gap-10">
+              <div class="avatar" style="width:32px;height:32px;"></div>
+              <div class="flex-1">
+                <div class="h3" style="font-size:13px;">Mei Lin</div>
+                <div class="caption">Travel companion · Has access</div>
+              </div>
+              <span class="tag green">Shared</span>
+            </div>
+            <div class="flex align-center gap-10">
+              <div style="width:32px;height:32px;border:1.5px dashed #ccc;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:18px;">+</div>
+              <button style="background:none;border:none;color:#888;font-size:13px;cursor:pointer;">Add someone…</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location privacy -->
+        <div style="background:#f5f5f5;border-radius:14px;padding:14px;">
+          <div class="flex align-center justify-between">
+            <div>
+              <div class="h3">Location data</div>
+              <div class="body mt-4">Your exact GPS trail is never shared — only place names.</div>
+            </div>
+            <div style="width:44px;height:26px;background:#1a1a1a;border-radius:13px;position:relative;flex-shrink:0;margin-left:12px;">
+              <div style="position:absolute;right:3px;top:3px;width:20px;height:20px;background:#fff;border-radius:50%;"></div>
+            </div>
+          </div>
+          <div class="annotation mt-8">A3 — Granular location controls: exact trail never shared, only place-level data</div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo('s-memory')">Done</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+  const screens = document.querySelectorAll('.screen');
+  const flowBtns = document.querySelectorAll('.flow-btn');
+
+  const screenMap = {
+    's-welcome': 0, 's-ob1': 1, 's-ob2': 2, 's-ob3': 3, 's-preview': 4,
+    's-discover': 5, 's-tip': 6, 's-plan': 7, 's-map': 8,
+    's-connect': 9, 's-profile': 10, 's-chat': 11,
+    's-journal': 12, 's-memory': 13, 's-share': 14
+  };
+
+  function goTo(id) {
+    screens.forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById(id).querySelector('.scroll-area') &&
+      (document.getElementById(id).querySelector('.scroll-area').scrollTop = 0);
+
+    const idx = screenMap[id];
+    flowBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+  }
+
+  // Init
+  flowBtns[0].classList.add('active');
+</script>
+</body>
+</html>

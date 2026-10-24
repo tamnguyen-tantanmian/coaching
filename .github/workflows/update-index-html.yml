@@ -1,0 +1,47 @@
+# Tạo lại index.html (báo cáo hub) mỗi khi nội dung case thay đổi, để ai tải repo về
+# cũng có bản mới nhất, bấm đúp là mở. Không cần cài gì và không cần bật gì.
+name: Update index.html
+
+on:
+  push:
+    branches: [main]
+    # Any case folder: my-case, demo-case and every project made with toolkit/tools/new-case.py.
+    paths:
+      - '*/**'
+      - '!**/index.html'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-index-html
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export hub of every case
+        run: |
+          for agents in */AGENTS.md; do
+            case_dir="$(dirname "$agents")"
+            if [ -d "$case_dir/insights" ] || [ -d "$case_dir/work" ]; then
+              echo "Exporting $case_dir"
+              python3 toolkit/skills/export-hub.py --case "$case_dir"
+            fi
+          done
+      - name: Build the home page (one card per case)
+        run: python3 toolkit/skills/export-home.py
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- index.html '*/index.html'
+          if git diff --cached --quiet; then
+            echo "index.html is already up to date"
+          else
+            git commit -m "Update index.html"
+            git push
+          fi

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Workspace</title>
+<style>
+/* Minimal theme, same as the reports (tokens are read from export-hub.py at build time) */
+:root{--ink:#1c252e;--bg:#fff;--surface:#f4f6f8;--muted:#637381;--line:rgba(145,158,171,.28);--purple:#00a76f;--link:#007867;--tint:rgba(0,167,111,.08);--tint2:rgba(0,167,111,.16);--on-purple:#fff;--r:8px;color-scheme:light}
+*{box-sizing:border-box}
+html{overflow-y:scroll}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);backdrop-filter:blur(6px);border-bottom:1px dashed var(--line)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.brand{display:flex;align-items:center;gap:10px;padding:14px 0;font-weight:800;letter-spacing:-.01em}
+.logo{width:34px;height:auto;color:var(--ink)}
+h1{font-size:1.9rem;line-height:1.2;margin:40px 0 8px;font-weight:800;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0 0 28px;max-width:60ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin:0 0 56px}
+a.card,div.card{display:flex;flex-direction:column;gap:10px;padding:24px;border:0;border-radius:16px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 0 2px 0 rgba(145,158,171,.2),0 12px 24px -4px rgba(145,158,171,.12);transition:box-shadow .2s,transform .2s}
+a.card:hover,a.card:focus-visible{box-shadow:0 0 2px 0 rgba(145,158,171,.24),0 20px 40px -4px rgba(145,158,171,.24);transform:translateY(-2px);outline:0}
+a.card:focus-visible{box-shadow:0 0 0 2px var(--purple)}
+.card.off{opacity:.7}
+.kind{align-self:flex-start;font-size:.75rem;font-weight:700;line-height:24px;padding:0 8px;border-radius:6px;background:var(--tint2);color:var(--link)}
+.kind.Example{background:rgba(0,184,217,.16);color:#006c9c}
+.kind.Template{background:rgba(145,158,171,.16);color:#637381}
+.card h2{margin:0;font-size:1.15rem;line-height:1.35;font-weight:700;color:var(--ink)}
+.card p{margin:0;color:var(--muted);font-size:.93rem}
+.q{color:var(--ink)!important}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);font-size:.84rem;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:800}
+.stage{font-weight:700;color:var(--link)}
+.open{margin-left:auto;font-weight:700;color:var(--link)}
+section h3{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 16px}
+code{font:.88em ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface);padding:2px 6px;border-radius:6px}
+footer{padding:24px 0 48px;border-top:1px dashed var(--line);color:var(--muted);font-size:.88rem}
+:root{--ink:#1c252e;--bg:#fff;--surface:#f4f6f8;--muted:#637381;--line:rgba(145,158,171,.28);--purple:#00a76f;--link:#007867;--tint:rgba(0,167,111,.08);--tint2:rgba(0,167,111,.16);--on-purple:#fff;--r:8px;color-scheme:light}</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand"><svg class="logo" viewBox="18 50 214 150" fill="currentColor" aria-hidden="true"><path d="M80.5165 60.4055C76.2827 67.7288 75.4817 70.1317 74.9096 77.2261C74.5663 81.8032 74.7952 87.5244 75.4817 90.0418C76.8548 94.7332 76.0921 95.8546 74.4519 95.191C72.8194 94.5455 67.7008 93.4746 47.4474 93.0169C33.1442 92.6736 21.244 92.5592 21.0151 92.5592C20.7862 92.6736 23.1892 96.1064 26.1643 100.226C29.1393 104.345 45.8455 127.573 63.1238 151.832L94.4764 196L96.4216 192.338C97.4515 190.279 101.228 183.184 104.889 176.548C108.436 169.911 112.899 161.215 114.844 157.21C117.705 151.26 118.62 150.23 119.65 151.603C120.337 152.518 128.575 162.931 138.073 174.602L155.236 196L157.296 193.483C158.44 191.995 161.415 186.732 163.933 181.811C169.311 170.941 169.769 163.732 165.992 154.807L163.59 149.2L188.077 112.24C201.579 91.8726 215.081 71.3904 218.171 66.699C221.26 62.0075 224.693 56.9728 225.837 55.7141L228.126 53.1967H207.071C180.296 53.0823 173.316 54.4554 163.475 62.0075C155.122 68.1865 150.888 74.3655 140.247 94.9621L132.351 110.295L130.292 107.663C129.033 106.176 126.63 103.201 124.914 101.027C108.78 81.0022 87.9541 54.4554 87.4964 53.1967C86.4666 50.6794 85.5512 51.7092 80.5165 60.4055ZM213.365 62.0075C212.22 62.8085 184.758 103.544 169.54 127.116C160.958 140.389 157.91 142.982 156.953 141.076C156.601 140.364 155.292 138.4 154.092 136.727C152.49 135.011 149.286 131.006 146.883 127.688C142.65 121.738 141.547 122.036 140.933 122.996C140.292 124 139.583 125.309 138.988 126.429C137.845 128.582 137.272 128.718 140.59 132.265C147.456 139.588 156.953 152.289 158.669 156.294C161.072 162.244 160.843 171.055 157.983 177.806C156.61 180.896 155.236 183.413 154.779 183.299C154.435 183.299 148.485 175.976 141.505 167.165C134.64 158.24 127.431 149.314 125.715 147.255L122.396 143.364L125.829 137.414C127.66 134.096 131.894 126.2 135.212 119.907C158.669 75.2809 162.445 69.7885 171.599 65.5547C174.574 64.1816 178.007 62.5796 179.266 62.0075C181.44 60.9777 211.419 59.9478 213.479 60.8633C213.937 61.0921 213.937 61.5498 213.365 62.0075ZM98.7102 79.8579C104.66 87.41 113.7 98.8526 118.849 105.26L128.346 117.046L123.541 126.658C120.794 132.036 118.277 136.384 117.819 136.384C117.133 136.499 110.954 128.832 90.9292 103.315C83.0338 93.2457 80.9742 87.5244 81.6607 78.7137C82.3473 72.077 85.6656 63.495 87.0387 65.097C87.4964 65.6691 92.76 72.3058 98.7102 79.8579ZM77.3125 103.315C83.4915 106.405 88.5263 111.668 100.999 127.917C105.69 133.981 110.382 140.046 111.64 141.533C113.7 144.165 113.7 144.28 108.78 153.205C106.148 158.24 101.571 166.821 98.7102 172.428C94.362 180.896 93.3322 182.269 92.3023 180.553C91.7302 179.408 89.3273 176.09 87.1532 173C84.9791 169.911 80.6309 163.732 77.427 159.269C74.3375 154.692 67.2431 144.852 61.7507 137.185C56.2582 129.519 50.0792 121.051 48.0196 118.191C46.0743 115.33 42.4127 110.41 40.0098 107.206C37.6068 104.002 35.6616 101.027 35.6616 100.569C35.6616 99.9968 43.7858 99.8824 53.7409 100.111C70.1037 100.455 72.1634 100.798 77.3125 103.315Z"/></svg><span>Product Workspace</span></div></div></header>
+<main class="wrap">
+<h1>All projects</h1>
+<p class="lede">Every project in this workspace, in one place. Open a card to see that project&rsquo;s report.</p>
+<section><h3>Your projects</h3><p class="lede">No project yet. Create one with <code>python3 toolkit/tools/new-case.py project-name</code>, or ask your AI tool: &ldquo;Create a new project called &hellip;&rdquo;.</p></section>
+<section><h3>Examples and template</h3><div class="grid"><a class="card" href="demo-case/index.html"><span class="kind Example">Example</span><h2>Travel Buddy</h2><p>This is a real project that went through the stages from Discover to Test: Travel Buddy, a travel companion app.</p><div class="meta"><span><b>32</b> items</span><span><b>19</b> documents <small>(+1 planned)</small></span><span class="open">Open report &rarr;</span></div></a><a class="card" href="my-case/index.html"><span class="kind Template">Template</span><h2>Product Name</h2><p>This is my-case, the blank workspace. Do not fill it in directly: open the workspace folder with an AI tool and say &quot;Create a new project called project-name&quot;.</p><div class="meta"><span><b>0</b> items</span><span><b>0</b> documents <small>(+32 planned)</small></span><span class="open">Open report &rarr;</span></div></a></div></section>
+</main>
+<footer><div class="wrap">This page is generated from the project folders. To refresh it, rebuild any report or run <code>export-home.py</code>.</div></footer>
+</body>
+</html>

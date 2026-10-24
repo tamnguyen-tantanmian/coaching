@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Buddy sitemap</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --color-paper: #f5f5f5; --color-ink: #2d3142; --color-muted: #4f5d75;
+    --font-sans: 'Geist', system-ui, sans-serif; --font-serif: 'Instrument Serif', serif; --font-mono: 'Geist Mono', ui-monospace, monospace; }
+  body { font-family: var(--font-sans); background: var(--color-paper); color: var(--color-ink); padding: 3rem 2rem 4rem; line-height: 1.5; }
+  .frame { max-width: 1200px; margin: 0 auto; }
+  .eyebrow { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
+  h1 { font-family: var(--font-serif); font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.75rem; }
+  p { max-width: 72ch; margin-bottom: 0.75rem; }
+  .cap { color: var(--color-muted); font-size: 0.875rem; margin-top: 0.5rem; }
+  .diagram-container { width: 100%; overflow-x: auto; margin-top: 1rem; }
+  svg { width: 100%; min-width: 1320px; display: block; }
+  @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+</style>
+</head>
+<body>
+<div class="frame">
+<p class="eyebrow">Information architecture · Travel Buddy</p>
+<h1>Sitemap, pre-sort hypothesis</h1>
+<p>Tier 1 (app root) → Tier 2 (7 sections) → Tier 3 (screens and key actions). To be confirmed by the card sort results.</p>
+<div class="diagram-container">
+<svg viewBox="0 0 1320 562" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ia-sitemap-title ia-sitemap-desc">
+<title id="ia-sitemap-title">Travel Buddy sitemap, pre-sort hypothesis</title>
+<desc id="ia-sitemap-desc">Sitemap of Travel Buddy: the app root, seven sections in two groups (entry and hub, content pillars) and the screens inside each section; a hypothesis to be tested by a card sort.</desc>
+<rect width="100%" height="100%" fill="#f5f5f5"/>
+<rect x="40" y="140" width="352" height="306" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="52" y="436" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">ENTRY AND HUB</text>
+<rect x="408" y="140" width="868" height="306" rx="6" fill="#ececec" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="420" y="436" fill="#4f5d75" font-size="8" font-weight="500" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">CONTENT PILLARS</text>
+<line x1="660" y1="88" x2="660" y2="118" stroke="#4f5d75" stroke-width="1.2"/>
+<path d="M 130,172 V 126 Q 130,118 138,118 H 1178 Q 1186,118 1186,126 V 172" fill="none" stroke="#4f5d75" stroke-width="1.2"/>
+<line x1="302" y1="118" x2="302" y2="172" stroke="#4f5d75" stroke-width="1.2"/>
+<line x1="498" y1="118" x2="498" y2="172" stroke="#4f5d75" stroke-width="1.2"/>
+<line x1="670" y1="118" x2="670" y2="172" stroke="#4f5d75" stroke-width="1.2"/>
+<line x1="842" y1="118" x2="842" y2="172" stroke="#4f5d75" stroke-width="1.2"/>
+<line x1="1014" y1="118" x2="1014" y2="172" stroke="#4f5d75" stroke-width="1.2"/>
+<rect x="556" y="40" width="208" height="48" rx="6" fill="#f5f5f5"/><rect x="556" y="40" width="208" height="48" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="660" y="68" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Travel Buddy App</text>
+<rect x="52" y="172" width="156" height="217" rx="6" fill="#f5f5f5"/>
+<rect x="52" y="172" width="156" height="217" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="130.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Onboarding</text>
+<line x1="52" y1="212" x2="208" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="62" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Browse without</text>
+<text x="62" y="241" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">account</text>
+<text x="62" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Quick sign-up — 3</text>
+<text x="62" y="279" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">questions</text>
+<text x="62" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Free access granted</text>
+<line x1="60" y1="313" x2="200" y2="313" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="62" y="329" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Personalised first</text>
+<text x="62" y="342" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">moment</text>
+<text x="62" y="367" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Location controls</text>
+<text x="62" y="380" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">set</text>
+<rect x="224" y="172" width="156" height="154" rx="6" fill="#f5f5f5"/>
+<rect x="224" y="172" width="156" height="154" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<text x="302.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Dashboard</text>
+<line x1="224" y1="212" x2="380" y2="212" stroke="#4f5d75" stroke-width="1"/>
+<text x="234" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Active trip status</text>
+<line x1="232" y1="237" x2="372" y2="237" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="234" y="253" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Discovery feed entry</text>
+<text x="234" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">point</text>
+<line x1="232" y1="275" x2="372" y2="275" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="234" y="291" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Journal</text>
+<text x="234" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">quick-capture</text>
+<text x="234" y="317" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">indicator</text>
+<rect x="420" y="172" width="156" height="242" rx="6" fill="#f5f5f5"/>
+<rect x="420" y="172" width="156" height="242" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="498.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Discover</text>
+<line x1="420" y1="212" x2="576" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="430" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Peer-sourced tip</text>
+<text x="430" y="241" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">feed</text>
+<line x1="428" y1="250" x2="568" y2="250" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="430" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Filter by travel</text>
+<text x="430" y="279" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">style</text>
+<line x1="428" y1="288" x2="568" y2="288" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="430" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Crowd / popularity</text>
+<text x="430" y="317" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">signal</text>
+<line x1="428" y1="326" x2="568" y2="326" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="430" y="342" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Video tip snippets</text>
+<text x="430" y="367" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Safety context per</text>
+<text x="430" y="380" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">place</text>
+<line x1="428" y1="389" x2="568" y2="389" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="430" y="405" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Place detail → Save</text>
+<rect x="592" y="172" width="156" height="216" rx="6" fill="#f5f5f5"/>
+<rect x="592" y="172" width="156" height="216" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="670.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Plan / Trip</text>
+<line x1="592" y1="212" x2="748" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="602" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Living shortlist</text>
+<text x="602" y="253" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Map view of saved</text>
+<text x="602" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">places</text>
+<line x1="600" y1="275" x2="740" y2="275" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="602" y="291" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">One-tap save</text>
+<text x="602" y="316" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Offline access</text>
+<text x="602" y="341" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Collaborative</text>
+<text x="602" y="354" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">planning</text>
+<line x1="600" y1="363" x2="740" y2="363" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="602" y="379" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">AI itinerary import</text>
+<rect x="764" y="172" width="156" height="204" rx="6" fill="#f5f5f5"/>
+<rect x="764" y="172" width="156" height="204" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="842.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Connect</text>
+<line x1="764" y1="212" x2="920" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="774" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Verified local</text>
+<text x="774" y="241" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">profiles</text>
+<line x1="772" y1="250" x2="912" y2="250" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="774" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Match by interest &amp;</text>
+<text x="774" y="279" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">style</text>
+<line x1="772" y1="288" x2="912" y2="288" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="774" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Reciprocal exchange</text>
+<text x="774" y="317" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">framing</text>
+<line x1="772" y1="326" x2="912" y2="326" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="774" y="342" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">In-app messaging</text>
+<text x="774" y="367" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Report / block</text>
+<rect x="936" y="172" width="156" height="204" rx="6" fill="#f5f5f5"/>
+<rect x="936" y="172" width="156" height="204" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="1014.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Journal / Memories</text>
+<line x1="936" y1="212" x2="1092" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="946" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Auto-captured</text>
+<text x="946" y="241" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">entries</text>
+<line x1="944" y1="250" x2="1084" y2="250" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="946" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Auto-generated</text>
+<text x="946" y="279" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">layout</text>
+<line x1="944" y1="288" x2="1084" y2="288" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="946" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Private-by-default</text>
+<text x="946" y="317" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">view</text>
+<line x1="944" y1="326" x2="1084" y2="326" stroke="rgba(45,49,66,0.12)" stroke-width="1"/>
+<text x="946" y="342" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Selective sharing</text>
+<text x="946" y="367" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Searchable memory</text>
+<rect x="1108" y="172" width="156" height="154" rx="6" fill="#f5f5f5"/>
+<rect x="1108" y="172" width="156" height="154" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="1186.0" y="196" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">Profile &amp; Settings</text>
+<line x1="1108" y1="212" x2="1264" y2="212" stroke="#2d3142" stroke-width="1"/>
+<text x="1118" y="228" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">My trips (past +</text>
+<text x="1118" y="241" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">upcoming)</text>
+<text x="1118" y="266" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Local guide profile</text>
+<text x="1118" y="279" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">(opt-in)</text>
+<text x="1118" y="304" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">Location &amp;</text>
+<text x="1118" y="317" fill="#2d3142" font-size="11" font-family="'Geist', system-ui, sans-serif">notification privacy</text>
+<path d="M 420,456 V 462 H 748 V 456" fill="none" stroke="#bf4520" stroke-width="1.4"/>
+<text x="420" y="484" fill="#2d3142" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">Riskiest assumption: users may merge Discover and Plan / Trip into one section.</text>
+<line x1="40" y1="514" x2="1280" y2="514" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+<text x="40" y="538" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.18em">LEGEND</text>
+<rect x="112" y="529" width="22" height="12" rx="3" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+<text x="142" y="538" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Section and its screens</text>
+<rect x="294.2" y="529" width="22" height="12" rx="3" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+<text x="324.2" y="538" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Hub, not a content pillar</text>
+<line x1="487.2" y1="535" x2="509.2" y2="535" stroke="#4f5d75" stroke-width="1.2"/>
+<text x="517.2" y="538" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Contains</text>
+<path d="M 588.4000000000001,532 V 536 H 610.4000000000001 V 532" fill="none" stroke="#bf4520" stroke-width="1.4"/>
+<text x="618.4000000000001" y="538" fill="#4f5d75" font-size="9" font-family="'Geist', system-ui, sans-serif">Hypothesis to test</text>
+</svg>
+</div>
+<p class="cap">Hypothesis, not a result: the structure the real open card sort is designed to test.</p>
+</div>
+</body>
+</html>
